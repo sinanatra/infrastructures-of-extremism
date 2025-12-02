@@ -8,6 +8,8 @@
   const height = precomputedLayout?.height ?? 3000;
   const cx = width / 2;
   const cy = height / 2;
+  const viewPadding = 160;
+  const viewBoxValue = `${-viewPadding} ${-viewPadding} ${width + viewPadding * 2} ${height + viewPadding * 2}`;
   const innerRadius = 3;
   const outerRadius = Math.min(width, height) / 2 - 50;
 
@@ -25,6 +27,15 @@
 
   let sizeMode = "links";
   let showLinks = false;
+  let selectedGroupId = null;
+  $: selectedGroup =
+    selectedGroupId === null
+      ? null
+      : sliceForGroup.get(selectedGroupId)?.group ?? null;
+
+  const toggleGroup = (groupId) => {
+    selectedGroupId = selectedGroupId === groupId ? null : groupId;
+  };
 
   const postCountByGroup = new Map();
   for (const post of posts) {
@@ -51,15 +62,17 @@
     }
   }
 
-  const orderedGroups = [...knownGroups.values()].sort((a, b) => {
-    const aSubs = a.subscribers ?? 0;
-    const bSubs = b.subscribers ?? 0;
-    if (aSubs !== bSubs) return bSubs - aSubs;
-    const aPosts = a.postCount ?? 0;
-    const bPosts = b.postCount ?? 0;
-    if (aPosts !== bPosts) return bPosts - aPosts;
-    return a.label.localeCompare(b.label);
-  });
+  const orderedGroups = [...knownGroups.values()]
+    .filter((g) => (g.postCount ?? 0) > 0)
+    .sort((a, b) => {
+      const aSubs = a.subscribers ?? 0;
+      const bSubs = b.subscribers ?? 0;
+      if (aSubs !== bSubs) return bSubs - aSubs;
+      const aPosts = a.postCount ?? 0;
+      const bPosts = b.postCount ?? 0;
+      if (aPosts !== bPosts) return bPosts - aPosts;
+      return a.label.localeCompare(b.label);
+    });
 
   const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
   const sliceGap = Math.min(0.4, sliceAngle * 0.18);
@@ -149,6 +162,7 @@
     color: slice.color,
     path: arcPath(innerRadius - 28, outerRadius + 12, slice.start, slice.end),
     labelPos: toCartesian(outerRadius + 26, slice.center),
+    angleDeg: (slice.center * 180) / Math.PI,
   }));
 
   const linkPaths = edges.map((edge, idx) => {
@@ -173,9 +187,17 @@
 
   const ringTicks = precomputedLayout?.ringTicks ?? [];
 
+  const subscriberText = (value) => {
+    if (!value) return null;
+    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m subs`;
+    if (value >= 1_000) return `${(value / 1_000).toFixed(1)}k subs`;
+    return `${value} subs`;
+  };
+
   const formatTick = new Intl.DateTimeFormat("en", {
+    month: "short",
     year: "numeric",
-    timeZone: "UTC", // avoid local TZ rolling the year forward
+    timeZone: "UTC",
   });
 
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
@@ -194,7 +216,19 @@
     return lines.join("\n");
   };
 
-  $: visibleLinks = showLinks ? linkPaths : [];
+  $: visibleNodes =
+    selectedGroupId === null
+      ? nodes
+      : nodes.filter((n) => n.groupId === selectedGroupId);
+
+  $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+
+  $: visibleLinks = showLinks
+    ? linkPaths.filter(
+        (link) =>
+          visibleNodeIds.has(link.sourceId) && visibleNodeIds.has(link.targetId)
+      )
+    : [];
 </script>
 
 <section
@@ -206,6 +240,25 @@
         <span>{posts.length} posts</span>
         <span>{orderedGroups.length} groups</span>
         <span>{links.length} links</span>
+        {#if selectedGroup}
+          <span class="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full text-sm">
+            <span class="font-semibold">{selectedGroup.label}</span>
+            {#if subscriberText(selectedGroup.subscribers)}
+              <span class="text-gray-200">
+                {subscriberText(selectedGroup.subscribers)}
+              </span>
+            {/if}
+            <span class="text-gray-200">
+              {(selectedGroup.postCount ?? 0).toLocaleString()} posts
+            </span>
+            <button
+              class="underline decoration-dotted"
+              on:click={() => (selectedGroupId = null)}
+            >
+              clear
+            </button>
+          </span>
+        {/if}
       </div>
     </div>
     <div class="flex flex-wrap items-center gap-3 text-sm">
@@ -235,7 +288,7 @@
       <svg
         role="img"
         class="w-full h-auto"
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={viewBoxValue}
         preserveAspectRatio="xMidYMid meet"
         aria-label="Radial network"
       >
@@ -244,11 +297,18 @@
         <g class="slices">
           {#each slicePaths as slice}
             <text
+              on:click={() => toggleGroup(slice.id)}
+              class="cursor-pointer select-none"
               x={slice.labelPos.x}
               y={slice.labelPos.y}
-              text-anchor={slice.labelPos.x >= cx ? "start" : "end"}
+              text-anchor="start"
               dominant-baseline="middle"
-              fill="#f5f5f5"
+              transform={`rotate(${slice.angleDeg}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
+              fill={
+                selectedGroupId === null || selectedGroupId === slice.id
+                  ? "#f5f5f5"
+                  : "#555"
+              }
               font-size="1rem"
               font-weight="800"
             >
@@ -284,7 +344,7 @@
         {/if}
 
         <g class="nodes">
-          {#each nodes as node (node.id)}
+          {#each visibleNodes as node (node.id)}
             {#if node.post.url}
               <a href={node.post.url} target="_blank" rel="noreferrer">
                 <g
@@ -339,7 +399,7 @@
               />
               <text
                 x={cx}
-                y={cy - tick.radius + 18}
+                y={cy - tick.radius - 6}
                 text-anchor="middle"
                 fill="red"
                 font-size="1rem"

@@ -88,11 +88,13 @@ const loadData = async () => {
 
       const id = (row.id ?? "").trim();
       const chat = (row.chat ?? "").trim();
+      const label = row.label?.trim() ?? "";
       if (!id || !chat) return null;
+      if (!label) return null;
 
       return {
         id,
-        label: row.label?.trim() ?? "",
+        label,
         chat,
         messageId: row.message_id?.trim() ?? "",
         dateIso: new Date(dateMs).toISOString(),
@@ -120,7 +122,10 @@ const loadData = async () => {
     }))
     .filter(
       (link) =>
-        link.source && link.target && postIds.has(link.source) && postIds.has(link.target)
+        link.source &&
+        link.target &&
+        postIds.has(link.source) &&
+        postIds.has(link.target)
     );
 
   return { posts, links, groups };
@@ -170,16 +175,13 @@ const computeLayout = ({ posts, links, groups }) => {
     );
   }
 
-  const maxReactions = posts.reduce(
-    (m, p) => Math.max(m, p.reactions ?? 0),
-    0
-  );
+  const maxReactions = posts.reduce((m, p) => Math.max(m, p.reactions ?? 0), 0);
   const maxLinks = [...linkCountByPost.values()].reduce(
     (m, v) => Math.max(m, v),
     0
   );
-  const minNodeRadius = 3;
-  const maxNodeRadiusDesired = 16;
+  const minNodeRadius = 2;
+  const maxNodeRadiusDesired = 20;
 
   const radiusForReactions = (value) => {
     const v = Math.max(0, value ?? 0);
@@ -197,10 +199,7 @@ const computeLayout = ({ posts, links, groups }) => {
 
   const postCountByGroup = new Map();
   for (const post of posts) {
-    postCountByGroup.set(
-      post.chat,
-      (postCountByGroup.get(post.chat) ?? 0) + 1
-    );
+    postCountByGroup.set(post.chat, (postCountByGroup.get(post.chat) ?? 0) + 1);
   }
 
   const knownGroups = new Map(
@@ -223,15 +222,17 @@ const computeLayout = ({ posts, links, groups }) => {
     }
   }
 
-  const orderedGroups = [...knownGroups.values()].sort((a, b) => {
-    const aSubs = a.subscribers ?? 0;
-    const bSubs = b.subscribers ?? 0;
-    if (aSubs !== bSubs) return bSubs - aSubs;
-    const aPosts = a.postCount ?? 0;
-    const bPosts = b.postCount ?? 0;
-    if (aPosts !== bPosts) return bPosts - aPosts;
-    return a.label.localeCompare(b.label);
-  });
+  const orderedGroups = [...knownGroups.values()]
+    .filter((g) => (g.postCount ?? 0) > 0)
+    .sort((a, b) => {
+      const aSubs = a.subscribers ?? 0;
+      const bSubs = b.subscribers ?? 0;
+      if (aSubs !== bSubs) return bSubs - aSubs;
+      const aPosts = a.postCount ?? 0;
+      const bPosts = b.postCount ?? 0;
+      if (aPosts !== bPosts) return bPosts - aPosts;
+      return a.label.localeCompare(b.label);
+    });
 
   const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
   const sliceGap = Math.min(0.4, sliceAngle * 0.18);
@@ -331,9 +332,9 @@ const computeLayout = ({ posts, links, groups }) => {
 
     const anchorStrength = 0.25;
     const linkStrength = 0.01;
-    const damping = 0.9;
-    const collisionPadding = 30;
-    const cellSize = Math.max(28, maxNodeRadius * 4);
+    const damping = 0.2;
+    const collisionPadding = 4;
+    const cellSize = Math.max(32, maxNodeRadius * 4);
 
     for (let step = 0; step < iterations; step++) {
       for (const edge of edges) {
@@ -485,20 +486,48 @@ const computeLayout = ({ posts, links, groups }) => {
     }
   };
 
-  simulate(500);
+  simulate(200);
 
   const ringTicks = (() => {
     if (!sortedTimes.length) return [];
-    const startYear = new Date(minTime).getFullYear();
-    const endYear = new Date(maxTime).getFullYear();
+    const start = new Date(minTime);
+    const end = new Date(maxTime);
+    // walk backwards from the latest month to ensure the outer ring is aligned with the latest date
+    let cursor = Date.UTC(
+      end.getUTCFullYear(),
+      end.getUTCMonth(),
+      1,
+      0,
+      0,
+      0
+    );
+    const first = Date.UTC(
+      start.getUTCFullYear(),
+      start.getUTCMonth(),
+      1,
+      0,
+      0,
+      0
+    );
     const ticks = [];
-    for (let y = startYear; y <= endYear; y++) {
-      ticks.push(Date.UTC(y, 11, 31, 23, 59, 59));
+    const minRadiusGap = 60;
+    let lastRadius = Infinity;
+    while (cursor >= first) {
+      const r = radiusForTime(cursor);
+      if (ticks.length === 0 || lastRadius - r >= minRadiusGap) {
+        ticks.push(cursor);
+        lastRadius = r;
+      }
+
+      const d = new Date(cursor);
+      cursor = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1, 0, 0, 0);
     }
-    return ticks.map((t) => ({
-      time: t,
-      radius: radiusForTime(t),
-    }));
+    return ticks
+      .sort((a, b) => a - b)
+      .map((t) => ({
+        time: t,
+        radius: radiusForTime(t),
+      }));
   })();
 
   return {

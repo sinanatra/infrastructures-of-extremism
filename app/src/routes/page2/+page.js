@@ -55,11 +55,13 @@ export const load = async ({ fetch }) => {
 
 			const id = (row.id ?? '').trim();
 			const chat = (row.chat ?? '').trim();
+			const label = row.label?.trim() ?? '';
 			if (!id || !chat) return null;
+			if (!label) return null; 
 
 			return {
 				id,
-				label: row.label?.trim() ?? '',
+				label,
 				chat,
 				messageId: row.message_id?.trim() ?? '',
 				dateIso: new Date(dateMs).toISOString(),
