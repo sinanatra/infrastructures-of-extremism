@@ -8,7 +8,7 @@
   const height = precomputedLayout?.height ?? 3000;
   const cx = width / 2;
   const cy = height / 2;
-  const viewPadding = 160;
+  const viewPadding = 280;
   const viewBoxValue = `${-viewPadding} ${-viewPadding} ${width + viewPadding * 2} ${height + viewPadding * 2}`;
   const innerRadius = 3;
   const outerRadius = Math.min(width, height) / 2 - 50;
@@ -254,6 +254,7 @@
             <button
               class="underline decoration-dotted"
               on:click={() => (selectedGroupId = null)}
+              
             >
               clear
             </button>
@@ -298,6 +299,7 @@
           {#each slicePaths as slice}
             <text
               on:click={() => toggleGroup(slice.id)}
+              
               class="cursor-pointer select-none"
               x={slice.labelPos.x}
               y={slice.labelPos.y}
@@ -309,7 +311,7 @@
                   ? "#f5f5f5"
                   : "#555"
               }
-              font-size="1rem"
+              font-size="1.5rem"
               font-weight="800"
             >
               {slice.label}
@@ -322,7 +324,7 @@
             <path
               d={link.d}
               fill="none"
-              stroke="red"
+              stroke="var(--highlite-color)"
               stroke-width={link.crossGroup ? 1.3 : 0.8}
               opacity={link.crossGroup ? 0.28 : 0.12}
             />
@@ -335,7 +337,7 @@
               <path
                 d={link.d}
                 fill="none"
-                stroke="red"
+                stroke="var(--highlite-color)"
                 stroke-width={link.crossGroup ? 1.3 : 0.8}
                 opacity={link.crossGroup ? 0.6 : 0.28}
               />
@@ -394,15 +396,15 @@
                 {cy}
                 r={tick.radius}
                 fill="none"
-                stroke="red"
+                stroke="var(--highlite-color)"
                 stroke-dasharray="3 5"
               />
               <text
                 x={cx}
                 y={cy - tick.radius - 6}
                 text-anchor="middle"
-                fill="red"
-                font-size="1rem"
+                fill="var(--highlite-color)"
+                font-size="1.4rem"
                 font-weight="700"
               >
                 {formatTick.format(tick.time)}
