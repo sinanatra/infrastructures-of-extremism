@@ -31,7 +31,7 @@
   $: selectedGroup =
     selectedGroupId === null
       ? null
-      : sliceForGroup.get(selectedGroupId)?.group ?? null;
+      : (sliceForGroup.get(selectedGroupId)?.group ?? null);
 
   const toggleGroup = (groupId) => {
     selectedGroupId = selectedGroupId === groupId ? null : groupId;
@@ -186,6 +186,16 @@
   });
 
   const ringTicks = precomputedLayout?.ringTicks ?? [];
+  const outerTick = ringTicks.length ? ringTicks[ringTicks.length - 1] : null;
+  const innerTicks =
+    ringTicks.length > 1 ? ringTicks.slice(0, ringTicks.length - 1) : [];
+  const maxNodeRadial = nodes.reduce(
+    (m, n) => Math.max(m, Math.hypot(n.x - cx, n.y - cy)),
+    0
+  );
+  const outerRingRadius =
+    Math.max(outerTick?.radius ?? 0, maxNodeRadial + 12) ||
+    Math.min(width, height) / 2 - 50;
 
   const subscriberText = (value) => {
     if (!value) return null;
@@ -241,7 +251,9 @@
         <span>{orderedGroups.length} groups</span>
         <span>{links.length} links</span>
         {#if selectedGroup}
-          <span class="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full text-sm">
+          <span
+            class="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full text-sm"
+          >
             <span class="font-semibold">{selectedGroup.label}</span>
             {#if subscriberText(selectedGroup.subscribers)}
               <span class="text-gray-200">
@@ -254,7 +266,6 @@
             <button
               class="underline decoration-dotted"
               on:click={() => (selectedGroupId = null)}
-              
             >
               clear
             </button>
@@ -299,18 +310,15 @@
           {#each slicePaths as slice}
             <text
               on:click={() => toggleGroup(slice.id)}
-              
               class="cursor-pointer select-none"
               x={slice.labelPos.x}
               y={slice.labelPos.y}
               text-anchor="start"
               dominant-baseline="middle"
               transform={`rotate(${slice.angleDeg}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
-              fill={
-                selectedGroupId === null || selectedGroupId === slice.id
-                  ? "#f5f5f5"
-                  : "#555"
-              }
+              fill={selectedGroupId === null || selectedGroupId === slice.id
+                ? "#f5f5f5"
+                : "#555"}
               font-size="1.5rem"
               font-weight="800"
             >
@@ -389,28 +397,53 @@
         </g>
 
         <g class="rings">
-          {#each ringTicks as tick}
+          {#if innerTicks.length}
+            {#each innerTicks as tick}
+              <g>
+                <circle
+                  {cx}
+                  {cy}
+                  r={tick.radius}
+                  fill="none"
+                  stroke="var(--highlite-color)"
+                  stroke-dasharray="3 5"
+                />
+                <text
+                  x={cx}
+                  y={cy - tick.radius - 6}
+                  text-anchor="middle"
+                  fill="var(--highlite-color)"
+                  font-size="1.4rem"
+                  font-weight="700"
+                >
+                  {formatTick.format(tick.time)}
+                </text>
+              </g>
+            {/each}
+          {/if}
+
+          {#if outerTick}
             <g>
               <circle
                 {cx}
                 {cy}
-                r={tick.radius}
+                r={outerRingRadius}
                 fill="none"
                 stroke="var(--highlite-color)"
                 stroke-dasharray="3 5"
               />
               <text
                 x={cx}
-                y={cy - tick.radius - 6}
+                y={cy - outerRingRadius - 12}
                 text-anchor="middle"
                 fill="var(--highlite-color)"
                 font-size="1.4rem"
-                font-weight="700"
+                font-weight="800"
               >
-                {formatTick.format(tick.time)}
+                {formatTick.format(outerTick.time)}
               </text>
             </g>
-          {/each}
+          {/if}
         </g>
       </svg>
     </div>
