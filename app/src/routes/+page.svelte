@@ -254,7 +254,7 @@
           <span
             class="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full text-sm"
           >
-            <span class="font-semibold">{selectedGroup.label}</span>
+            <span>{selectedGroup.label}</span>
             {#if subscriberText(selectedGroup.subscribers)}
               <span class="text-gray-200">
                 {subscriberText(selectedGroup.subscribers)}
@@ -414,7 +414,7 @@
                   text-anchor="middle"
                   fill="var(--highlite-color)"
                   font-size="1.4rem"
-                  font-weight="700"
+                  font-weight="400"
                 >
                   {formatTick.format(tick.time)}
                 </text>
