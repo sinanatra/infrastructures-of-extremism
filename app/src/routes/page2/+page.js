@@ -11,20 +11,22 @@ const parseDateMs = (value) => {
 };
 
 export const load = async ({ fetch }) => {
-	const [postsRes, linksRes, groupsRes] = await Promise.all([
+	const [postsRes, linksRes, groupsRes, layoutRes] = await Promise.all([
 		fetch('/data/message_nodes.csv'),
 		fetch('/data/message_edges.csv'),
-		fetch('/data/nodes.csv')
+		fetch('/data/nodes.csv'),
+		fetch('/data/layout.json')
 	]);
 
-	if (!postsRes.ok || !linksRes.ok || !groupsRes.ok) {
-		throw new Error('Failed to load one or more CSV files from /data');
+	if (!postsRes.ok || !linksRes.ok || !groupsRes.ok || !layoutRes.ok) {
+		throw new Error('Failed to load one or more data files from /data');
 	}
 
-	const [postsCsv, linksCsv, groupsCsv] = await Promise.all([
+	const [postsCsv, linksCsv, groupsCsv, layoutJson] = await Promise.all([
 		postsRes.text(),
 		linksRes.text(),
-		groupsRes.text()
+		groupsRes.text(),
+		layoutRes.text()
 	]);
 
 	const excludedGroupIds = new Set(['boost']);
@@ -86,9 +88,17 @@ export const load = async ({ fetch }) => {
 		}))
 		.filter((link) => link.source && link.target && postIds.has(link.source) && postIds.has(link.target));
 
+	let layout = null;
+	try {
+		layout = JSON.parse(layoutJson);
+	} catch (err) {
+		throw new Error('Failed to parse precomputed layout.json');
+	}
+
 	return {
 		posts,
 		groups,
-		links
+		links,
+		layout
 	};
 };
