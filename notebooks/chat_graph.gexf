@@ -1,0 +1,1726 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2025-12-02">
+    <creator>NetworkX 3.6</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="1" title="message_id" type="string" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="subscribers" type="long" />
+    </attributes>
+    <nodes>
+      <node id="jungenationalisten" label="Junge Nationalisten">
+        <attvalues>
+          <attvalue for="0" value="13827" />
+        </attvalues>
+      </node>
+      <node id="heimat2023" label="heimat2023" />
+      <node id="schmidtkeswelt" label="schmidtkeswelt" />
+      <node id="dortmundsrechte" label="dortmundsrechte" />
+      <node id="mundsrechte" label="mundsrechte" />
+      <node id="eimatDo!&#10;" label="eimatDo!&#10;" />
+      <node id="JN_Sachsen_Anhalt" label="JN_Sachsen_Anhalt" />
+      <node id="JN_voran" label="JN_voran" />
+      <node id="JungeNationalisten" label="JungeNationalisten" />
+      <node id="HeimatSachsenAnhalt" label="HeimatSachsenAnhalt" />
+      <node id="KDN2013" label="KDN2013" />
+      <node id="Balaclavagraphics" label="Balaclavagraphics" />
+      <node id="Frontdienst" label="Frontdienst" />
+      <node id="fsnrev" label="fsnrev" />
+      <node id="theresia_brand" label="theresia_brand" />
+      <node id="EB_official" label="EB_official" />
+      <node id="pcrecords" label="pcrecords" />
+      <node id="niederlausitzInfo" label="niederlausitzInfo" />
+      <node id="braunschweigverteidigen" label="braunschweigverteidigen" />
+      <node id="JN_MuP" label="JN_MuP" />
+      <node id="WiderstandinAktion" label="WiderstandinAktion" />
+      <node id="eimatsachsen ⚙" label="eimatsachsen ⚙" />
+      <node id="sturmzeichen" label="sturmzeichen" />
+      <node id="turmzeichen" label="turmzeichen" />
+      <node id="dieheimatmv" label="dieheimatmv" />
+      <node id="jungenationlisten" label="jungenationlisten" />
+      <node id="JN_Th" label="JN_Th" />
+      <node id="jnhessen" label="jnhessen" />
+      <node id="harzverteidigen" label="harzverteidigen" />
+      <node id="heimatsachsenanhalt" label="heimatsachsenanhalt" />
+      <node id="DieHeimat" label="DieHeimat" />
+      <node id="hermanns_heide" label="hermanns_heide" />
+      <node id="freiesachsen" label="freiesachsen" />
+      <node id="unetenucleonacional" label="unetenucleonacional" />
+      <node id="JN_Westverband" label="JN_Westverband" />
+      <node id="athenscene" label="athenscene" />
+      <node id="heimat_th" label="heimat_th" />
+      <node id="jungenationalisten " label="jungenationalisten " />
+      <node id="gegenstrom" label="gegenstrom" />
+      <node id="WiderstandinAktion " label="WiderstandinAktion " />
+      <node id="rossmueller" label="rossmueller" />
+      <node id="wie_gesagt" label="wie_gesagt" />
+      <node id="ortmundsrechte" label="ortmundsrechte" />
+      <node id="Sicherheitshinweise" label="Sicherheitshinweise" />
+      <node id="sicherheitshinweise" label="sicherheitshinweise" />
+      <node id="ungenationalisten 🇩" label="ungenationalisten 🇩" />
+      <node id="tnrw" label="tnrw" />
+      <node id="heimatnrw" label="heimatnrw" />
+      <node id="N_Westverband" label="N_Westverband" />
+      <node id="Freiheitsgedanken01&#10;" label="Freiheitsgedanken01&#10;" />
+      <node id="matnrw" label="matnrw" />
+      <node id="imatnrw" label="imatnrw" />
+      <node id="eimatDo o" label="eimatDo o" />
+      <node id="deutschestimmemagazin" label="deutschestimmemagazin" />
+      <node id="estverband" label="estverband" />
+      <node id="HeimatDo" label="HeimatDo" />
+      <node id="urbsturrium" label="urbsturrium" />
+      <node id="ontdienst 🪧🔥" label="ontdienst 🪧🔥" />
+      <node id=" auf Tele" label=" auf Tele" />
+      <node id="BlickpunktTV" label="BlickpunktTV" />
+      <node id="Jungenationalisten" label="Jungenationalisten" />
+      <node id="itsgedanken01&#10;Telefo" label="itsgedanken01&#10;Telefo" />
+      <node id="ungenationalisten" label="ungenationalisten" />
+      <node id="Freiheitsgedanken01" label="Freiheitsgedanken01" />
+      <node id="Schreiberklagtan" label="Schreiberklagtan" />
+      <node id="DerAppell" label="DerAppell" />
+      <node id="AufbauHolstein" label="AufbauHolstein" />
+      <node id="ungenationalisten&#10;&#10;" label="ungenationalisten&#10;&#10;" />
+      <node id="loiswagnerjn" label="loiswagnerjn" />
+      <node id="eimat2023) " label="eimat2023) " />
+      <node id="KGxPR" label="KGxPR" />
+      <node id="dieband" label="dieband" />
+      <node id="snrev&#10;@" label="snrev&#10;@" />
+      <node id="alaclavagraphics&#10;@" label="alaclavagraphics&#10;@" />
+      <node id="DN2013&#10;@" label="DN2013&#10;@" />
+      <node id="crecords&#10;@" label="crecords&#10;@" />
+      <node id="nhessen" label="nhessen" />
+      <node id="eitsgedanken01&#10;&#10;📞 01" label="eitsgedanken01&#10;&#10;📞 01" />
+      <node id="elblandrevolte" label="elblandrevolte" />
+      <node id="stefantrautmannDL" label="stefantrautmannDL" />
+      <node id="comitedu9mai" label="comitedu9mai" />
+      <node id="mitedu9mai" label="mitedu9mai" />
+      <node id="enationalisten" label="enationalisten" />
+      <node id="ngenationalisten" label="ngenationalisten" />
+      <node id="gespraeche" label="gespraeche" />
+      <node id="23&#10;🗨 Diskus" label="23&#10;🗨 Diskus" />
+      <node id="nvoran" label="nvoran" />
+      <node id="Hessen" label="Hessen" />
+      <node id="3&#10;🗨 Diskuss" label="3&#10;🗨 Diskuss" />
+      <node id="espraeche" label="espraeche" />
+      <node id="rtmundsrechte" label="rtmundsrechte" />
+      <node id="tgespraeche" label="tgespraeche" />
+      <node id="023&#10;🧠 Disku" label="023&#10;🧠 Disku" />
+      <node id="23&#10;🧠 Diskus" label="23&#10;🧠 Diskus" />
+      <node id="skussionsgr" label="skussionsgr" />
+      <node id="che" label="che" />
+      <node id="JN_TH" label="JN_TH" />
+      <node id="jn_voran" label="jn_voran" />
+      <node id="wuerttemberg_verteidigen" label="wuerttemberg_verteidigen" />
+      <node id="3  &#10;&#10;💬 Komm" label="3  &#10;&#10;💬 Komm" />
+      <node id="gefangenenhilfe" label="gefangenenhilfe" />
+      <node id="&#10;&#10;💬 Kommt i" label="&#10;&#10;💬 Kommt i" />
+      <node id="raeche" label="raeche" />
+      <node id="genationalisten 🇩🇪" label="genationalisten 🇩🇪" />
+      <node id="defunken&#10;@ju" label="defunken&#10;@ju" />
+      <node id="muldefunken" label="muldefunken" />
+      <node id="praeche" label="praeche" />
+      <node id="&#10;💬 Kommt in" label="&#10;💬 Kommt in" />
+      <node id="PAxActiveClub" label="PAxActiveClub" />
+      <node id="activeclubger&#10;&#10;😊" label="activeclubger&#10;&#10;😊" />
+      <node id="PAxActiveClu" label="PAxActiveClu" />
+      <node id="atgespraeche" label="atgespraeche" />
+      <node id="2023&#10;&#10;Kommt" label="2023&#10;&#10;Kommt" />
+      <node id="lukovmarch" label="lukovmarch" />
+      <node id="heimatNDS" label="heimatNDS" />
+      <node id="heimatNDS&#10;" label="heimatNDS&#10;" />
+      <node id="iskursNDS" label="iskursNDS" />
+      <node id="dresden_gedenken" label="dresden_gedenken" />
+      <node id="lblandrevolte&#10;&#10;" label="lblandrevolte&#10;&#10;" />
+      <node id="peterschreiber" label="peterschreiber" />
+      <node id="prototelegram" label="prototelegram" />
+      <node id="aufgewachtonline" label="aufgewachtonline" />
+      <node id="eimatjugendrl 🥁" label="eimatjugendrl 🥁" />
+      <node id="heimatsachsen" label="heimatsachsen" />
+      <node id="HeimatDo!" label="HeimatDo!" />
+      <node id="uldefunken 📢" label="uldefunken 📢" />
+      <node id="N_voran 🙋" label="N_voran 🙋" />
+      <node id="agner_jn&#10;F" label="agner_jn&#10;F" />
+      <node id="JNDeutschland" label="JNDeutschland" />
+      <node id="JA_Deutschland" label="JA_Deutschland" />
+      <node id="frontdienst" label="frontdienst" />
+      <node id="eheimatgespraeche" label="eheimatgespraeche" />
+      <node id="eimat2023&#10;&#10;" label="eimat2023&#10;&#10;" />
+      <node id="weseremsaktion" label="weseremsaktion" />
+      <node id="jndortmund" label="jndortmund" />
+      <node id="clauscremernrw" label="clauscremernrw" />
+      <node id="JN_Pfalz" label="JN_Pfalz" />
+      <node id="flakdieband" label="flakdieband" />
+      <node id="auf1tv" label="auf1tv" />
+      <node id="eheimatgespraeche&#10;&#10;🖤" label="eheimatgespraeche&#10;&#10;🖤" />
+      <node id="jfeseu" label="jfeseu" />
+      <node id="hannoververteidigen" label="hannoververteidigen" />
+      <node id="J_F457" label="J_F457" />
+      <node id="zukunftHBS" label="zukunftHBS" />
+      <node id="michaelbrueck90" label="michaelbrueck90" />
+      <node id="prphellas" label="prphellas" />
+      <node id="genationalisten 💪🏻&#10;" label="genationalisten 💪🏻&#10;" />
+      <node id="turmzeichen&#10;&#10;" label="turmzeichen&#10;&#10;" />
+      <node id="erblehre" label="erblehre" />
+      <node id="egiohungaria 🇭" label="egiohungaria 🇭" />
+      <node id="legiohungaria" label="legiohungaria" />
+      <node id="eimatNDS 🔥" label="eimatNDS 🔥" />
+      <node id="niewiederaltpartei" label="niewiederaltpartei" />
+      <node id="kavalier_nds" label="kavalier_nds" />
+      <node id="23&#10;&#10;Kommt i" label="23&#10;&#10;Kommt i" />
+      <node id="heimatbw" label="heimatbw" />
+      <node id="heinlandbande ⛺" label="heinlandbande ⛺" />
+      <node id="&#10;&#10;Kommt in " label="&#10;&#10;Kommt in " />
+      <node id="spraeche" label="spraeche" />
+      <node id="at2023&#10;&#10;Kom" label="at2023&#10;&#10;Kom" />
+      <node id="imatgespraeche" label="imatgespraeche" />
+      <node id="rontdienst 📢" label="rontdienst 📢" />
+      <node id="landrevolte" label="landrevolte" />
+      <node id="iheitsgedanken01" label="iheitsgedanken01" />
+      <node id="heimat_bayern" label="heimat_bayern" />
+      <node id="forzheimrevolte 📢" label="forzheimrevolte 📢" />
+      <node id="SchwarzeKreuze" label="SchwarzeKreuze" />
+      <node id="blocmtp" label="blocmtp" />
+      <node id="ursNDS" label="ursNDS" />
+      <node id="matNDS&#10;&#10;Ko" label="matNDS&#10;&#10;Ko" />
+      <node id="activeclubger" label="activeclubger" />
+      <node id="BNSIYI" label="BNSIYI" />
+      <node id="rphellas 🇬" label="rphellas 🇬" />
+      <node id="nationalistesfr" label="nationalistesfr" />
+      <node id="ForteresseEurope" label="ForteresseEurope" />
+      <node id="emernrw" label="emernrw" />
+      <node id="heimatgespraeche" label="heimatgespraeche" />
+      <node id="imat2023&#10;&#10;K" label="imat2023&#10;&#10;K" />
+      <node id="Sondershausen_geht_spazieren" label="Sondershausen_geht_spazieren" />
+      <node id="freiesth" label="freiesth" />
+      <node id="lauscremernrw (" label="lauscremernrw (" />
+      <node id="kursNDS" label="kursNDS" />
+      <node id="imatNDS&#10;&#10;K" label="imatNDS&#10;&#10;K" />
+      <node id="infodeutschoesterreich" label="infodeutschoesterreich" />
+      <node id="ebergegenlinks 🙋🏼" label="ebergegenlinks 🙋🏼" />
+      <node id="aufklebergegenlinks" label="aufklebergegenlinks" />
+      <node id="JN_voran " label="JN_voran " />
+      <node id="023&#10;&#10;Kommt " label="023&#10;&#10;Kommt " />
+      <node id="ein_prozent" label="ein_prozent" />
+      <node id="esden_gedenken" label="esden_gedenken" />
+      <node id="atnrw" label="atnrw" />
+      <node id="atgespraeche&#10;&#10;https:" label="atgespraeche&#10;&#10;https:" />
+      <node id="pforzheimrevolte" label="pforzheimrevolte" />
+      <node id="atgespraeche der" label="atgespraeche der" />
+      <node id="genationalisten&#10;&#10;- " label="genationalisten&#10;&#10;- " />
+      <node id="HeimatNDS " label="HeimatNDS " />
+      <node id="protestkarte" label="protestkarte" />
+      <node id="InfernoDE" label="InfernoDE" />
+      <node id="skursNDS" label="skursNDS" />
+      <node id="eimatNDS&#10;&#10;" label="eimatNDS&#10;&#10;" />
+      <node id="erial" label="erial" />
+      <node id="tgespraeche&#10;&#10;Heimatm" label="tgespraeche&#10;&#10;Heimatm" />
+      <node id="rmzeichen" label="rmzeichen" />
+      <node id="eutschestimmemagazin d" label="eutschestimmemagazin d" />
+      <node id="forzheimRevolte" label="forzheimRevolte" />
+      <node id="lebensart_survival" label="lebensart_survival" />
+      <node id="N_Th&#10;&#10;" label="N_Th&#10;&#10;" />
+      <node id="nsfronta" label="nsfronta" />
+      <node id="heimatundidentitaet" label="heimatundidentitaet" />
+      <node id="srechte" label="srechte" />
+      <node id="Do 👈&#10;&#10;⚫️🟡" label="Do 👈&#10;&#10;⚫️🟡" />
+      <node id="aktionschwarzekreuze" label="aktionschwarzekreuze" />
+      <node id="mkdnds" label="mkdnds" />
+      <node id="jnpdniedersachsen" label="jnpdniedersachsen" />
+      <node id="npdbundesverband" label="npdbundesverband" />
+      <node id="derdritteblickwinkel" label="derdritteblickwinkel" />
+      <node id="DeutscheDD" label="DeutscheDD" />
+      <node id="deutschedichter" label="deutschedichter" />
+      <node id="oposrecords" label="oposrecords" />
+      <node id="wirpackenan" label="wirpackenan" />
+      <node id="zusammenruecken" label="zusammenruecken" />
+      <node id="youngheartofeurope" label="youngheartofeurope" />
+      <node id="inbewegung2020" label="inbewegung2020" />
+      <node id="hexogenoutdoor" label="hexogenoutdoor" />
+      <node id="FactaESP" label="FactaESP" />
+      <node id="schuelersprecher" label="schuelersprecher" />
+      <node id="npd_nrw" label="npd_nrw" />
+      <node id="artikel5" label="artikel5" />
+      <node id="Er_Volkslehrer" label="Er_Volkslehrer" />
+      <node id="wirpackenan " label="wirpackenan " />
+      <node id="ultrasnotreds2" label="ultrasnotreds2" />
+      <node id="rontdienst" label="rontdienst" />
+      <node id="ationalisten 🇩🇪" label="ationalisten 🇩🇪" />
+      <node id="rAppell" label="rAppell" />
+      <node id="SturmfestOS" label="SturmfestOS" />
+      <node id="rontdienst f" label="rontdienst f" />
+      <node id="en" label="en" />
+      <node id="ngenationalisten 🇩🇪" label="ngenationalisten 🇩🇪" />
+      <node id="prozessbeobachtung" label="prozessbeobachtung" />
+      <node id="erAppell" label="erAppell" />
+      <node id="CompactMagazin" label="CompactMagazin" />
+      <node id="enationalisten 🇩🇪" label="enationalisten 🇩🇪" />
+      <node id="ungenationalisten🇩🇪" label="ungenationalisten🇩🇪" />
+      <node id="Schuelersprecher" label="Schuelersprecher" />
+      <node id="ungenationalisten &lt;" label="ungenationalisten &lt;" />
+      <node id="tagderarbeit&#10;" label="tagderarbeit&#10;" />
+      <node id="tagderarbeit" label="tagderarbeit" />
+      <node id="agderarbeit 🛠" label="agderarbeit 🛠" />
+      <node id="guenterdeckert" label="guenterdeckert" />
+      <node id="npdrn" label="npdrn" />
+      <node id="rdritteblickwinkel du" label="rdritteblickwinkel du" />
+      <node id="ationalisten &lt;&lt;" label="ationalisten &lt;&lt;" />
+      <node id="genationalisten 🇩🇪 " label="genationalisten 🇩🇪 " />
+      <node id="werra_elbflorenz" label="werra_elbflorenz" />
+      <node id="dresden2020" label="dresden2020" />
+      <node id="CoronaWahnsinnStoppen" label="CoronaWahnsinnStoppen" />
+      <node id="balaclavagraphics" label="balaclavagraphics" />
+      <node id="martinkohlmann" label="martinkohlmann" />
+      <node id="blklgnwear" label="blklgnwear" />
+      <node id="npdhessen" label="npdhessen" />
+      <node id="zukunft_heimat" label="zukunft_heimat" />
+      <node id="RheinwiesenlagerBretzenheim" label="RheinwiesenlagerBretzenheim" />
+      <node id="messestadtaktivisten" label="messestadtaktivisten" />
+      <node id="Messestadtaktivisten" label="Messestadtaktivisten" />
+      <node id="TremoniaKollektiv" label="TremoniaKollektiv" />
+      <node id="freie_mittelsachsen" label="freie_mittelsachsen" />
+      <node id="Harzrevolte" label="Harzrevolte" />
+      <node id="npdmv" label="npdmv" />
+      <node id="aktivde" label="aktivde" />
+      <node id="pdbundesverband" label="pdbundesverband" />
+      <node id="freiesachsen " label="freiesachsen " />
+      <node id="schwarzeKreuze" label="schwarzeKreuze" />
+      <node id="NPDUckermark" label="NPDUckermark" />
+      <node id="aktionsgruppezittau" label="aktionsgruppezittau" />
+      <node id="npdniedersachsen&#10;&#10;" label="npdniedersachsen&#10;&#10;" />
+      <node id="ignazbearth" label="ignazbearth" />
+      <node id="rpackenan" label="rpackenan" />
+      <node id="Gefangenenhilfe" label="Gefangenenhilfe" />
+      <node id="er_Volkslehrer u" label="er_Volkslehrer u" />
+      <node id="joinchat" label="joinchat" />
+      <node id="PROsition" label="PROsition" />
+      <node id="oronaWahnsinnStoppen&#10;&#10;" label="oronaWahnsinnStoppen&#10;&#10;" />
+      <node id="tradition_und_ordnung" label="tradition_und_ordnung" />
+      <node id="Jungetat" label="Jungetat" />
+    </nodes>
+    <edges>
+      <edge source="jungenationalisten" target="jungenationalisten" id="0">
+        <attvalues>
+          <attvalue for="1" value="283" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimat2023" id="1">
+        <attvalues>
+          <attvalue for="1" value="2694" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="schmidtkeswelt" id="2">
+        <attvalues>
+          <attvalue for="1" value="1163" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="dortmundsrechte" id="3">
+        <attvalues>
+          <attvalue for="1" value="1458" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="mundsrechte" id="4">
+        <attvalues>
+          <attvalue for="1" value="4426" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatDo!&#10;" id="5">
+        <attvalues>
+          <attvalue for="1" value="4011" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_Sachsen_Anhalt" id="6">
+        <attvalues>
+          <attvalue for="1" value="3505" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_voran" id="7">
+        <attvalues>
+          <attvalue for="1" value="3186" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JungeNationalisten" id="8">
+        <attvalues>
+          <attvalue for="1" value="4616" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="HeimatSachsenAnhalt" id="9">
+        <attvalues>
+          <attvalue for="1" value="1216" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="KDN2013" id="10">
+        <attvalues>
+          <attvalue for="1" value="4224" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Balaclavagraphics" id="11">
+        <attvalues>
+          <attvalue for="1" value="1670" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Frontdienst" id="12">
+        <attvalues>
+          <attvalue for="1" value="1858" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="fsnrev" id="13">
+        <attvalues>
+          <attvalue for="1" value="17" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="theresia_brand" id="14">
+        <attvalues>
+          <attvalue for="1" value="4689" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="EB_official" id="15">
+        <attvalues>
+          <attvalue for="1" value="3327" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="pcrecords" id="16">
+        <attvalues>
+          <attvalue for="1" value="159" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="niederlausitzInfo" id="17">
+        <attvalues>
+          <attvalue for="1" value="2984" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="braunschweigverteidigen" id="18">
+        <attvalues>
+          <attvalue for="1" value="3266" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_MuP" id="19">
+        <attvalues>
+          <attvalue for="1" value="4592" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="WiderstandinAktion" id="20">
+        <attvalues>
+          <attvalue for="1" value="1275" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatsachsen ⚙" id="21">
+        <attvalues>
+          <attvalue for="1" value="4669" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="sturmzeichen" id="22">
+        <attvalues>
+          <attvalue for="1" value="2141" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="turmzeichen" id="23">
+        <attvalues>
+          <attvalue for="1" value="2293" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="dieheimatmv" id="24">
+        <attvalues>
+          <attvalue for="1" value="1354" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jungenationlisten" id="25">
+        <attvalues>
+          <attvalue for="1" value="4653" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_Th" id="26">
+        <attvalues>
+          <attvalue for="1" value="2482" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jnhessen" id="27">
+        <attvalues>
+          <attvalue for="1" value="4219" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="harzverteidigen" id="28">
+        <attvalues>
+          <attvalue for="1" value="3586" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatsachsenanhalt" id="29">
+        <attvalues>
+          <attvalue for="1" value="4616" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="DieHeimat" id="30">
+        <attvalues>
+          <attvalue for="1" value="4616" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="hermanns_heide" id="31">
+        <attvalues>
+          <attvalue for="1" value="3600" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="freiesachsen" id="32">
+        <attvalues>
+          <attvalue for="1" value="973" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="unetenucleonacional" id="33">
+        <attvalues>
+          <attvalue for="1" value="4596" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_Westverband" id="34">
+        <attvalues>
+          <attvalue for="1" value="4051" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="athenscene" id="35">
+        <attvalues>
+          <attvalue for="1" value="3550" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimat_th" id="36">
+        <attvalues>
+          <attvalue for="1" value="4329" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jungenationalisten " id="37">
+        <attvalues>
+          <attvalue for="1" value="1835" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="gegenstrom" id="38">
+        <attvalues>
+          <attvalue for="1" value="1961" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="WiderstandinAktion " id="39">
+        <attvalues>
+          <attvalue for="1" value="3573" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rossmueller" id="40">
+        <attvalues>
+          <attvalue for="1" value="4533" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="wie_gesagt" id="41">
+        <attvalues>
+          <attvalue for="1" value="2168" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ortmundsrechte" id="42">
+        <attvalues>
+          <attvalue for="1" value="3103" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Sicherheitshinweise" id="43">
+        <attvalues>
+          <attvalue for="1" value="2934" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="sicherheitshinweise" id="44">
+        <attvalues>
+          <attvalue for="1" value="2934" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ungenationalisten 🇩" id="45">
+        <attvalues>
+          <attvalue for="1" value="1907" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tnrw" id="46">
+        <attvalues>
+          <attvalue for="1" value="4461" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatnrw" id="47">
+        <attvalues>
+          <attvalue for="1" value="3109" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="N_Westverband" id="48">
+        <attvalues>
+          <attvalue for="1" value="4445" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Freiheitsgedanken01&#10;" id="49">
+        <attvalues>
+          <attvalue for="1" value="4442" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="matnrw" id="50">
+        <attvalues>
+          <attvalue for="1" value="4434" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="imatnrw" id="51">
+        <attvalues>
+          <attvalue for="1" value="3341" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatDo o" id="52">
+        <attvalues>
+          <attvalue for="1" value="4426" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="deutschestimmemagazin" id="53">
+        <attvalues>
+          <attvalue for="1" value="432" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="estverband" id="54">
+        <attvalues>
+          <attvalue for="1" value="4098" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="HeimatDo" id="55">
+        <attvalues>
+          <attvalue for="1" value="4344" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="urbsturrium" id="56">
+        <attvalues>
+          <attvalue for="1" value="4332" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ontdienst 🪧🔥" id="57">
+        <attvalues>
+          <attvalue for="1" value="4331" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target=" auf Tele" id="58">
+        <attvalues>
+          <attvalue for="1" value="4331" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="BlickpunktTV" id="59">
+        <attvalues>
+          <attvalue for="1" value="504" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Jungenationalisten" id="60">
+        <attvalues>
+          <attvalue for="1" value="4316" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="itsgedanken01&#10;Telefo" id="61">
+        <attvalues>
+          <attvalue for="1" value="4313" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ungenationalisten" id="62">
+        <attvalues>
+          <attvalue for="1" value="4049" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Freiheitsgedanken01" id="63">
+        <attvalues>
+          <attvalue for="1" value="2496" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Schreiberklagtan" id="64">
+        <attvalues>
+          <attvalue for="1" value="4268" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="DerAppell" id="65">
+        <attvalues>
+          <attvalue for="1" value="2035" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="AufbauHolstein" id="66">
+        <attvalues>
+          <attvalue for="1" value="3739" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ungenationalisten&#10;&#10;" id="67">
+        <attvalues>
+          <attvalue for="1" value="4120" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="loiswagnerjn" id="68">
+        <attvalues>
+          <attvalue for="1" value="4250" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimat2023) " id="69">
+        <attvalues>
+          <attvalue for="1" value="4236" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="KGxPR" id="70">
+        <attvalues>
+          <attvalue for="1" value="4236" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="dieband" id="71">
+        <attvalues>
+          <attvalue for="1" value="4236" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="snrev&#10;@" id="72">
+        <attvalues>
+          <attvalue for="1" value="4224" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="alaclavagraphics&#10;@" id="73">
+        <attvalues>
+          <attvalue for="1" value="4224" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="DN2013&#10;@" id="74">
+        <attvalues>
+          <attvalue for="1" value="4224" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="crecords&#10;@" id="75">
+        <attvalues>
+          <attvalue for="1" value="4224" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="nhessen" id="76">
+        <attvalues>
+          <attvalue for="1" value="4223" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eitsgedanken01&#10;&#10;📞 01" id="77">
+        <attvalues>
+          <attvalue for="1" value="4222" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="elblandrevolte" id="78">
+        <attvalues>
+          <attvalue for="1" value="3336" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="stefantrautmannDL" id="79">
+        <attvalues>
+          <attvalue for="1" value="2228" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="comitedu9mai" id="80">
+        <attvalues>
+          <attvalue for="1" value="1915" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="mitedu9mai" id="81">
+        <attvalues>
+          <attvalue for="1" value="4114" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="enationalisten" id="82">
+        <attvalues>
+          <attvalue for="1" value="4097" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ngenationalisten" id="83">
+        <attvalues>
+          <attvalue for="1" value="1677" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="gespraeche" id="84">
+        <attvalues>
+          <attvalue for="1" value="3463" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="23&#10;🗨 Diskus" id="85">
+        <attvalues>
+          <attvalue for="1" value="4029" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="nvoran" id="86">
+        <attvalues>
+          <attvalue for="1" value="4028" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Hessen" id="87">
+        <attvalues>
+          <attvalue for="1" value="4014" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="3&#10;🗨 Diskuss" id="88">
+        <attvalues>
+          <attvalue for="1" value="3965" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="espraeche" id="89">
+        <attvalues>
+          <attvalue for="1" value="3929" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rtmundsrechte" id="90">
+        <attvalues>
+          <attvalue for="1" value="3010" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tgespraeche" id="91">
+        <attvalues>
+          <attvalue for="1" value="3185" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="023&#10;🧠 Disku" id="92">
+        <attvalues>
+          <attvalue for="1" value="3993" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="23&#10;🧠 Diskus" id="93">
+        <attvalues>
+          <attvalue for="1" value="3990" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="skussionsgr" id="94">
+        <attvalues>
+          <attvalue for="1" value="3974" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="che" id="95">
+        <attvalues>
+          <attvalue for="1" value="3974" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_TH" id="96">
+        <attvalues>
+          <attvalue for="1" value="3898" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jn_voran" id="97">
+        <attvalues>
+          <attvalue for="1" value="3788" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="wuerttemberg_verteidigen" id="98">
+        <attvalues>
+          <attvalue for="1" value="3729" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="3  &#10;&#10;💬 Komm" id="99">
+        <attvalues>
+          <attvalue for="1" value="3929" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="gefangenenhilfe" id="100">
+        <attvalues>
+          <attvalue for="1" value="1563" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="&#10;&#10;💬 Kommt i" id="101">
+        <attvalues>
+          <attvalue for="1" value="3901" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="raeche" id="102">
+        <attvalues>
+          <attvalue for="1" value="3901" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="genationalisten 🇩🇪" id="103">
+        <attvalues>
+          <attvalue for="1" value="2739" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="defunken&#10;@ju" id="104">
+        <attvalues>
+          <attvalue for="1" value="3775" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="muldefunken" id="105">
+        <attvalues>
+          <attvalue for="1" value="3775" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="praeche" id="106">
+        <attvalues>
+          <attvalue for="1" value="3895" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="&#10;💬 Kommt in" id="107">
+        <attvalues>
+          <attvalue for="1" value="3895" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="PAxActiveClub" id="108">
+        <attvalues>
+          <attvalue for="1" value="3891" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="activeclubger&#10;&#10;😊" id="109">
+        <attvalues>
+          <attvalue for="1" value="3891" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="PAxActiveClu" id="110">
+        <attvalues>
+          <attvalue for="1" value="3891" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="atgespraeche" id="111">
+        <attvalues>
+          <attvalue for="1" value="2894" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="2023&#10;&#10;Kommt" id="112">
+        <attvalues>
+          <attvalue for="1" value="2894" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="lukovmarch" id="113">
+        <attvalues>
+          <attvalue for="1" value="3785" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatNDS" id="114">
+        <attvalues>
+          <attvalue for="1" value="2906" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatNDS&#10;" id="115">
+        <attvalues>
+          <attvalue for="1" value="3868" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="iskursNDS" id="116">
+        <attvalues>
+          <attvalue for="1" value="3868" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="dresden_gedenken" id="117">
+        <attvalues>
+          <attvalue for="1" value="126" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="lblandrevolte&#10;&#10;" id="118">
+        <attvalues>
+          <attvalue for="1" value="3813" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="peterschreiber" id="119">
+        <attvalues>
+          <attvalue for="1" value="3737" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="prototelegram" id="120">
+        <attvalues>
+          <attvalue for="1" value="2786" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="aufgewachtonline" id="121">
+        <attvalues>
+          <attvalue for="1" value="3809" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatjugendrl 🥁" id="122">
+        <attvalues>
+          <attvalue for="1" value="3746" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatsachsen" id="123">
+        <attvalues>
+          <attvalue for="1" value="424" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="HeimatDo!" id="124">
+        <attvalues>
+          <attvalue for="1" value="3773" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="uldefunken 📢" id="125">
+        <attvalues>
+          <attvalue for="1" value="3749" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="N_voran 🙋" id="126">
+        <attvalues>
+          <attvalue for="1" value="3741" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="agner_jn&#10;F" id="127">
+        <attvalues>
+          <attvalue for="1" value="3739" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JNDeutschland" id="128">
+        <attvalues>
+          <attvalue for="1" value="3737" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JA_Deutschland" id="129">
+        <attvalues>
+          <attvalue for="1" value="3737" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="frontdienst" id="130">
+        <attvalues>
+          <attvalue for="1" value="3736" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eheimatgespraeche" id="131">
+        <attvalues>
+          <attvalue for="1" value="2694" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimat2023&#10;&#10;" id="132">
+        <attvalues>
+          <attvalue for="1" value="2694" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="weseremsaktion" id="133">
+        <attvalues>
+          <attvalue for="1" value="3715" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jndortmund" id="134">
+        <attvalues>
+          <attvalue for="1" value="3683" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="clauscremernrw" id="135">
+        <attvalues>
+          <attvalue for="1" value="909" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_Pfalz" id="136">
+        <attvalues>
+          <attvalue for="1" value="3677" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="flakdieband" id="137">
+        <attvalues>
+          <attvalue for="1" value="3677" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="auf1tv" id="138">
+        <attvalues>
+          <attvalue for="1" value="2417" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eheimatgespraeche&#10;&#10;🖤" id="139">
+        <attvalues>
+          <attvalue for="1" value="3624" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jfeseu" id="140">
+        <attvalues>
+          <attvalue for="1" value="3644" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="hannoververteidigen" id="141">
+        <attvalues>
+          <attvalue for="1" value="3615" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="J_F457" id="142">
+        <attvalues>
+          <attvalue for="1" value="3610" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="zukunftHBS" id="143">
+        <attvalues>
+          <attvalue for="1" value="3586" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="michaelbrueck90" id="144">
+        <attvalues>
+          <attvalue for="1" value="3370" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="prphellas" id="145">
+        <attvalues>
+          <attvalue for="1" value="3301" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="genationalisten 💪🏻&#10;" id="146">
+        <attvalues>
+          <attvalue for="1" value="3551" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="turmzeichen&#10;&#10;" id="147">
+        <attvalues>
+          <attvalue for="1" value="3209" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="erblehre" id="148">
+        <attvalues>
+          <attvalue for="1" value="3543" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="egiohungaria 🇭" id="149">
+        <attvalues>
+          <attvalue for="1" value="3540" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="legiohungaria" id="150">
+        <attvalues>
+          <attvalue for="1" value="2563" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatNDS 🔥" id="151">
+        <attvalues>
+          <attvalue for="1" value="3513" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="niewiederaltpartei" id="152">
+        <attvalues>
+          <attvalue for="1" value="3533" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="kavalier_nds" id="153">
+        <attvalues>
+          <attvalue for="1" value="2555" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="23&#10;&#10;Kommt i" id="154">
+        <attvalues>
+          <attvalue for="1" value="3463" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatbw" id="155">
+        <attvalues>
+          <attvalue for="1" value="3502" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heinlandbande ⛺" id="156">
+        <attvalues>
+          <attvalue for="1" value="3495" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="&#10;&#10;Kommt in " id="157">
+        <attvalues>
+          <attvalue for="1" value="3462" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="spraeche" id="158">
+        <attvalues>
+          <attvalue for="1" value="3462" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="at2023&#10;&#10;Kom" id="159">
+        <attvalues>
+          <attvalue for="1" value="3245" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="imatgespraeche" id="160">
+        <attvalues>
+          <attvalue for="1" value="3245" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rontdienst 📢" id="161">
+        <attvalues>
+          <attvalue for="1" value="2926" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="landrevolte" id="162">
+        <attvalues>
+          <attvalue for="1" value="3439" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="iheitsgedanken01" id="163">
+        <attvalues>
+          <attvalue for="1" value="3429" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimat_bayern" id="164">
+        <attvalues>
+          <attvalue for="1" value="3424" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="forzheimrevolte 📢" id="165">
+        <attvalues>
+          <attvalue for="1" value="3402" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="SchwarzeKreuze" id="166">
+        <attvalues>
+          <attvalue for="1" value="1162" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="blocmtp" id="167">
+        <attvalues>
+          <attvalue for="1" value="3379" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ursNDS" id="168">
+        <attvalues>
+          <attvalue for="1" value="3352" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="matNDS&#10;&#10;Ko" id="169">
+        <attvalues>
+          <attvalue for="1" value="3352" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="activeclubger" id="170">
+        <attvalues>
+          <attvalue for="1" value="3327" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="BNSIYI" id="171">
+        <attvalues>
+          <attvalue for="1" value="3320" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rphellas 🇬" id="172">
+        <attvalues>
+          <attvalue for="1" value="3319" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="nationalistesfr" id="173">
+        <attvalues>
+          <attvalue for="1" value="3310" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ForteresseEurope" id="174">
+        <attvalues>
+          <attvalue for="1" value="3317" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="emernrw" id="175">
+        <attvalues>
+          <attvalue for="1" value="3308" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatgespraeche" id="176">
+        <attvalues>
+          <attvalue for="1" value="3195" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="imat2023&#10;&#10;K" id="177">
+        <attvalues>
+          <attvalue for="1" value="3195" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Sondershausen_geht_spazieren" id="178">
+        <attvalues>
+          <attvalue for="1" value="3256" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="freiesth" id="179">
+        <attvalues>
+          <attvalue for="1" value="3256" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="lauscremernrw (" id="180">
+        <attvalues>
+          <attvalue for="1" value="3208" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="kursNDS" id="181">
+        <attvalues>
+          <attvalue for="1" value="3071" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="imatNDS&#10;&#10;K" id="182">
+        <attvalues>
+          <attvalue for="1" value="3071" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="infodeutschoesterreich" id="183">
+        <attvalues>
+          <attvalue for="1" value="3194" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ebergegenlinks 🙋🏼" id="184">
+        <attvalues>
+          <attvalue for="1" value="3193" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="aufklebergegenlinks" id="185">
+        <attvalues>
+          <attvalue for="1" value="3193" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="JN_voran " id="186">
+        <attvalues>
+          <attvalue for="1" value="3192" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="023&#10;&#10;Kommt " id="187">
+        <attvalues>
+          <attvalue for="1" value="3004" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ein_prozent" id="188">
+        <attvalues>
+          <attvalue for="1" value="2151" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="esden_gedenken" id="189">
+        <attvalues>
+          <attvalue for="1" value="3156" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="atnrw" id="190">
+        <attvalues>
+          <attvalue for="1" value="3109" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="atgespraeche&#10;&#10;https:" id="191">
+        <attvalues>
+          <attvalue for="1" value="3099" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="pforzheimrevolte" id="192">
+        <attvalues>
+          <attvalue for="1" value="3095" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="atgespraeche der" id="193">
+        <attvalues>
+          <attvalue for="1" value="3090" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="genationalisten&#10;&#10;- " id="194">
+        <attvalues>
+          <attvalue for="1" value="3087" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="HeimatNDS " id="195">
+        <attvalues>
+          <attvalue for="1" value="3077" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="protestkarte" id="196">
+        <attvalues>
+          <attvalue for="1" value="3076" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="InfernoDE" id="197">
+        <attvalues>
+          <attvalue for="1" value="3065" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="skursNDS" id="198">
+        <attvalues>
+          <attvalue for="1" value="2906" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eimatNDS&#10;&#10;" id="199">
+        <attvalues>
+          <attvalue for="1" value="2906" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="erial" id="200">
+        <attvalues>
+          <attvalue for="1" value="3004" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tgespraeche&#10;&#10;Heimatm" id="201">
+        <attvalues>
+          <attvalue for="1" value="3004" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rmzeichen" id="202">
+        <attvalues>
+          <attvalue for="1" value="2998" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="eutschestimmemagazin d" id="203">
+        <attvalues>
+          <attvalue for="1" value="2956" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="forzheimRevolte" id="204">
+        <attvalues>
+          <attvalue for="1" value="2943" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="lebensart_survival" id="205">
+        <attvalues>
+          <attvalue for="1" value="2155" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="N_Th&#10;&#10;" id="206">
+        <attvalues>
+          <attvalue for="1" value="2918" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="nsfronta" id="207">
+        <attvalues>
+          <attvalue for="1" value="2904" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="heimatundidentitaet" id="208">
+        <attvalues>
+          <attvalue for="1" value="2903" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="srechte" id="209">
+        <attvalues>
+          <attvalue for="1" value="2880" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Do 👈&#10;&#10;⚫️🟡" id="210">
+        <attvalues>
+          <attvalue for="1" value="2880" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="aktionschwarzekreuze" id="211">
+        <attvalues>
+          <attvalue for="1" value="2841" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="mkdnds" id="212">
+        <attvalues>
+          <attvalue for="1" value="2786" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="jnpdniedersachsen" id="213">
+        <attvalues>
+          <attvalue for="1" value="21" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npdbundesverband" id="214">
+        <attvalues>
+          <attvalue for="1" value="211" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="derdritteblickwinkel" id="215">
+        <attvalues>
+          <attvalue for="1" value="1119" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="DeutscheDD" id="216">
+        <attvalues>
+          <attvalue for="1" value="2172" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="deutschedichter" id="217">
+        <attvalues>
+          <attvalue for="1" value="2172" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="oposrecords" id="218">
+        <attvalues>
+          <attvalue for="1" value="2703" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="wirpackenan" id="219">
+        <attvalues>
+          <attvalue for="1" value="276" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="zusammenruecken" id="220">
+        <attvalues>
+          <attvalue for="1" value="2677" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="youngheartofeurope" id="221">
+        <attvalues>
+          <attvalue for="1" value="2505" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="inbewegung2020" id="222">
+        <attvalues>
+          <attvalue for="1" value="1219" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="hexogenoutdoor" id="223">
+        <attvalues>
+          <attvalue for="1" value="586" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="FactaESP" id="224">
+        <attvalues>
+          <attvalue for="1" value="2505" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="schuelersprecher" id="225">
+        <attvalues>
+          <attvalue for="1" value="731" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npd_nrw" id="226">
+        <attvalues>
+          <attvalue for="1" value="2383" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="artikel5" id="227">
+        <attvalues>
+          <attvalue for="1" value="500" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Er_Volkslehrer" id="228">
+        <attvalues>
+          <attvalue for="1" value="2181" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="wirpackenan " id="229">
+        <attvalues>
+          <attvalue for="1" value="2318" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ultrasnotreds2" id="230">
+        <attvalues>
+          <attvalue for="1" value="2317" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rontdienst" id="231">
+        <attvalues>
+          <attvalue for="1" value="2305" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ationalisten 🇩🇪" id="232">
+        <attvalues>
+          <attvalue for="1" value="2254" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rAppell" id="233">
+        <attvalues>
+          <attvalue for="1" value="2194" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="SturmfestOS" id="234">
+        <attvalues>
+          <attvalue for="1" value="1967" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rontdienst f" id="235">
+        <attvalues>
+          <attvalue for="1" value="1960" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="en" id="236">
+        <attvalues>
+          <attvalue for="1" value="2141" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ngenationalisten 🇩🇪" id="237">
+        <attvalues>
+          <attvalue for="1" value="1875" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="prozessbeobachtung" id="238">
+        <attvalues>
+          <attvalue for="1" value="2098" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="erAppell" id="239">
+        <attvalues>
+          <attvalue for="1" value="2041" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="CompactMagazin" id="240">
+        <attvalues>
+          <attvalue for="1" value="893" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="enationalisten 🇩🇪" id="241">
+        <attvalues>
+          <attvalue for="1" value="1970" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ungenationalisten🇩🇪" id="242">
+        <attvalues>
+          <attvalue for="1" value="1914" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Schuelersprecher" id="243">
+        <attvalues>
+          <attvalue for="1" value="974" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ungenationalisten &lt;" id="244">
+        <attvalues>
+          <attvalue for="1" value="1910" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tagderarbeit&#10;" id="245">
+        <attvalues>
+          <attvalue for="1" value="1890" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tagderarbeit" id="246">
+        <attvalues>
+          <attvalue for="1" value="1849" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="agderarbeit 🛠" id="247">
+        <attvalues>
+          <attvalue for="1" value="1870" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="guenterdeckert" id="248">
+        <attvalues>
+          <attvalue for="1" value="1862" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npdrn" id="249">
+        <attvalues>
+          <attvalue for="1" value="853" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rdritteblickwinkel du" id="250">
+        <attvalues>
+          <attvalue for="1" value="1839" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ationalisten &lt;&lt;" id="251">
+        <attvalues>
+          <attvalue for="1" value="1839" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="genationalisten 🇩🇪 " id="252">
+        <attvalues>
+          <attvalue for="1" value="1820" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="werra_elbflorenz" id="253">
+        <attvalues>
+          <attvalue for="1" value="1741" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="dresden2020" id="254">
+        <attvalues>
+          <attvalue for="1" value="770" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="CoronaWahnsinnStoppen" id="255">
+        <attvalues>
+          <attvalue for="1" value="343" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="balaclavagraphics" id="256">
+        <attvalues>
+          <attvalue for="1" value="1672" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="martinkohlmann" id="257">
+        <attvalues>
+          <attvalue for="1" value="1609" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="blklgnwear" id="258">
+        <attvalues>
+          <attvalue for="1" value="1602" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npdhessen" id="259">
+        <attvalues>
+          <attvalue for="1" value="1584" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="zukunft_heimat" id="260">
+        <attvalues>
+          <attvalue for="1" value="1562" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="RheinwiesenlagerBretzenheim" id="261">
+        <attvalues>
+          <attvalue for="1" value="1260" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="messestadtaktivisten" id="262">
+        <attvalues>
+          <attvalue for="1" value="1406" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Messestadtaktivisten" id="263">
+        <attvalues>
+          <attvalue for="1" value="1516" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="TremoniaKollektiv" id="264">
+        <attvalues>
+          <attvalue for="1" value="1514" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="freie_mittelsachsen" id="265">
+        <attvalues>
+          <attvalue for="1" value="1371" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Harzrevolte" id="266">
+        <attvalues>
+          <attvalue for="1" value="1462" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npdmv" id="267">
+        <attvalues>
+          <attvalue for="1" value="1432" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="aktivde" id="268">
+        <attvalues>
+          <attvalue for="1" value="1400" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="pdbundesverband" id="269">
+        <attvalues>
+          <attvalue for="1" value="982" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="freiesachsen " id="270">
+        <attvalues>
+          <attvalue for="1" value="1307" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="schwarzeKreuze" id="271">
+        <attvalues>
+          <attvalue for="1" value="1262" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="NPDUckermark" id="272">
+        <attvalues>
+          <attvalue for="1" value="1081" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="aktionsgruppezittau" id="273">
+        <attvalues>
+          <attvalue for="1" value="767" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="npdniedersachsen&#10;&#10;" id="274">
+        <attvalues>
+          <attvalue for="1" value="848" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="ignazbearth" id="275">
+        <attvalues>
+          <attvalue for="1" value="932" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="rpackenan" id="276">
+        <attvalues>
+          <attvalue for="1" value="911" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Gefangenenhilfe" id="277">
+        <attvalues>
+          <attvalue for="1" value="881" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="er_Volkslehrer u" id="278">
+        <attvalues>
+          <attvalue for="1" value="848" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="joinchat" id="279">
+        <attvalues>
+          <attvalue for="1" value="124" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="PROsition" id="280">
+        <attvalues>
+          <attvalue for="1" value="730" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="oronaWahnsinnStoppen&#10;&#10;" id="281">
+        <attvalues>
+          <attvalue for="1" value="802" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="tradition_und_ordnung" id="282">
+        <attvalues>
+          <attvalue for="1" value="499" />
+        </attvalues>
+      </edge>
+      <edge source="jungenationalisten" target="Jungetat" id="283">
+        <attvalues>
+          <attvalue for="1" value="642" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
