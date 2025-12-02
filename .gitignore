@@ -1,1 +1,3 @@
 notebooks/data/*
+.DS_Store
+notebooks/session_name.session
