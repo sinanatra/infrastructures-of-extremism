@@ -193,9 +193,74 @@
     (m, n) => Math.max(m, Math.hypot(n.x - cx, n.y - cy)),
     0
   );
+  const radialPosts = nodes.map((n) => ({
+    radius: Math.hypot(n.x - cx, n.y - cy),
+    dateMs: n.post.dateMs,
+  }));
   const outerRingRadius =
     Math.max(outerTick?.radius ?? 0, maxNodeRadial + 12) ||
     Math.min(width, height) / 2 - 50;
+
+  const ticksByRadius = [...ringTicks].sort((a, b) => a.radius - b.radius);
+
+  const timeAtRadius = (radius) => {
+    if (!ticksByRadius.length) return null;
+    if (radius <= ticksByRadius[0].radius) return ticksByRadius[0].time;
+    if (radius >= ticksByRadius[ticksByRadius.length - 1].radius)
+      return ticksByRadius[ticksByRadius.length - 1].time;
+    for (let i = 1; i < ticksByRadius.length; i++) {
+      const prev = ticksByRadius[i - 1];
+      const curr = ticksByRadius[i];
+      if (radius <= curr.radius) {
+        const span = curr.radius - prev.radius || 1;
+        const frac = (radius - prev.radius) / span;
+        return prev.time + frac * (curr.time - prev.time);
+      }
+    }
+    return ticksByRadius[ticksByRadius.length - 1].time;
+  };
+
+  let hoverTick = null;
+
+  const toViewCoords = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = event.clientX - rect.left;
+    const py = event.clientY - rect.top;
+    const vbX = -viewPadding;
+    const vbY = -viewPadding;
+    const vbW = width + viewPadding * 2;
+    const vbH = height + viewPadding * 2;
+    const x = vbX + (px / rect.width) * vbW;
+    const y = vbY + (py / rect.height) * vbH;
+    return { x, y };
+  };
+
+  const onMouseMoveSvg = (event) => {
+    const { x, y } = toViewCoords(event);
+    const radiusRaw = Math.hypot(x - cx, y - cy);
+    const radius = Math.min(radiusRaw, outerRingRadius);
+    const tol = 12;
+    const near = radialPosts.filter((p) => Math.abs(p.radius - radius) <= tol);
+    if (near.length) {
+      const minDate = Math.min(...near.map((p) => p.dateMs));
+      const maxDate = Math.max(...near.map((p) => p.dateMs));
+      const midDate = (minDate + maxDate) / 2;
+      hoverTick = {
+        radius,
+        time: midDate,
+        minDate,
+        maxDate,
+        count: near.length,
+      };
+      return;
+    }
+    const time = timeAtRadius(radius);
+    hoverTick = time !== null ? { radius, time } : null;
+  };
+
+  const onMouseLeaveSvg = () => {
+    hoverTick = null;
+  };
 
   const subscriberText = (value) => {
     if (!value) return null;
@@ -207,6 +272,10 @@
   const formatTick = new Intl.DateTimeFormat("en", {
     month: "short",
     year: "numeric",
+    timeZone: "UTC",
+  });
+  const formatHoverDate = new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
     timeZone: "UTC",
   });
 
@@ -303,6 +372,8 @@
         viewBox={viewBoxValue}
         preserveAspectRatio="xMidYMid meet"
         aria-label="Radial network"
+        on:mousemove={onMouseMoveSvg}
+        on:mouseleave={onMouseLeaveSvg}
       >
         <defs />
 
@@ -412,9 +483,11 @@
                   x={cx}
                   y={cy - tick.radius - 6}
                   text-anchor="middle"
+                  stroke="black"
+                  stroke-width="1"
                   fill="var(--highlite-color)"
                   font-size="1.4rem"
-                  font-weight="400"
+                  font-weight="700"
                 >
                   {formatTick.format(tick.time)}
                 </text>
@@ -436,11 +509,57 @@
                 x={cx}
                 y={cy - outerRingRadius - 12}
                 text-anchor="middle"
+                stroke="black"
+                stroke-width="1"
                 fill="var(--highlite-color)"
                 font-size="1.4rem"
-                font-weight="400"
+                font-weight="700"
               >
                 {formatTick.format(outerTick.time)}
+              </text>
+            </g>
+          {/if}
+
+          {#if hoverTick}
+            <g>
+              <circle
+                {cx}
+                {cy}
+                r={hoverTick.radius}
+                fill="none"
+                stroke="black"
+                stroke-width="4"
+                stroke-dasharray="4 6"
+                opacity="0.4"
+              />
+              <circle
+                {cx}
+                {cy}
+                r={hoverTick.radius}
+                fill="none"
+                stroke="var(--highlite-color)"
+                stroke-dasharray="4 6"
+                opacity="0.7"
+              />
+              <text
+                x={cx}
+                y={cy - hoverTick.radius - 12}
+                text-anchor="middle"
+                stroke="black"
+                stroke-width="1"
+                fill="var(--highlite-color)"
+                font-size="1.4rem"
+                font-weight="700"
+              >
+                {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
+                  {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
+                    hoverTick.maxDate
+                  )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
+                {:else}
+                  {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
+                    ? ` (${hoverTick.count})`
+                    : ""}
+                {/if}
               </text>
             </g>
           {/if}
