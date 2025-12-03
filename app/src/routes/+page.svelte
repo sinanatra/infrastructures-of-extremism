@@ -9,9 +9,19 @@
   const cx = width / 2;
   const cy = height / 2;
   const viewPadding = 280;
-  const viewBoxValue = `${-viewPadding} ${-viewPadding} ${width + viewPadding * 2} ${height + viewPadding * 2}`;
   const innerRadius = 3;
   const outerRadius = Math.min(width, height) / 2 - 50;
+  let viewBox = {
+    x: -viewPadding,
+    y: -viewPadding,
+    width: width + viewPadding * 2,
+    height: height + viewPadding * 2,
+  };
+  let isPanning = false;
+  let panState = null;
+  const zoomStep = 1.08;
+  const minScale = 0.5;
+  const maxScale = 4;
 
   const linkCountByPost = new Map();
   for (const link of links) {
@@ -226,12 +236,8 @@
     const rect = event.currentTarget.getBoundingClientRect();
     const px = event.clientX - rect.left;
     const py = event.clientY - rect.top;
-    const vbX = -viewPadding;
-    const vbY = -viewPadding;
-    const vbW = width + viewPadding * 2;
-    const vbH = height + viewPadding * 2;
-    const x = vbX + (px / rect.width) * vbW;
-    const y = vbY + (py / rect.height) * vbH;
+    const x = viewBox.x + (px / rect.width) * viewBox.width;
+    const y = viewBox.y + (py / rect.height) * viewBox.height;
     return { x, y };
   };
 
@@ -308,97 +314,181 @@
           visibleNodeIds.has(link.sourceId) && visibleNodeIds.has(link.targetId)
       )
     : [];
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+  const handleWheel = (event) => {
+    event.preventDefault();
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const pointerX =
+      viewBox.x + ((event.clientX - rect.left) / rect.width) * viewBox.width;
+    const pointerY =
+      viewBox.y + ((event.clientY - rect.top) / rect.height) * viewBox.height;
+
+    const direction = event.deltaY > 0 ? zoomStep : 1 / zoomStep;
+    const nextScale = clamp(
+      (viewBox.width / (width + viewPadding * 2)) * direction,
+      minScale,
+      maxScale
+    );
+
+    const newWidth = (width + viewPadding * 2) * nextScale;
+    const newHeight = (height + viewPadding * 2) * nextScale;
+    const offsetX = (pointerX - viewBox.x) / viewBox.width;
+    const offsetY = (pointerY - viewBox.y) / viewBox.height;
+
+    viewBox = {
+      width: newWidth,
+      height: newHeight,
+      x: pointerX - offsetX * newWidth,
+      y: pointerY - offsetY * newHeight,
+    };
+  };
+
+  const startPan = (event) => {
+    if (event.button !== 0) return;
+    const target = event.target;
+    if (target && (target.closest("a") || target.closest("text"))) return;
+    isPanning = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    panState = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      viewBoxX: viewBox.x,
+      viewBoxY: viewBox.y,
+    };
+  };
+
+  const handlePan = (event) => {
+    if (!isPanning || !panState || event.pointerId !== panState.pointerId)
+      return;
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const dx = ((event.clientX - panState.x) / rect.width) * viewBox.width;
+    const dy = ((event.clientY - panState.y) / rect.height) * viewBox.height;
+    viewBox = {
+      ...viewBox,
+      x: panState.viewBoxX - dx,
+      y: panState.viewBoxY - dy,
+    };
+  };
+
+  const endPan = (event) => {
+    if (!isPanning || !panState || event.pointerId !== panState.pointerId)
+      return;
+    isPanning = false;
+    panState = null;
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch (error) {
+      console.warn("Pan end without capture", error);
+    }
+  };
 </script>
 
-<section
-  class="min-h-screen bg-black text-white px-4 sm:px-6 md:px-10 py-8 space-y-6"
->
-  <header class="flex flex-wrap justify-between gap-4">
-    <div class="space-y-2">
-      <div class="flex flex-wrap gap-3 text-gray-100">
-        <span>{posts.length} posts</span>
-        <span>{orderedGroups.length} groups</span>
-        <span>{links.length} links</span>
-        {#if selectedGroup}
-          <span
-            class="flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full text-sm"
-          >
-            <span>{selectedGroup.label}</span>
-            {#if subscriberText(selectedGroup.subscribers)}
-              <span class="text-gray-200">
-                {subscriberText(selectedGroup.subscribers)}
+<section class="min-h-screen text-white">
+  <div class="relative">
+    <header
+      class="absolute left-1/2 top-4 z-20 flex w-fit max-w-[calc(100%-1rem)] -translate-x-1/2 flex-wrap items-center justify-between gap-4 rounded-lg bg-black p-2"
+    >
+      <div class="space-y-2">
+        <div class="flex flex-wrap gap-3 text-gray-100">
+          <span>{posts.length} posts</span>
+          <span>{orderedGroups.length} groups</span>
+          <span>{links.length} links</span>
+          {#if selectedGroup}
+            <span
+              class="flex items-center gap-3 bg-white text-black px-3 py-1 rounded-full text-sm"
+            >
+              <span>{selectedGroup.label}</span>
+              {#if subscriberText(selectedGroup.subscribers)}
+                <span>
+                  {subscriberText(selectedGroup.subscribers)}
+                </span>
+              {/if}
+              <span>
+                {(selectedGroup.postCount ?? 0).toLocaleString()} posts
               </span>
-            {/if}
-            <span class="text-gray-200">
-              {(selectedGroup.postCount ?? 0).toLocaleString()} posts
+              <button
+                class="underline decoration-dotted"
+                on:click={() => (selectedGroupId = null)}
+              >
+                clear
+              </button>
             </span>
-            <button
-              class="underline decoration-dotted"
-              on:click={() => (selectedGroupId = null)}
-            >
-              clear
-            </button>
-          </span>
-        {/if}
+          {/if}
+        </div>
       </div>
-    </div>
-    <div class="flex flex-wrap items-center gap-3 text-sm">
-      <div class="flex rounded-md border border-gray-700 overflow-hidden">
-        <button
-          class={`px-3 py-2 ${sizeMode === "reactions" ? "bg-white text-black" : "bg-transparent text-white"}`}
-          on:click={() => (sizeMode = "reactions")}
-        >
-          Size by reactions
-        </button>
-        <button
-          class={`px-3 py-2 ${sizeMode === "links" ? "bg-white text-black" : "bg-transparent text-white"}`}
-          on:click={() => (sizeMode = "links")}
-        >
-          Size by mentions/forwards
-        </button>
+      <div class="flex flex-wrap items-center gap-3 text-sm">
+        <div class="flex rounded-full border border-gray-700 overflow-hidden">
+          <button
+            class={`px-3 py-2 ${sizeMode === "reactions" ? "bg-white text-black" : "bg-transparent text-white"}`}
+            on:click={() => (sizeMode = "reactions")}
+          >
+            Size by reactions
+          </button>
+          <button
+            class={`px-3 py-2 ${sizeMode === "links" ? "bg-white text-black" : "bg-transparent text-white"}`}
+            on:click={() => (sizeMode = "links")}
+          >
+            Size by mentions/forwards
+          </button>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            bind:checked={showLinks}
+            class="accent-white"
+          />
+          <span>Show links</span>
+        </label>
       </div>
-      <label class="flex items-center gap-2 cursor-pointer select-none">
-        <input type="checkbox" bind:checked={showLinks} class="accent-white" />
-        <span>Show links</span>
-      </label>
-    </div>
-  </header>
+    </header>
 
-  <div class="relative bg-black p-4">
-    <div class="overflow-auto">
-      <svg
-        role="img"
-        class="w-full h-auto"
-        viewBox={viewBoxValue}
-        preserveAspectRatio="xMidYMid meet"
-        aria-label="Radial network"
-        on:mousemove={onMouseMoveSvg}
-        on:mouseleave={onMouseLeaveSvg}
-      >
-        <defs />
+    <div class="relative bg-black">
+      <div class="overflow-auto">
+        <div class="min-h-[70vh] flex items-center justify-center">
+          <svg
+            role="img"
+            class="w-full h-auto max-w-full zoomable"
+            class:grabbing={isPanning}
+            viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
+            preserveAspectRatio="xMidYMid meet"
+            aria-label="Radial network"
+            on:mousemove={onMouseMoveSvg}
+            on:mouseleave={onMouseLeaveSvg}
+            on:wheel|preventDefault={handleWheel}
+            on:pointerdown={startPan}
+            on:pointermove={handlePan}
+            on:pointerup={endPan}
+            on:pointerleave={endPan}
+          >
+            <defs />
 
-        <g class="slices">
-          {#each slicePaths as slice}
-            <text
-              on:click={() => toggleGroup(slice.id)}
-              class="cursor-pointer select-none"
-              x={slice.labelPos.x}
-              y={slice.labelPos.y}
-              text-anchor="start"
-              dominant-baseline="middle"
-              transform={`rotate(${slice.angleDeg}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
-              fill={selectedGroupId === null || selectedGroupId === slice.id
-                ? "#f5f5f5"
-                : "#555"}
-              font-size="1.5rem"
-              font-weight="400"
-            >
-              {slice.label}
-            </text>
-          {/each}
-        </g>
+            <g class="slices">
+              {#each slicePaths as slice}
+                <text
+                  on:click={() => toggleGroup(slice.id)}
+                  class="cursor-pointer select-none"
+                  x={slice.labelPos.x}
+                  y={slice.labelPos.y}
+                  text-anchor="start"
+                  dominant-baseline="middle"
+                  transform={`rotate(${slice.angleDeg}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
+                  fill={selectedGroupId === null || selectedGroupId === slice.id
+                    ? "#f5f5f5"
+                    : "#555"}
+                  font-size="1.5rem"
+                  font-weight="400"
+                >
+                  {slice.label}
+                </text>
+              {/each}
+            </g>
 
-        <!-- <g class="links" stroke-linecap="round" stroke-linejoin="round">
+            <!-- <g class="links" stroke-linecap="round" stroke-linejoin="round">
           {#each linkPaths as link}
             <path
               d={link.d}
@@ -410,161 +500,186 @@
           {/each}
         </g> -->
 
-        {#if visibleLinks.length}
-          <g class="links" stroke-linecap="round" stroke-linejoin="round">
-            {#each visibleLinks as link}
-              <path
-                d={link.d}
-                fill="none"
-                stroke="var(--highlite-color)"
-                stroke-width={link.crossGroup ? 1.3 : 0.8}
-                opacity={link.crossGroup ? 0.6 : 0.28}
-              />
-            {/each}
-          </g>
-        {/if}
-
-        <g class="nodes">
-          {#each visibleNodes as node (node.id)}
-            {#if node.post.url}
-              <a href={node.post.url} target="_blank" rel="noreferrer">
-                <g
-                  transform={`translate(${node.x}, ${node.y})`}
-                  class="cursor-pointer"
-                  role="presentation"
-                >
-                  <circle
-                    r={sizeMode === "links"
-                      ? node.radiusLinks
-                      : node.radiusReactions}
-                    fill={node.color}
-                    fill-opacity="1"
-                    stroke="#000"
-                    stroke-width="1.5"
-                    stroke-opacity="1"
+            {#if visibleLinks.length}
+              <g class="links" stroke-linecap="round" stroke-linejoin="round">
+                {#each visibleLinks as link}
+                  <path
+                    d={link.d}
+                    fill="none"
+                    class="guide"
+                    stroke="var(--highlite-color)"
+                    stroke-width={link.crossGroup ? 1.3 : 0.8}
+                    opacity={link.crossGroup ? 0.6 : 0.28}
                   />
-                  <title>{tooltipForPost(node.post)}</title>
-                </g>
-              </a>
-            {:else}
-              <g
-                transform={`translate(${node.x}, ${node.y})`}
-                class="cursor-pointer"
-                role="presentation"
-              >
-                <circle
-                  r={sizeMode === "links"
-                    ? node.radiusLinks
-                    : node.radiusReactions}
-                  fill={node.color}
-                  fill-opacity="1"
-                  stroke="#ffffff"
-                  stroke-opacity="0.35"
-                />
-                <title>{tooltipForPost(node.post)}</title>
+                {/each}
               </g>
             {/if}
-          {/each}
-        </g>
 
-        <g class="rings">
-          {#if innerTicks.length}
-            {#each innerTicks as tick}
-              <g>
-                <circle
-                  {cx}
-                  {cy}
-                  r={tick.radius}
-                  fill="none"
-                  stroke="var(--highlite-color)"
-                  stroke-dasharray="3 5"
-                />
-                <text
-                  x={cx}
-                  y={cy - tick.radius - 6}
-                  text-anchor="middle"
-                  stroke="black"
-                  stroke-width="1"
-                  fill="var(--highlite-color)"
-                  font-size="1.4rem"
-                  font-weight="700"
-                >
-                  {formatTick.format(tick.time)}
-                </text>
-              </g>
-            {/each}
-          {/if}
+            <g class="rings">
+              {#if innerTicks.length}
+                {#each innerTicks as tick}
+                  <g>
+                    <circle
+                      class="guide"
+                      {cx}
+                      {cy}
+                      r={tick.radius}
+                      fill="none"
+                      stroke="var(--highlite-color)"
+                      stroke-dasharray="3 5"
+                    />
+                    <text
+                      class="guide"
+                      x={cx}
+                      y={cy - tick.radius - 6}
+                      text-anchor="middle"
+                      stroke="black"
+                      stroke-width="1"
+                      fill="var(--highlite-color)"
+                      font-size="1.4rem"
+                      font-weight="700"
+                    >
+                      {formatTick.format(tick.time)}
+                    </text>
+                  </g>
+                {/each}
+              {/if}
 
-          {#if outerTick}
-            <g>
-              <circle
-                {cx}
-                {cy}
-                r={outerRingRadius}
-                fill="none"
-                stroke="var(--highlite-color)"
-                stroke-dasharray="3 5"
-              />
-              <text
-                x={cx}
-                y={cy - outerRingRadius - 12}
-                text-anchor="middle"
-                stroke="black"
-                stroke-width="1"
-                fill="var(--highlite-color)"
-                font-size="1.4rem"
-                font-weight="700"
-              >
-                {formatTick.format(outerTick.time)}
-              </text>
+              {#if outerTick}
+                <g>
+                  <circle
+                    {cx}
+                    {cy}
+                    r={outerRingRadius}
+                    fill="none"
+                    class="guide"
+                    stroke="var(--highlite-color)"
+                    stroke-dasharray="3 5"
+                  />
+                  <text
+                    x={cx}
+                    y={cy - outerRingRadius - 12}
+                    text-anchor="middle"
+                    stroke="black"
+                    stroke-width="1"
+                    class="guide"
+                    fill="var(--highlite-color)"
+                    font-size="1.4rem"
+                    font-weight="700"
+                  >
+                    {formatTick.format(outerTick.time)}
+                  </text>
+                </g>
+              {/if}
+
+              {#if hoverTick}
+                <g>
+                  <circle
+                    {cx}
+                    {cy}
+                    r={hoverTick.radius}
+                    fill="none"
+                    stroke="black"
+                    stroke-width="4"
+                    stroke-dasharray="4 6"
+                    opacity="0.4"
+                  />
+                  <circle
+                    {cx}
+                    {cy}
+                    r={hoverTick.radius}
+                    fill="none"
+                    class="guide"
+                    stroke="var(--highlite-color)"
+                    stroke-dasharray="4 6"
+                    opacity="0.7"
+                  />
+                  <text
+                    x={cx}
+                    y={cy - hoverTick.radius - 12}
+                    text-anchor="middle"
+                    stroke="black"
+                    stroke-width="1"
+                    class="guide"
+                    fill="var(--highlite-color)"
+                    font-size="1.4rem"
+                    font-weight="700"
+                  >
+                    {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
+                      {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
+                        hoverTick.maxDate
+                      )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
+                    {:else}
+                      {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
+                        ? ` (${hoverTick.count})`
+                        : ""}
+                    {/if}
+                  </text>
+                </g>
+              {/if}
             </g>
-          {/if}
 
-          {#if hoverTick}
-            <g>
-              <circle
-                {cx}
-                {cy}
-                r={hoverTick.radius}
-                fill="none"
-                stroke="black"
-                stroke-width="4"
-                stroke-dasharray="4 6"
-                opacity="0.4"
-              />
-              <circle
-                {cx}
-                {cy}
-                r={hoverTick.radius}
-                fill="none"
-                stroke="var(--highlite-color)"
-                stroke-dasharray="4 6"
-                opacity="0.7"
-              />
-              <text
-                x={cx}
-                y={cy - hoverTick.radius - 12}
-                text-anchor="middle"
-                stroke="black"
-                stroke-width="1"
-                fill="var(--highlite-color)"
-                font-size="1.4rem"
-                font-weight="700"
-              >
-                {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
-                  {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
-                    hoverTick.maxDate
-                  )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
+            <g class="nodes">
+              {#each visibleNodes as node (node.id)}
+                {#if node.post.url}
+                  <a href={node.post.url} target="_blank" rel="noreferrer">
+                    <g
+                      transform={`translate(${node.x}, ${node.y})`}
+                      class="cursor-pointer"
+                      role="presentation"
+                    >
+                      <circle
+                        r={sizeMode === "links"
+                          ? node.radiusLinks
+                          : node.radiusReactions}
+                        fill={node.color}
+                        fill-opacity="1"
+                        stroke="#000"
+                        stroke-width="1.5"
+                        stroke-opacity="1"
+                      />
+                      <title>{tooltipForPost(node.post)}</title>
+                    </g>
+                  </a>
                 {:else}
-                  {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
-                    ? ` (${hoverTick.count})`
-                    : ""}
+                  <g
+                    transform={`translate(${node.x}, ${node.y})`}
+                    class="cursor-pointer"
+                    role="presentation"
+                  >
+                    <circle
+                      r={sizeMode === "links"
+                        ? node.radiusLinks
+                        : node.radiusReactions}
+                      fill={node.color}
+                      fill-opacity="1"
+                      stroke="#ffffff"
+                      stroke-opacity="0.35"
+                    />
+                    <title>{tooltipForPost(node.post)}</title>
+                  </g>
                 {/if}
-              </text>
+              {/each}
             </g>
-          {/if}
-        </g>
-      </svg>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .guide {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .zoomable {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .zoomable.grabbing {
+    cursor: grabbing;
+  }
+</style>
