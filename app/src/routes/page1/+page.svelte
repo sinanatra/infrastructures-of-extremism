@@ -280,10 +280,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  text, line, :global(circle) {
-    pointer-events: none;
-    user-select: none;
-  }
-</style>
