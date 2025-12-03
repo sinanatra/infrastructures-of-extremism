@@ -433,7 +433,7 @@
             class={`px-3 py-2 ${sizeMode === "links" ? "bg-white text-black" : "bg-transparent text-white"}`}
             on:click={() => (sizeMode = "links")}
           >
-            Size by mentions/forwards
+            Size by forwards
           </button>
         </div>
         <label class="flex items-center gap-2 cursor-pointer select-none">
@@ -515,6 +515,95 @@
               </g>
             {/if}
 
+            {#if hoverTick}
+              <g>
+                <circle
+                  {cx}
+                  {cy}
+                  r={hoverTick.radius}
+                  fill="none"
+                  stroke="black"
+                  stroke-width="4"
+                  stroke-dasharray="4 6"
+                  opacity="0.4"
+                />
+                <circle
+                  {cx}
+                  {cy}
+                  r={hoverTick.radius}
+                  fill="none"
+                  class="guide"
+                  stroke="var(--highlite-color)"
+                  stroke-dasharray="4 6"
+                  opacity="0.7"
+                />
+                <text
+                  x={cx}
+                  y={cy - hoverTick.radius - 12}
+                  text-anchor="middle"
+                  stroke="black"
+                  stroke-width="1"
+                  class="guide"
+                  fill="var(--highlite-color)"
+                  font-size="1.4rem"
+                  font-weight="700"
+                >
+                  {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
+                    {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
+                      hoverTick.maxDate
+                    )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
+                  {:else}
+                    {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
+                      ? ` (${hoverTick.count})`
+                      : ""}
+                  {/if}
+                </text>
+              </g>
+            {/if}
+
+            <g class="nodes">
+              {#each visibleNodes as node (node.id)}
+                {#if node.post.url}
+                  <a href={node.post.url} target="_blank" rel="noreferrer">
+                    <g
+                      transform={`translate(${node.x}, ${node.y})`}
+                      class="cursor-pointer"
+                      role="presentation"
+                    >
+                      <circle
+                        r={sizeMode === "links"
+                          ? node.radiusLinks
+                          : node.radiusReactions}
+                        fill={node.color}
+                        fill-opacity="1"
+                        stroke="#000"
+                        stroke-width="1.5"
+                        stroke-opacity="1"
+                      />
+                      <title>{tooltipForPost(node.post)}</title>
+                    </g>
+                  </a>
+                {:else}
+                  <g
+                    transform={`translate(${node.x}, ${node.y})`}
+                    class="cursor-pointer"
+                    role="presentation"
+                  >
+                    <circle
+                      r={sizeMode === "links"
+                        ? node.radiusLinks
+                        : node.radiusReactions}
+                      fill={node.color}
+                      fill-opacity="1"
+                      stroke="#ffffff"
+                      stroke-opacity="0.35"
+                    />
+                    <title>{tooltipForPost(node.post)}</title>
+                  </g>
+                {/if}
+              {/each}
+            </g>
+
             <g class="rings">
               {#if innerTicks.length}
                 {#each innerTicks as tick}
@@ -571,97 +660,8 @@
                   </text>
                 </g>
               {/if}
-
-              {#if hoverTick}
-                <g>
-                  <circle
-                    {cx}
-                    {cy}
-                    r={hoverTick.radius}
-                    fill="none"
-                    stroke="black"
-                    stroke-width="4"
-                    stroke-dasharray="4 6"
-                    opacity="0.4"
-                  />
-                  <circle
-                    {cx}
-                    {cy}
-                    r={hoverTick.radius}
-                    fill="none"
-                    class="guide"
-                    stroke="var(--highlite-color)"
-                    stroke-dasharray="4 6"
-                    opacity="0.7"
-                  />
-                  <text
-                    x={cx}
-                    y={cy - hoverTick.radius - 12}
-                    text-anchor="middle"
-                    stroke="black"
-                    stroke-width="1"
-                    class="guide"
-                    fill="var(--highlite-color)"
-                    font-size="1.4rem"
-                    font-weight="700"
-                  >
-                    {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
-                      {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
-                        hoverTick.maxDate
-                      )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
-                    {:else}
-                      {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
-                        ? ` (${hoverTick.count})`
-                        : ""}
-                    {/if}
-                  </text>
-                </g>
-              {/if}
-            </g>
-
-            <g class="nodes">
-              {#each visibleNodes as node (node.id)}
-                {#if node.post.url}
-                  <a href={node.post.url} target="_blank" rel="noreferrer">
-                    <g
-                      transform={`translate(${node.x}, ${node.y})`}
-                      class="cursor-pointer"
-                      role="presentation"
-                    >
-                      <circle
-                        r={sizeMode === "links"
-                          ? node.radiusLinks
-                          : node.radiusReactions}
-                        fill={node.color}
-                        fill-opacity="1"
-                        stroke="#000"
-                        stroke-width="1.5"
-                        stroke-opacity="1"
-                      />
-                      <title>{tooltipForPost(node.post)}</title>
-                    </g>
-                  </a>
-                {:else}
-                  <g
-                    transform={`translate(${node.x}, ${node.y})`}
-                    class="cursor-pointer"
-                    role="presentation"
-                  >
-                    <circle
-                      r={sizeMode === "links"
-                        ? node.radiusLinks
-                        : node.radiusReactions}
-                      fill={node.color}
-                      fill-opacity="1"
-                      stroke="#ffffff"
-                      stroke-opacity="0.35"
-                    />
-                    <title>{tooltipForPost(node.post)}</title>
-                  </g>
-                {/if}
-              {/each}
-            </g>
-          </svg>
+            </g></svg
+          >
         </div>
       </div>
     </div>
