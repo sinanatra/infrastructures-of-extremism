@@ -55,9 +55,19 @@ export const load = async ({ fetch }) => {
 
 			const id = (row.id ?? '').trim();
 			const chat = (row.chat ?? '').trim();
-			const label = row.label?.trim() ?? '';
+			const rawLabel = row.label?.trim() ?? '';
+			const text = row.text?.trim() ?? '';
+			const label = rawLabel || (text ? `${text.slice(0, 120)}${text.length > 120 ? '…' : ''}` : id);
 			if (!id || !chat) return null;
-			if (!label) return null; 
+
+			let reactionBreakdown = {};
+			if (row.reaction_breakdown) {
+				try {
+					reactionBreakdown = JSON.parse(row.reaction_breakdown);
+				} catch (err) {
+					reactionBreakdown = {};
+				}
+			}
 
 			return {
 				id,
@@ -68,7 +78,8 @@ export const load = async ({ fetch }) => {
 				dateMs,
 				views: parseNumber(row.views),
 				reactions: parseNumber(row.reaction_count),
-				url: row.url?.trim()
+				url: row.url?.trim(),
+				reactionBreakdown
 			};
 		})
 		.filter(
@@ -84,8 +95,8 @@ export const load = async ({ fetch }) => {
 
 	const links = csvParse(linksCsv)
 		.map((row) => ({
-			source: row.source?.trim() ?? '',
-			target: row.target?.trim() ?? '',
+			source: row.source?.trim?.() ?? row.from?.trim?.() ?? '',
+			target: row.target?.trim?.() ?? row.to?.trim?.() ?? '',
 			type: row.type?.trim() || 'link'
 		}))
 		.filter((link) => link.source && link.target && postIds.has(link.source) && postIds.has(link.target));

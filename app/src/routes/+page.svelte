@@ -36,6 +36,7 @@
   }
 
   let sizeMode = "links";
+  let showEmoji = false;
   let showLinks = false;
   let selectedGroupId = null;
   $: selectedGroup =
@@ -117,10 +118,22 @@
     throw new Error("Precomputed layout is required for page2");
   }
 
+  const topEmojiInfo = (post) => {
+    if (!post.reactionBreakdown) return { emoji: null, count: 0 };
+    const entries = Object.entries(post.reactionBreakdown).filter(
+      ([, v]) => typeof v === "number"
+    );
+    if (!entries.length) return { emoji: null, count: 0 };
+    entries.sort((a, b) => b[1] - a[1]);
+    const [emoji, count] = entries[0];
+    return { emoji, count };
+  };
+
   for (const post of posts) {
     const saved = precomputedNodeById.get(post.id);
     if (!saved) continue;
     const slice = sliceForGroup.get(post.chat);
+    const { emoji, count } = topEmojiInfo(post);
 
     nodes.push({
       index: nodeIndex++,
@@ -133,8 +146,29 @@
       collisionRadius: saved.collisionRadius ?? 5,
       x: saved.x,
       y: saved.y,
+      topEmoji: emoji,
+      topEmojiCount: count,
     });
   }
+
+  const sizeStats = {
+    links: { min: Infinity, max: 0 },
+    reactions: { min: Infinity, max: 0 },
+  };
+  for (const node of nodes) {
+    sizeStats.links.min = Math.min(sizeStats.links.min, node.radiusLinks);
+    sizeStats.links.max = Math.max(sizeStats.links.max, node.radiusLinks);
+    sizeStats.reactions.min = Math.min(
+      sizeStats.reactions.min,
+      node.radiusReactions
+    );
+    sizeStats.reactions.max = Math.max(
+      sizeStats.reactions.max,
+      node.radiusReactions
+    );
+  }
+  if (!Number.isFinite(sizeStats.links.min)) sizeStats.links.min = 0;
+  if (!Number.isFinite(sizeStats.reactions.min)) sizeStats.reactions.min = 0;
 
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const edges = links
@@ -301,6 +335,16 @@
     return lines.join("\n");
   };
 
+  const topReactionEmoji = (post) => {
+    if (!post.reactionBreakdown) return null;
+    const entries = Object.entries(post.reactionBreakdown).filter(
+      ([, v]) => typeof v === "number"
+    );
+    if (!entries.length) return null;
+    entries.sort((a, b) => b[1] - a[1]);
+    return entries[0];
+  };
+
   $: visibleNodes =
     selectedGroupId === null
       ? nodes
@@ -316,6 +360,14 @@
     : [];
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const nodeSize = (node) =>
+    sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
+  // Keep emojis visually in sync with the active size mode, with a wider spread to make changes obvious
+  const emojiFontSize = (node) => {
+    const base = nodeSize(node);
+    const multiplier = sizeMode === "links" ? 3.4 : 2.8;
+    return clamp(base * multiplier, 12, 72);
+  };
 
   const handleWheel = (event) => {
     event.preventDefault();
@@ -444,6 +496,14 @@
           />
           <span>Show links</span>
         </label>
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            bind:checked={showEmoji}
+            class="accent-white"
+          />
+          <span>Use top emoji</span>
+        </label>
       </div>
     </header>
 
@@ -564,45 +624,67 @@
             <g class="nodes">
               {#each visibleNodes as node (node.id)}
                 {#if node.post.url}
-                  <a href={node.post.url} target="_blank" rel="noreferrer">
-                    <g
-                      transform={`translate(${node.x}, ${node.y})`}
-                      class="cursor-pointer"
-                      role="presentation"
+              <a href={node.post.url} target="_blank" rel="noreferrer">
+                <g
+                  transform={`translate(${node.x}, ${node.y})`}
+                  class="cursor-pointer"
+                  role="presentation"
+                >
+                  {#if showEmoji && node.topEmoji && node.topEmojiCount > 0}
+                    <text
+                      text-anchor="middle"
+                      dominant-baseline="middle"
+                      font-size={`${emojiFontSize(node)}px`}
+                      opacity="1"
                     >
-                      <circle
-                        r={sizeMode === "links"
-                          ? node.radiusLinks
-                          : node.radiusReactions}
-                        fill={node.color}
-                        fill-opacity="1"
-                        stroke="#000"
-                        stroke-width="1.5"
-                        stroke-opacity="1"
-                      />
-                      <title>{tooltipForPost(node.post)}</title>
-                    </g>
-                  </a>
-                {:else}
-                  <g
-                    transform={`translate(${node.x}, ${node.y})`}
-                    class="cursor-pointer"
-                    role="presentation"
-                  >
+                      {node.topEmoji}
+                    </text>
+                  {:else if !showEmoji}
                     <circle
                       r={sizeMode === "links"
                         ? node.radiusLinks
                         : node.radiusReactions}
                       fill={node.color}
                       fill-opacity="1"
-                      stroke="#ffffff"
-                      stroke-opacity="0.35"
+                      stroke="#000"
+                      stroke-width="1.5"
+                      stroke-opacity="1"
                     />
-                    <title>{tooltipForPost(node.post)}</title>
-                  </g>
+                  {/if}
+                  <title>{tooltipForPost(node.post)}</title>
+                </g>
+              </a>
+            {:else}
+              <g
+                transform={`translate(${node.x}, ${node.y})`}
+                class="cursor-pointer"
+                role="presentation"
+              >
+                {#if showEmoji && node.topEmoji && node.topEmojiCount > 0}
+                  <text
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    font-size={`${emojiFontSize(node)}px`}
+                    opacity="1"
+                  >
+                    {node.topEmoji}
+                  </text>
+                {:else if !showEmoji}
+                  <circle
+                    r={sizeMode === "links"
+                      ? node.radiusLinks
+                      : node.radiusReactions}
+                    fill={node.color}
+                    fill-opacity="1"
+                    stroke="#ffffff"
+                    stroke-opacity="0.35"
+                  />
                 {/if}
-              {/each}
-            </g>
+                <title>{tooltipForPost(node.post)}</title>
+              </g>
+            {/if}
+          {/each}
+        </g>
 
             <g class="rings">
               {#if innerTicks.length}
@@ -670,6 +752,11 @@
 
 <style>
   .guide {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .nodes text {
     pointer-events: none;
     user-select: none;
   }

@@ -1,14 +1,15 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { csvParse } from "d3-dsv";
+import { csvParse, csvFormat } from "d3-dsv";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
 const dataDir = path.join(projectRoot, "static", "data");
+const sourceDir = path.resolve(projectRoot, "..", "notebooks", "data");
 
 const readCsv = async (filename) => {
-  const fullPath = path.join(dataDir, filename);
+  const fullPath = path.join(sourceDir, filename);
   const raw = await fs.readFile(fullPath, "utf8");
   return csvParse(raw);
 };
@@ -81,6 +82,9 @@ const loadData = async () => {
         !excludedGroupLabels.has(group.label.toLowerCase())
     );
 
+  const seenPostIds = new Set();
+  const sanitizedPosts = [];
+
   const posts = postsCsv
     .map((row) => {
       const dateMs = parseDateMs(row.date);
@@ -88,11 +92,16 @@ const loadData = async () => {
 
       const id = (row.id ?? "").trim();
       const chat = (row.chat ?? "").trim();
-      const label = row.label?.trim() ?? "";
-      if (!id || !chat) return null;
-      if (!label) return null;
+      const rawLabel = row.label?.trim() ?? "";
+      const text = row.text?.trim() ?? "";
+      if (!id || !chat || !text) return null;
+      if (seenPostIds.has(id)) return null;
 
-      return {
+      const label =
+        rawLabel ||
+        `${text.slice(0, 120)}${text.length > 120 ? "…" : ""}`;
+
+      const post = {
         id,
         label,
         chat,
@@ -102,22 +111,43 @@ const loadData = async () => {
         views: parseNumber(row.views),
         reactions: parseNumber(row.reaction_count),
         url: row.url?.trim(),
+        text,
+        senderId: row.sender_id?.trim?.() ?? "",
+        reactionBreakdown: row.reaction_breakdown ?? "",
       };
+
+      if (
+        excludedGroupIds.has(post.chat.toLowerCase()) ||
+        excludedGroupLabels.has(post.chat.toLowerCase())
+      )
+        return null;
+
+      seenPostIds.add(id);
+      sanitizedPosts.push({
+        id,
+        chat,
+        message_id: post.messageId,
+        date: row.date,
+        url: post.url ?? "",
+        views: row.views ?? "",
+        reaction_count: row.reaction_count ?? "",
+        reaction_breakdown: row.reaction_breakdown ?? "",
+        text,
+        sender_id: post.senderId,
+        label: rawLabel || "",
+      });
+
+      return post;
     })
-    .filter(
-      (post) =>
-        post !== null &&
-        !excludedGroupIds.has(post.chat.toLowerCase()) &&
-        !excludedGroupLabels.has(post.chat.toLowerCase())
-    )
+    .filter((post) => post !== null)
     .sort((a, b) => a.dateMs - b.dateMs);
 
   const postIds = new Set(posts.map((p) => p.id));
 
   const links = linksCsv
     .map((row) => ({
-      source: row.source?.trim() ?? "",
-      target: row.target?.trim() ?? "",
+      source: row.source?.trim?.() ?? row.from?.trim?.() ?? "",
+      target: row.target?.trim?.() ?? row.to?.trim?.() ?? "",
       type: row.type?.trim() || "link",
     }))
     .filter(
@@ -127,6 +157,30 @@ const loadData = async () => {
         postIds.has(link.source) &&
         postIds.has(link.target)
     );
+
+  const sanitizedLinks = links.map((link) => ({
+    from: link.source,
+    to: link.target,
+    type: link.type,
+  }));
+
+  await fs.mkdir(dataDir, { recursive: true });
+  const postsOut = csvFormat(sanitizedPosts, [
+    "id",
+    "chat",
+    "message_id",
+    "date",
+    "url",
+    "views",
+    "reaction_count",
+    "reaction_breakdown",
+    "text",
+    "sender_id",
+    "label",
+  ]);
+  const linksOut = csvFormat(sanitizedLinks, ["from", "to", "type"]);
+  await fs.writeFile(path.join(dataDir, "message_nodes.csv"), postsOut, "utf8");
+  await fs.writeFile(path.join(dataDir, "message_edges.csv"), linksOut, "utf8");
 
   return { posts, links, groups };
 };
