@@ -19,8 +19,12 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
   const outerRadius = Math.min(width, height) / 2 - 50;
 
   const postCountByGroup = new Map();
+  const postLabelByGroup = new Map();
   for (const post of posts) {
     postCountByGroup.set(post.chat, (postCountByGroup.get(post.chat) ?? 0) + 1);
+    if (post.chatLabel && !postLabelByGroup.has(post.chat)) {
+      postLabelByGroup.set(post.chat, post.chatLabel);
+    }
   }
 
   const knownGroups = new Map(
@@ -37,7 +41,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
     if (!knownGroups.has(chat)) {
       knownGroups.set(chat, {
         id: chat,
-        label: chat,
+        label: postLabelByGroup.get(chat) ?? chat,
         postCount: postCountByGroup.get(chat) ?? 0,
       });
     }
@@ -226,14 +230,22 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
     return `M ${p0.x} ${p0.y} A ${r1} ${r1} 0 ${largeArc} 1 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${r0} ${r0} 0 ${largeArc} 0 ${p3.x} ${p3.y} Z`;
   };
 
-  const slicePaths = groupSlices.map((slice) => ({
-    id: slice.group.id,
-    label: slice.group.label ?? slice.group.id,
-    color: slice.color,
-    path: arcPath(innerRadius - 28, outerRadius + 12, slice.start, slice.end),
-    labelPos: toCartesian(outerRadius + 26, slice.center),
-    angleDeg: (slice.center * 180) / Math.PI,
-  }));
+  const slicePaths = groupSlices.map((slice) => {
+    const angleDeg = (slice.center * 180) / Math.PI;
+    const normalized = ((angleDeg % 360) + 360) % 360;
+    const flipped = normalized > 90 && normalized < 270;
+
+    return {
+      id: slice.group.id,
+      label: slice.group.label ?? slice.group.id,
+      color: slice.color,
+      path: arcPath(innerRadius - 28, outerRadius + 12, slice.start, slice.end),
+      labelPos: toCartesian(outerRadius + 26, slice.center),
+      angleDeg,
+      labelRotation: flipped ? angleDeg + 180 : angleDeg,
+      labelAnchor: flipped ? "end" : "start",
+    };
+  });
 
   const linkPaths = edges.map((edge, idx) => {
     const sx = edge.source.x;

@@ -1,23 +1,26 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import EmojiFilter from "$lib/EmojiFilter.svelte";
 
   export let counts = { posts: 0, groups: 0, links: 0 };
   export let selectedGroup = null;
   export let sizeMode = "links";
   export let showLinks = false;
-  export let showEmoji = false;
+  export let topEmojis = [];
+  export let selectedEmoji = null;
   export let subscriberText = () => null;
 
   const dispatch = createEventDispatcher();
 
   const setSizeMode = (mode) => dispatch("sizeMode", mode);
   const toggleLinks = (checked) => dispatch("showLinks", checked);
-  const toggleEmoji = (checked) => dispatch("showEmoji", checked);
   const clearSelection = () => dispatch("clearSelection");
+  const setEmoji = (emoji) =>
+    dispatch("selectEmoji", selectedEmoji === emoji ? null : emoji);
 </script>
 
 <header
-  class="absolute left-1/2 top-4 z-50 flex  -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded-full bg-black p-2 px-4"
+  class="fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded-full bg-black p-2 px-6"
 >
   <div class="flex flex-wrap items-center gap-3 text-sm">
     <span>{counts.posts} posts</span>
@@ -65,14 +68,7 @@
       />
       <span>Show links</span>
     </label>
-    <label class="flex items-center gap-2 cursor-pointer select-none">
-      <input
-        type="checkbox"
-        checked={showEmoji}
-        on:change={(event) => toggleEmoji(event.currentTarget.checked)}
-        class="accent-white"
-      />
-      <span>Use top emoji</span>
-    </label>
   </div>
+
+  <EmojiFilter {topEmojis} {selectedEmoji} on:select={(event) => setEmoji(event.detail)} />
 </header>

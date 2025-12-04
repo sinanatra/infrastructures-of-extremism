@@ -25,21 +25,24 @@
     linkCountByPost,
     sliceForGroup,
   } = prepared;
+  const baseWidth = width + viewPadding * 2;
+  const baseHeight = height + viewPadding * 2;
+  const initialScale = 0.6;
   let viewBox = {
-    x: -viewPadding,
-    y: -viewPadding,
-    width: width + viewPadding * 2,
-    height: height + viewPadding * 2,
+    width: baseWidth * initialScale,
+    height: baseHeight * initialScale,
+    x: -viewPadding + (baseWidth - baseWidth * initialScale) / 2,
+    y: -viewPadding + (baseHeight - baseHeight * initialScale) / 2,
   };
   let isPanning = false;
   let panState = null;
   const zoomStep = 1.08;
-  const minScale = 0.5;
-  const maxScale = 4;
+  const minScale = 0.1;
+  const maxScale = 0.9;
 
   let sizeMode = "links";
   let showLinks = false;
-  let showEmoji = false;
+  let selectedEmoji = null;
   let selectedGroupId = null;
   $: selectedGroup =
     selectedGroupId === null
@@ -124,9 +127,10 @@
 
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
   const tooltipForPost = (post) => {
+    const groupLabel = post.chatLabel ?? post.chat;
     const lines = [
       post.label || post.id,
-      `Group: ${post.chat}`,
+      `Group: ${groupLabel}`,
       `Date: ${formatDate.format(post.dateMs)}`,
     ];
     const linkCount = linkCountByPost.get(post.id) ?? 0;
@@ -138,10 +142,28 @@
     return lines.join("\n");
   };
 
+  $: topEmojis =
+    (() => {
+      const counts = new Map();
+      for (const node of nodes) {
+        if (!node.topEmoji || node.topEmojiCount <= 0) continue;
+        counts.set(
+          node.topEmoji,
+          (counts.get(node.topEmoji) ?? 0) + node.topEmojiCount
+        );
+      }
+      return [...counts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 20)
+        .map(([emoji, count]) => ({ emoji, count }));
+    })();
+
   $: visibleNodes =
-    selectedGroupId === null
-      ? nodes
-      : nodes.filter((n) => n.groupId === selectedGroupId);
+    nodes.filter(
+      (n) =>
+        (selectedGroupId === null || n.groupId === selectedGroupId) &&
+        (selectedEmoji === null || n.topEmoji === selectedEmoji)
+    );
 
   $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
 
@@ -155,11 +177,6 @@
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const nodeSize = (node) =>
     sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
-  const emojiFontSize = (node) => {
-    const base = nodeSize(node);
-    const multiplier = sizeMode === "links" ? 3.4 : 2.8;
-    return clamp(base * multiplier, 12, 72);
-  };
 
   const handleWheel = (event) => {
     event.preventDefault();
@@ -232,252 +249,228 @@
   };
 </script>
 
-<section class="min-h-screen text-white">
-  <div class="relative">
+<section class="relative h-screen text-white overflow-hidden bg-black">
+  <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
+    <div class="pointer-events-auto max-w-5xl mx-auto">
     <NetworkControls
-      counts={{ posts: posts.length, groups: orderedGroups.length, links: links.length }}
+      counts={{
+        posts: posts.length,
+        groups: orderedGroups.length,
+        links: links.length,
+      }}
       {selectedGroup}
       {sizeMode}
       {showLinks}
-      {showEmoji}
+      {topEmojis}
+      {selectedEmoji}
       {subscriberText}
       on:sizeMode={(event) => {
         sizeMode = event.detail;
-        showEmoji = false;
       }}
       on:showLinks={(event) => (showLinks = event.detail)}
-      on:showEmoji={(event) => (showEmoji = event.detail)}
+      on:selectEmoji={(event) => (selectedEmoji = event.detail)}
       on:clearSelection={() => (selectedGroupId = null)}
     />
-
-    <div class="relative bg-black">
-      <div class="overflow-auto">
-        <div class="min-h-[70vh] flex items-center justify-center">
-          <svg
-            role="img"
-            class="w-full h-auto max-w-full zoomable"
-            class:grabbing={isPanning}
-            viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
-            preserveAspectRatio="xMidYMid meet"
-            aria-label="Radial network"
-            on:mousemove={onMouseMoveSvg}
-            on:mouseleave={onMouseLeaveSvg}
-            on:wheel|preventDefault={handleWheel}
-            on:pointerdown={startPan}
-            on:pointermove={handlePan}
-            on:pointerup={endPan}
-            on:pointerleave={endPan}
-          >
-            <defs />
-
-            <g class="slices">
-              {#each slicePaths as slice}
-                <text
-                  on:click={() => toggleGroup(slice.id)}
-                  class="cursor-pointer select-none"
-                  x={slice.labelPos.x}
-                  y={slice.labelPos.y}
-                  text-anchor="start"
-                  dominant-baseline="middle"
-                  transform={`rotate(${slice.angleDeg}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
-                  fill={selectedGroupId === null || selectedGroupId === slice.id
-                    ? "#f5f5f5"
-                    : "#555"}
-                  font-size="1.5rem"
-                  font-weight="400"
-                >
-                  {slice.label}
-                </text>
-              {/each}
-            </g>
-
-            {#if visibleLinks.length}
-              <g class="links" stroke-linecap="round" stroke-linejoin="round">
-                {#each visibleLinks as link}
-                  <path
-                    d={link.d}
-                    fill="none"
-                    class="guide"
-                    stroke="var(--highlite-color)"
-                    stroke-width={link.crossGroup ? 1.3 : 0.8}
-                    opacity={link.crossGroup ? 0.6 : 0.28}
-                  />
-                {/each}
-              </g>
-            {/if}
-
-            {#if hoverTick}
-              <g>
-                <circle
-                  {cx}
-                  {cy}
-                  r={hoverTick.radius}
-                  fill="none"
-                  stroke="black"
-                  stroke-width="4"
-                  stroke-dasharray="4 6"
-                  opacity="0.4"
-                />
-                <circle
-                  {cx}
-                  {cy}
-                  r={hoverTick.radius}
-                  fill="none"
-                  class="guide"
-                  stroke="var(--highlite-color)"
-                  stroke-dasharray="4 6"
-                  opacity="0.7"
-                />
-                <text
-                  x={cx}
-                  y={cy - hoverTick.radius - 12}
-                  text-anchor="middle"
-                  stroke="black"
-                  stroke-width="1"
-                  class="guide"
-                  fill="var(--highlite-color)"
-                  font-size="1.4rem"
-                  font-weight="700"
-                >
-                  {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
-                    {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
-                      hoverTick.maxDate
-                    )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
-                  {:else}
-                    {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
-                      ? ` (${hoverTick.count})`
-                      : ""}
-                  {/if}
-                </text>
-              </g>
-            {/if}
-
-            <g class="nodes">
-              {#each visibleNodes as node (node.id)}
-                {#if node.post.url}
-                  <a href={node.post.url} target="_blank" rel="noreferrer">
-                    <g
-                      transform={`translate(${node.x}, ${node.y})`}
-                      class="cursor-pointer"
-                      role="presentation"
-                    >
-                      {#if showEmoji && node.topEmoji && node.topEmojiCount > 0}
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          font-size={`${emojiFontSize(node)}px`}
-                          opacity="1"
-                        >
-                          {node.topEmoji}
-                        </text>
-                      {:else if !showEmoji}
-                        <circle
-                          r={sizeMode === "links"
-                            ? node.radiusLinks
-                            : node.radiusReactions}
-                          fill={node.color}
-                          fill-opacity="1"
-                          stroke="#000"
-                          stroke-width="1.5"
-                          stroke-opacity="1"
-                        />
-                      {/if}
-                      <title>{tooltipForPost(node.post)}</title>
-                    </g>
-                  </a>
-                {:else}
-                  <g
-                    transform={`translate(${node.x}, ${node.y})`}
-                    class="cursor-pointer"
-                    role="presentation"
-                  >
-                    {#if showEmoji && node.topEmoji && node.topEmojiCount > 0}
-                      <text
-                        text-anchor="middle"
-                        dominant-baseline="middle"
-                        font-size={`${emojiFontSize(node)}px`}
-                        opacity="1"
-                      >
-                        {node.topEmoji}
-                      </text>
-                    {:else if !showEmoji}
-                      <circle
-                        r={sizeMode === "links"
-                          ? node.radiusLinks
-                          : node.radiusReactions}
-                        fill={node.color}
-                        fill-opacity="1"
-                        stroke="#ffffff"
-                        stroke-opacity="0.35"
-                      />
-                    {/if}
-                    <title>{tooltipForPost(node.post)}</title>
-                  </g>
-                {/if}
-              {/each}
-            </g>
-
-            <g class="rings">
-              {#if innerTicks.length}
-                {#each innerTicks as tick}
-                  <g>
-                    <circle
-                      class="guide"
-                      {cx}
-                      {cy}
-                      r={tick.radius}
-                      fill="none"
-                      stroke="var(--highlite-color)"
-                      stroke-dasharray="3 5"
-                    />
-                    <text
-                      class="guide"
-                      x={cx}
-                      y={cy - tick.radius - 6}
-                      text-anchor="middle"
-                      stroke="black"
-                      stroke-width="1"
-                      fill="var(--highlite-color)"
-                      font-size="1.4rem"
-                      font-weight="700"
-                    >
-                      {formatTick.format(tick.time)}
-                    </text>
-                  </g>
-                {/each}
-              {/if}
-
-              {#if outerTick}
-                <g>
-                  <circle
-                    {cx}
-                    {cy}
-                    r={outerRingRadius}
-                    fill="none"
-                    class="guide"
-                    stroke="var(--highlite-color)"
-                    stroke-dasharray="3 5"
-                  />
-                  <text
-                    x={cx}
-                    y={cy - outerRingRadius - 12}
-                    text-anchor="middle"
-                    stroke="black"
-                    stroke-width="1"
-                    class="guide"
-                    fill="var(--highlite-color)"
-                    font-size="1.4rem"
-                    font-weight="700"
-                  >
-                    {formatTick.format(outerTick.time)}
-                  </text>
-                </g>
-              {/if}
-            </g>
-          </svg>
-        </div>
-      </div>
     </div>
+  </div>
+
+  <div class="h-full w-full flex items-center justify-center">
+    <svg
+      role="img"
+      class="w-full h-full max-w-full max-h-full zoomable"
+      class:grabbing={isPanning}
+      viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
+      preserveAspectRatio="xMidYMid meet"
+      aria-label="Radial network"
+      on:mousemove={onMouseMoveSvg}
+      on:mouseleave={onMouseLeaveSvg}
+      on:wheel|preventDefault={handleWheel}
+      on:pointerdown={startPan}
+      on:pointermove={handlePan}
+      on:pointerup={endPan}
+      on:pointerleave={endPan}
+    >
+      <defs />
+
+      <g class="slices">
+        {#each slicePaths as slice}
+          <text
+            on:click={() => toggleGroup(slice.id)}
+            class="cursor-pointer select-none"
+            x={slice.labelPos.x}
+            y={slice.labelPos.y}
+            text-anchor={slice.labelAnchor}
+            dominant-baseline="middle"
+            transform={`rotate(${slice.labelRotation}, ${slice.labelPos.x}, ${slice.labelPos.y})`}
+            fill={selectedGroupId === null || selectedGroupId === slice.id
+              ? "#f5f5f5"
+              : "#555"}
+            font-size="2.5rem"
+            font-weight="400"
+          >
+            {slice.label}
+          </text>
+        {/each}
+      </g>
+
+      {#if visibleLinks.length}
+        <g class="links" stroke-linecap="round" stroke-linejoin="round">
+          {#each visibleLinks as link}
+            <path
+              d={link.d}
+              fill="none"
+              class="guide"
+              stroke="var(--highlite-color)"
+              stroke-width={link.crossGroup ? 1.3 : 0.8}
+              opacity={link.crossGroup ? 0.6 : 0.28}
+            />
+          {/each}
+        </g>
+      {/if}
+
+      {#if hoverTick}
+        <g>
+          <circle
+            {cx}
+            {cy}
+            r={hoverTick.radius}
+            fill="none"
+            stroke="black"
+            stroke-width="4"
+            stroke-dasharray="4 6"
+            opacity="0.4"
+          />
+          <circle
+            {cx}
+            {cy}
+            r={hoverTick.radius}
+            fill="none"
+            class="guide"
+            stroke="var(--highlite-color)"
+            stroke-dasharray="4 6"
+            opacity="0.7"
+          />
+          <text
+            x={cx}
+            y={cy - hoverTick.radius - 12}
+            text-anchor="middle"
+            stroke="black"
+            stroke-width="1"
+            class="guide"
+            fill="var(--highlite-color)"
+            font-size="1.4rem"
+            font-weight="700"
+          >
+            {#if hoverTick.minDate && hoverTick.maxDate && hoverTick.minDate !== hoverTick.maxDate}
+              {formatHoverDate.format(hoverTick.minDate)} – {formatHoverDate.format(
+                hoverTick.maxDate
+              )}{hoverTick.count ? ` (${hoverTick.count})` : ""}
+            {:else}
+              {formatHoverDate.format(hoverTick.time)}{hoverTick?.count
+                ? ` (${hoverTick.count})`
+                : ""}
+            {/if}
+          </text>
+        </g>
+      {/if}
+
+      <g class="nodes">
+        {#each visibleNodes as node (node.id)}
+          {#if node.post.url}
+            <a href={node.post.url} target="_blank" rel="noreferrer">
+              <g
+                transform={`translate(${node.x}, ${node.y})`}
+                class="cursor-pointer"
+                role="presentation"
+              >
+                <circle
+                  r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
+                  fill={node.color}
+                  fill-opacity="1"
+                  stroke="#000"
+                  stroke-width="1.5"
+                  stroke-opacity="1"
+                />
+                <title>{tooltipForPost(node.post)}</title>
+              </g>
+            </a>
+          {:else}
+            <g
+              transform={`translate(${node.x}, ${node.y})`}
+              class="cursor-pointer"
+              role="presentation"
+            >
+              <circle
+                r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
+                fill={node.color}
+                fill-opacity="1"
+                stroke="#ffffff"
+                stroke-opacity="0.35"
+              />
+              <title>{tooltipForPost(node.post)}</title>
+            </g>
+          {/if}
+        {/each}
+      </g>
+
+      <g class="rings">
+        {#if innerTicks.length}
+          {#each innerTicks as tick}
+            <g>
+              <circle
+                class="guide"
+                {cx}
+                {cy}
+                r={tick.radius}
+                fill="none"
+                stroke="var(--highlite-color)"
+                stroke-dasharray="3 5"
+              />
+              <text
+                class="guide"
+                x={cx}
+                y={cy - tick.radius - 6}
+                text-anchor="middle"
+                stroke="black"
+                stroke-width="1"
+                fill="var(--highlite-color)"
+                font-size="1.4rem"
+                font-weight="700"
+              >
+                {formatTick.format(tick.time)}
+              </text>
+            </g>
+          {/each}
+        {/if}
+
+        {#if outerTick}
+          <g>
+            <circle
+              {cx}
+              {cy}
+              r={outerRingRadius}
+              fill="none"
+              class="guide"
+              stroke="var(--highlite-color)"
+              stroke-dasharray="3 5"
+            />
+            <text
+              x={cx}
+              y={cy - outerRingRadius - 12}
+              text-anchor="middle"
+              stroke="black"
+              stroke-width="1"
+              class="guide"
+              fill="var(--highlite-color)"
+              font-size="1.4rem"
+              font-weight="700"
+            >
+              {formatTick.format(outerTick.time)}
+            </text>
+          </g>
+        {/if}
+      </g>
+    </svg>
   </div>
 </section>
 

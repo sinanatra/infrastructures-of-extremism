@@ -11,3 +11,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.selector::-webkit-scrollbar {
+  display: none;
+}
+
+.selector {
+  scrollbar-width: none;
+}
+
+.selector {
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
