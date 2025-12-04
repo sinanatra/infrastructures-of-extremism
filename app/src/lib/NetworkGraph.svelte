@@ -154,7 +154,7 @@
       }
       return [...counts.entries()]
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 20)
+        .slice(0, 30)
         .map(([emoji, count]) => ({ emoji, count }));
     })();
 
