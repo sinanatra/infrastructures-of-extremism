@@ -17,7 +17,7 @@
 </script>
 
 <header
-  class="absolute left-1/2 top-4 z-20 flex  -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded-full bg-black p-2 px-4"
+  class="absolute left-1/2 top-4 z-50 flex  -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded-full bg-black p-2 px-4"
 >
   <div class="flex flex-wrap items-center gap-3 text-sm">
     <span>{counts.posts} posts</span>

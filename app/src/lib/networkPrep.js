@@ -43,38 +43,6 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
     }
   }
 
-  const orderedGroups = [...knownGroups.values()]
-    .filter((g) => (g.postCount ?? 0) > 0)
-    .sort((a, b) => {
-      const aSubs = a.subscribers ?? 0;
-      const bSubs = b.subscribers ?? 0;
-      if (aSubs !== bSubs) return bSubs - aSubs;
-      const aPosts = a.postCount ?? 0;
-      const bPosts = b.postCount ?? 0;
-      if (aPosts !== bPosts) return bPosts - aPosts;
-      return a.label.localeCompare(b.label);
-    });
-
-  const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
-  const sliceGap = Math.min(0.4, sliceAngle * 0.18);
-  const baseStart = -Math.PI / 2;
-
-  const groupSlices = orderedGroups.map((group, idx) => {
-    const start = baseStart + idx * sliceAngle + sliceGap / 2;
-    const end = baseStart + (idx + 1) * sliceAngle - sliceGap / 2;
-    return {
-      group,
-      start,
-      end,
-      center: start + (end - start) / 2,
-      idx,
-      color: colorForGroup(idx),
-    };
-  });
-
-  const sliceForGroup = new Map(
-    groupSlices.map((slice) => [slice.group.id, slice])
-  );
   const precomputedNodeById = layout
     ? new Map(layout.nodes.map((n) => [n.id, n]))
     : null;
@@ -111,7 +79,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
   for (const post of posts) {
     const saved = precomputedNodeById.get(post.id);
     if (!saved) continue;
-    const slice = sliceForGroup.get(post.chat);
+    const angle = Math.atan2(saved.y - cy, saved.x - cx);
     const { emoji, count } = topEmojiInfo(post);
 
     nodes.push({
@@ -119,15 +87,92 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
       id: post.id,
       groupId: post.chat,
       post,
-      color: slice?.color ?? "#ffffff",
+      color: "#ffffff",
       radiusReactions: saved.radiusReactions ?? 5,
       radiusLinks: saved.radiusLinks ?? 5,
       collisionRadius: saved.collisionRadius ?? 5,
       x: saved.x,
       y: saved.y,
+      angle,
       topEmoji: emoji,
       topEmojiCount: count,
     });
+  }
+
+  const nodesByGroup = nodes.reduce((map, node) => {
+    if (!map.has(node.groupId)) map.set(node.groupId, []);
+    map.get(node.groupId).push(node);
+    return map;
+  }, new Map());
+
+  const orderedGroupsWithAngles = [...nodesByGroup.entries()]
+    .map(([groupId, groupNodes]) => {
+      const group = knownGroups.get(groupId);
+      if (!group) return null;
+      let sinSum = 0;
+      let cosSum = 0;
+      for (const node of groupNodes) {
+        sinSum += Math.sin(node.angle);
+        cosSum += Math.cos(node.angle);
+      }
+      const angle = Math.atan2(sinSum, cosSum);
+      return { group, angle };
+    })
+    .filter((entry) => entry !== null)
+    .sort((a, b) => {
+      if (a.angle !== b.angle) return a.angle - b.angle;
+      return a.group.label.localeCompare(b.group.label);
+    });
+
+  const orderedGroups = orderedGroupsWithAngles.map((entry) => ({
+    ...entry.group,
+    angle: entry.angle,
+  }));
+
+  let groupSlices = [];
+  if (orderedGroups.length === 1) {
+    const single = orderedGroups[0];
+    groupSlices = [
+      {
+        group: single,
+        start: 0,
+        end: TAU,
+        center: single.angle,
+        idx: 0,
+        color: colorForGroup(0),
+      },
+    ];
+  } else if (orderedGroups.length > 1) {
+    const midpoint = (a, b) => {
+      const delta = normalizeAngle(b - a);
+      return normalizeAngle(a + delta / 2);
+    };
+
+    groupSlices = orderedGroups.map((group, idx) => {
+      const prev = orderedGroups[(idx - 1 + orderedGroups.length) % orderedGroups.length];
+      const next = orderedGroups[(idx + 1) % orderedGroups.length];
+      const start = midpoint(prev.angle, group.angle);
+      const end = midpoint(group.angle, next.angle);
+      return {
+        group,
+        start,
+        end,
+        center: group.angle,
+        idx,
+        color: colorForGroup(idx),
+      };
+    });
+  }
+
+  const sliceForGroup = new Map(
+    groupSlices.map((slice) => [slice.group.id, slice])
+  );
+
+  const colorByGroup = new Map(
+    groupSlices.map((slice) => [slice.group.id, slice.color])
+  );
+  for (const node of nodes) {
+    node.color = colorByGroup.get(node.groupId) ?? "#ffffff";
   }
 
   const sizeStats = {
@@ -171,11 +216,13 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
   });
 
   const arcPath = (r0, r1, startAngle, endAngle) => {
+    const delta = normalizeAngle(endAngle - startAngle) || TAU;
+    const end = startAngle + delta;
     const p0 = toCartesian(r1, startAngle);
-    const p1 = toCartesian(r1, endAngle);
-    const p2 = toCartesian(r0, endAngle);
+    const p1 = toCartesian(r1, end);
+    const p2 = toCartesian(r0, end);
     const p3 = toCartesian(r0, startAngle);
-    const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+    const largeArc = delta > Math.PI ? 1 : 0;
     return `M ${p0.x} ${p0.y} A ${r1} ${r1} 0 ${largeArc} 1 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${r0} ${r0} 0 ${largeArc} 0 ${p3.x} ${p3.y} Z`;
   };
 
