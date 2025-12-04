@@ -187,8 +187,8 @@ const loadData = async () => {
 
 const computeLayout = ({ posts, links, groups }) => {
   const TAU = Math.PI * 2;
-  const width = 4000;
-  const height = 4000;
+  const width = 5000;
+  const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
   const innerRadius = 3;
