@@ -462,16 +462,7 @@
           stroke.setAlpha(crossGroup ? 160 : 110);
           p.stroke(stroke);
           p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
-          p.bezier(
-            source.x,
-            source.y,
-            ctrlX,
-            ctrlY,
-            ctrlX,
-            ctrlY,
-            target.x,
-            target.y
-          );
+          p.line(source.x, source.y, target.x, target.y);
         }
         p.pop();
       };
