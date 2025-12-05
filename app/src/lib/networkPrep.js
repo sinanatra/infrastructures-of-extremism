@@ -2,14 +2,15 @@ const TAU = Math.PI * 2;
 const VIEW_PADDING = 280;
 const INNER_RADIUS = 3;
 
-const colorForGroup = () => "#ffffff";
-
 const normalizeAngle = (angle) => {
   const wrapped = angle % TAU;
   return wrapped < 0 ? wrapped + TAU : wrapped;
 };
 
-export const prepareNetwork = ({ posts, links, groups, layout }) => {
+export const prepareNetwork = (
+  { posts, links, groups, layout },
+  { circleColor = "#ffffff" } = {}
+) => {
   const width = layout?.width ?? 3000;
   const height = layout?.height ?? 3000;
   const cx = width / 2;
@@ -91,7 +92,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
       id: post.id,
       groupId: post.chat,
       post,
-      color: "#ffffff",
+      color: circleColor,
       radiusReactions: saved.radiusReactions ?? 5,
       radiusLinks: saved.radiusLinks ?? 5,
       collisionRadius: saved.collisionRadius ?? 5,
@@ -143,7 +144,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
         end: TAU,
         center: single.angle,
         idx: 0,
-        color: colorForGroup(0),
+        color: circleColor,
       },
     ];
   } else if (orderedGroups.length > 1) {
@@ -163,7 +164,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
         end,
         center: group.angle,
         idx,
-        color: colorForGroup(idx),
+        color: circleColor,
       };
     });
   }
@@ -176,7 +177,7 @@ export const prepareNetwork = ({ posts, links, groups, layout }) => {
     groupSlices.map((slice) => [slice.group.id, slice.color])
   );
   for (const node of nodes) {
-    node.color = colorByGroup.get(node.groupId) ?? "#ffffff";
+    node.color = colorByGroup.get(node.groupId) ?? circleColor;
   }
 
   const sizeStats = {

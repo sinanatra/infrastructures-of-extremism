@@ -6,9 +6,13 @@
   import Tooltip from "$lib/Tooltip.svelte";
 
   export let data;
+  export let backgroundColor = "#000000";
+  export let circleColor = "#ffffff";
+  export let textColor = "#ffffff";
+  export let highlightColor = "yellow";
   const { posts, links } = data;
 
-  const prepared = prepareNetwork(data);
+  const prepared = prepareNetwork(data, { circleColor });
   const {
     width,
     height,
@@ -25,14 +29,17 @@
   } = prepared;
 
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
-  let highlightColor = "yellow";
+  let resolvedHighlightColor = highlightColor;
 
   onMount(() => {
+    if (highlightColor) return;
     const cssColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue("--highlite-color");
-    highlightColor = (cssColor || highlightColor).trim() || highlightColor;
+    const fallback = (cssColor || resolvedHighlightColor).trim();
+    resolvedHighlightColor = fallback || resolvedHighlightColor;
   });
+  $: resolvedHighlightColor = highlightColor || resolvedHighlightColor;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   let redrawPending = false;
@@ -227,7 +234,6 @@
     });
   };
 
-  // Redraw whenever the state changes (filters, hover, zoom, etc.)
   $: if (pInstance) {
     visibleNodes;
     visibleLinks;
@@ -235,7 +241,10 @@
     selectedEmoji;
     sizeMode;
     showLinks;
-    highlightColor;
+    resolvedHighlightColor;
+    textColor;
+    backgroundColor;
+    circleColor;
     hoveredNode;
     view.scale;
     view.panX;
@@ -274,7 +283,6 @@
       return;
     }
 
-    // Toggle group selection if label was clicked
     const hit = slicePaths.find((slice) => {
       const pos = worldToScreen(slice.labelPos.x, slice.labelPos.y);
       const dx = pos.x - sx;
@@ -393,7 +401,7 @@
       const drawSlices = () => {
         p.push();
         p.noFill();
-        p.stroke(highlightColor);
+        p.stroke(resolvedHighlightColor);
         p.strokeWeight(0.9 / view.scale);
         for (const slice of slicePaths) {
           if (
@@ -422,7 +430,9 @@
           p.textAlign(slice.labelAnchor === "end" ? p.RIGHT : p.LEFT, p.CENTER);
           const active =
             selectedGroupId === null || selectedGroupId === slice.id;
-          p.fill(active ? highlightColor : "rgba(255,255,255,0.35)");
+          const inactiveLabel = p.color(textColor);
+          inactiveLabel.setAlpha(90);
+          p.fill(active ? resolvedHighlightColor : inactiveLabel);
           p.noStroke();
           p.textStyle(p.NORMAL);
           p.textSize(textSizeFor(14));
@@ -455,7 +465,7 @@
           const offsetY = midY - cy;
           const ctrlX = midX + offsetX * 0.14;
           const ctrlY = midY + offsetY * 0.14;
-          const stroke = p.color(highlightColor);
+          const stroke = p.color(resolvedHighlightColor);
           stroke.setAlpha(crossGroup ? 160 : 110);
           p.stroke(stroke);
           p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
@@ -471,15 +481,15 @@
         if (ctx?.setLineDash) {
           ctx.setLineDash([8 / view.scale, 10 / view.scale]);
         }
-        p.stroke(highlightColor);
-        p.strokeWeight(0.2 / view.scale);
+        p.stroke(resolvedHighlightColor);
+        p.strokeWeight(0.9 / view.scale);
         p.noFill();
 
         for (const tick of innerTicks) {
           p.circle(cx, cy, tick.radius * 2);
           p.push();
           p.noStroke();
-          p.fill(highlightColor);
+          p.fill(resolvedHighlightColor);
           p.textAlign(p.CENTER, p.BOTTOM);
           p.textSize(textSizeFor(12));
           p.text(
@@ -493,7 +503,7 @@
           p.circle(cx, cy, outerRingRadius * 2);
           p.push();
           p.noStroke();
-          p.fill(highlightColor);
+          p.fill(resolvedHighlightColor);
           p.textAlign(p.CENTER, p.BOTTOM);
           p.textSize(textSizeFor(14));
           p.text(
@@ -535,7 +545,7 @@
               : hoveredNode.radiusReactions;
           p.push();
           p.noFill();
-          const halo = p.color(highlightColor);
+          const halo = p.color(resolvedHighlightColor);
           halo.setAlpha(220);
           p.stroke(halo);
           p.strokeWeight(1.8 / view.scale);
@@ -545,7 +555,7 @@
       };
 
       p.draw = () => {
-        p.background(0);
+        p.background(backgroundColor);
         p.push();
         p.translate(canvasSize.w / 2 + view.panX, canvasSize.h / 2 + view.panY);
         p.scale(view.scale);
@@ -570,7 +580,10 @@
   const sketch = createSketch();
 </script>
 
-<section class="relative h-screen text-white overflow-hidden bg-black">
+<section
+  class="relative h-screen overflow-hidden"
+  style={`--highlite-color:${resolvedHighlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; background:${backgroundColor}; color:${circleColor};`}
+>
   <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
     <div
       class="pointer-events-auto max-w-5xl mx-auto"
@@ -593,6 +606,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
+        textColor={circleColor}
+        backgroundColor={backgroundColor}
+        highlightColor={resolvedHighlightColor}
         on:sizeMode={(event) => {
           sizeMode = event.detail;
         }}

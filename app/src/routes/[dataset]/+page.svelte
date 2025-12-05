@@ -6,5 +6,11 @@
 </script>
 
 <section class="dataset">
-  <NetworkGraph {data} />
+  <NetworkGraph
+    {data}
+    backgroundColor="black"
+    circleColor="#FFBF00"
+    textColor="#FFBF00"
+    highlightColor="#7B68EE"
+  />
 </section>

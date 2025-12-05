@@ -9,6 +9,9 @@
   export let topEmojis = [];
   export let selectedEmoji = null;
   export let subscriberText = () => null;
+  export let textColor = "#ffffff";
+  export let backgroundColor = "#000000";
+  export let highlightColor = "yellow";
 
   const dispatch = createEventDispatcher();
 
@@ -20,16 +23,15 @@
 </script>
 
 <header
-  class="fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded-full bg-black p-2 px-6"
+  class="controls fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded p-2 px-6"
+  style={`--controls-bg:${backgroundColor}; --controls-text:${textColor}; --controls-highlight:${highlightColor};`}
 >
   <div class="flex flex-wrap items-center gap-3 text-sm">
     <span>{counts.posts} posts</span>
     <span>{counts.groups} groups</span>
     <span>{counts.links} links</span>
     {#if selectedGroup}
-      <span
-        class="flex items-center gap-3 bg-white text-black px-3 py-1 rounded-full text-sm"
-      >
+      <span class="group-pill flex items-center gap-3 px-3 py-1 rounded-full text-sm">
         <span>{selectedGroup.label}</span>
         {#if subscriberText(selectedGroup.subscribers)}
           <span>
@@ -45,15 +47,15 @@
       </span>
     {/if}
 
-    <div class="flex rounded-full border border-gray-700 overflow-hidden">
+    <div class="flex rounded-full overflow-hidden toggle-group">
       <button
-        class={`px-3 py-2 ${sizeMode === "reactions" ? "bg-white text-black" : "bg-transparent text-white"}`}
+        class={`toggle-btn px-3 py-2 ${sizeMode === "reactions" ? "active" : ""}`}
         on:click={() => setSizeMode("reactions")}
       >
         Size by reactions
       </button>
       <button
-        class={`px-3 py-2 ${sizeMode === "links" ? "bg-white text-black" : "bg-transparent text-white"}`}
+        class={`toggle-btn px-3 py-2 ${sizeMode === "links" ? "active" : ""}`}
         on:click={() => setSizeMode("links")}
       >
         Size by forwards
@@ -64,11 +66,51 @@
         type="checkbox"
         checked={showLinks}
         on:change={(event) => toggleLinks(event.currentTarget.checked)}
-        class="accent-white"
+        style={`accent-color:${highlightColor};`}
       />
       <span>Show links</span>
     </label>
   </div>
 
-  <EmojiFilter {topEmojis} {selectedEmoji} on:select={(event) => setEmoji(event.detail)} />
+  <EmojiFilter
+    {topEmojis}
+    {selectedEmoji}
+    textColor={textColor}
+    backgroundColor={backgroundColor}
+    highlightColor={highlightColor}
+    on:select={(event) => setEmoji(event.detail)}
+  />
 </header>
+
+<style>
+  .controls {
+    background: var(--controls-bg);
+    color: var(--controls-text);
+    border: 0.75px solid var(--controls-highlight);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .group-pill {
+    background: var(--controls-text);
+    color: var(--controls-bg);
+  }
+
+  .toggle-group {
+    border: 0.75px solid var(--controls-highlight);
+  }
+
+  .toggle-btn {
+    background: transparent;
+    color: var(--controls-text);
+    transition: background 120ms ease, color 120ms ease;
+  }
+
+  .toggle-btn.active {
+    background: var(--controls-text);
+    color: var(--controls-bg);
+  }
+
+  .toggle-btn + .toggle-btn {
+    border-left: 0.75px solid var(--controls-highlight);
+  }
+</style>

@@ -3,6 +3,9 @@
 
   export let topEmojis = [];
   export let selectedEmoji = null;
+  export let textColor = "#ffffff";
+  export let backgroundColor = "#000000";
+  export let highlightColor = "yellow";
 
   const dispatch = createEventDispatcher();
   const selectEmoji = (emoji) =>
@@ -10,21 +13,20 @@
 </script>
 
 {#if topEmojis.length}
-  <div class="flex w-full items-center gap-1 text-xs pt-2 border-t border-gray-800">
-    <span class="uppercase text-gray-400 ">Filter by emoji</span>
+  <div
+    class="emoji-filter flex w-full items-center gap-1 text-xs pt-2"
+    style={`--filter-text:${textColor}; --filter-highlight:${highlightColor}; --filter-bg:${backgroundColor};`}
+  >
+    <span class="label uppercase">Filter by emoji</span>
     <div class="flex-1 overflow-x-auto no-scrollbar">
       <div class="flex gap-1 py-1 min-w-max">
         {#each topEmojis as option}
           <button
-            class={`flex items-center gap-1 rounded-full border px-1 py-1 text-xs transition ${
-              selectedEmoji === option.emoji
-                ? "bg-white text-black border-white"
-                : "bg-transparent text-white border-gray-700 hover:border-white/70"
-            }`}
+            class={`emoji-pill ${selectedEmoji === option.emoji ? "active" : ""}`}
             on:click={() => selectEmoji(option.emoji)}
           >
-            <span class="text-xs leading-none">{option.emoji}</span>
-            <span class="text-xs text-gray-400">
+            <span class="emoji text-xs leading-none">{option.emoji}</span>
+            <span class="count text-xs">
               {option.count.toLocaleString()}
             </span>
           </button>
@@ -32,14 +34,51 @@
       </div>
     </div>
     <button
-      class={`flex-shrink-0 rounded-full border px-1 py-1 text-sm transition ${
-        selectedEmoji === null
-          ? "bg-white text-black border-white"
-          : "bg-transparent text-white border-gray-800 hover:border-white/70"
-      }`}
+      class={`emoji-pill clear ${selectedEmoji === null ? "active" : ""}`}
       on:click={() => selectEmoji(null)}
     >
       Clear
     </button>
   </div>
 {/if}
+
+<style>
+  .emoji-filter {
+    color: var(--filter-text);
+    border-top: 0.75px solid var(--filter-highlight);
+  }
+
+  .label {
+    color: var(--filter-text);
+  }
+
+  .emoji-pill {
+    border: 0.75px solid var(--filter-highlight);
+    color: var(--filter-text);
+    background: transparent;
+    border-radius: 9999px;
+    padding: 0.25rem 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+
+  .emoji-pill.active {
+    background: var(--filter-text);
+    color: var(--filter-bg);
+    border-color: var(--filter-highlight);
+  }
+
+  .emoji-pill:hover {
+    border-color: var(--filter-text);
+  }
+
+  .emoji-pill.clear {
+    flex-shrink: 0;
+  }
+
+  .count {
+    opacity: 0.75;
+  }
+</style>

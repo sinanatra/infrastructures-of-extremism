@@ -3,8 +3,12 @@
   import { prepareNetwork } from "$lib/networkPrep.js";
 
   export let data;
+  export let backgroundColor = "#000000";
+  export let circleColor = "#ffffff";
+  export let textColor = "#ffffff";
+  export let highlightColor = "yellow";
   const { posts, links } = data;
-  const prepared = prepareNetwork(data);
+  const prepared = prepareNetwork(data, { circleColor });
   const {
     width,
     height,
@@ -249,7 +253,10 @@
   };
 </script>
 
-<section class="relative h-screen text-white overflow-hidden bg-black">
+<section
+  class="relative h-screen overflow-hidden"
+  style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
+>
   <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
     <div class="pointer-events-auto max-w-5xl mx-auto">
       <NetworkControls
@@ -264,6 +271,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
+        textColor={textColor}
+        backgroundColor={backgroundColor}
+        highlightColor={highlightColor}
         on:sizeMode={(event) => {
           sizeMode = event.detail;
         }}
@@ -375,7 +385,7 @@
                 r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
                 fill={node.color}
                 fill-opacity="1"
-                stroke="var(--highlite-color)"
+                stroke="var(--graph-bg)"
                 stroke-width="0.7"
                 stroke-opacity="0.7"
               />
@@ -392,7 +402,7 @@
                 r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
                 fill={node.color}
                 fill-opacity="1"
-                stroke="var(--highlite-color)"
+                stroke="var(--graph-bg)"
                 stroke-width="0.7"
                 stroke-opacity="0.6"
               />
