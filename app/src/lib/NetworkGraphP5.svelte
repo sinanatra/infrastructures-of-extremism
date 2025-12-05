@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
-  import TooltipPopup from "$lib/TooltipPopup.svelte";
+  import Tooltip from "$lib/Tooltip.svelte";
 
   export let data;
   const { posts, links } = data;
@@ -626,7 +626,7 @@
   />
 
   {#if hoveredNode && hoveredScreenPos}
-    <TooltipPopup
+    <Tooltip
       x={hoveredScreenPos.x}
       y={hoveredScreenPos.y}
       text={hoveredText}
