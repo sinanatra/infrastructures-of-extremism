@@ -170,6 +170,15 @@
       return Math.hypot(pos.x - sx, pos.y - sy) <= tolerance;
     });
   };
+  let cursorMode = "grab";
+
+  const setCursor = (mode, canvasOverride = null) => {
+    const canvas = canvasOverride ?? pInstance?.canvas;
+    if (!canvas) return;
+    if (mode === cursorMode) return;
+    cursorMode = mode;
+    canvas.style.cursor = mode;
+  };
 
   const clearHover = () => {
     hoveredNode = null;
@@ -288,17 +297,6 @@
         return base * (0.8 + s * 0.8);
       };
 
-      const applyCursor = (isClickable = false) => {
-        if (!p.canvas) return;
-        if (isPanning) {
-          p.canvas.style.cursor = "grabbing";
-        } else if (isClickable) {
-          p.canvas.style.cursor = "pointer";
-        } else {
-          p.canvas.style.cursor = "grab";
-        }
-      };
-
       p.setup = () => {
         const w = canvasParent?.clientWidth || window.innerWidth || width;
         const h = canvasParent?.clientHeight || window.innerHeight || height;
@@ -310,7 +308,7 @@
         p.textFont("sans-serif");
         if (p.canvas) {
           p.canvas.style.touchAction = "none";
-          p.canvas.style.cursor = "grab";
+          setCursor("grab");
         }
       };
 
@@ -338,7 +336,7 @@
           panY: view.panY,
         };
         dragDistance = 0;
-        applyCursor(false);
+        setCursor("grabbing");
       };
 
       const movePan = (x, y) => {
@@ -348,6 +346,7 @@
         dragDistance = Math.max(dragDistance, Math.hypot(dx, dy));
         view.panX = panStart.panX + dx;
         view.panY = panStart.panY + dy;
+        setCursor("grabbing");
         requestRedraw();
       };
 
@@ -359,8 +358,8 @@
           handleClick(x, y);
           requestRedraw();
         }
-        const clickable = (hoveredNode?.post?.url ?? false) || hitSliceLabel(x, y);
-        applyCursor(clickable);
+        const clickable = Boolean(hoveredNode) || hitSliceLabel(x, y);
+        setCursor(clickable ? "pointer" : "grab");
         requestRedraw();
       };
 
@@ -383,8 +382,8 @@
       p.mouseMoved = (evt) => {
         if (isPanning || overControls(evt)) return;
         updateHover(p.mouseX, p.mouseY);
-        const clickable = (hoveredNode?.post?.url ?? false) || hitSliceLabel(p.mouseX, p.mouseY);
-        applyCursor(clickable);
+        const clickable = Boolean(hoveredNode) || hitSliceLabel(p.mouseX, p.mouseY);
+        setCursor(clickable ? "pointer" : "grab");
         requestRedraw();
       };
 
