@@ -711,7 +711,7 @@ const computeLayout = ({ posts, links, groups }) => {
     if (!sortedTimes.length) return [];
     const start = new Date(minTime);
     const end = new Date(maxTime);
-    // walk backwards from the latest month to ensure the outer ring is aligned with the latest date
+    
     let cursor = Date.UTC(
       end.getUTCFullYear(),
       end.getUTCMonth(),
@@ -729,7 +729,7 @@ const computeLayout = ({ posts, links, groups }) => {
       0
     );
     const ticks = [];
-    const minRadiusGap = 60;
+    const minRadiusGap = 220;
     let lastRadius = Infinity;
     while (cursor >= first) {
       const r = radiusForTime(cursor);
