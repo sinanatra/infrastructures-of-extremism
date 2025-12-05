@@ -162,7 +162,6 @@
   });
 
   let hoveredNode = null;
-  let hoveredScreenPos = null;
   let hoveredText = "";
   const hitSliceLabel = (sx, sy, tolerance = 32) => {
     return slicePaths.some((slice) => {
@@ -182,7 +181,6 @@
 
   const clearHover = () => {
     hoveredNode = null;
-    hoveredScreenPos = null;
     hoveredText = "";
   };
 
@@ -214,7 +212,6 @@
     }
     if (best) {
       hoveredNode = best;
-      hoveredScreenPos = worldToScreen(best.x, best.y);
       hoveredText = tooltipForPost(best.post);
     } else {
       clearHover();
@@ -625,12 +622,8 @@
     on:instance={handleP5Instance}
   />
 
-  {#if hoveredNode && hoveredScreenPos}
-    <Tooltip
-      x={hoveredScreenPos.x}
-      y={hoveredScreenPos.y}
-      text={hoveredText}
-    />
+  {#if hoveredNode}
+    <Tooltip text={hoveredText} />
   {/if}
 </section>
 

@@ -1,4 +1,5 @@
 <script>
+  // Position props are kept for API compatibility but ignored; tooltip is fixed bottom-right.
   export let x = 0;
   export let y = 0;
   export let text = "";
@@ -6,7 +7,7 @@
 
 <div
   class="pointer-events-none fixed z-20 max-w-xs bg-black text-white text-xs p-1"
-  style={`left:${x}px; top:${y}px;`}
+  style="right: 16px; bottom: 16px;"
 >
   {#if text}
     {#each text.split("\n") as line, i}
