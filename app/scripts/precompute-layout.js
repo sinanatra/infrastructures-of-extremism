@@ -5,11 +5,114 @@ import { csvParse, csvFormat } from "d3-dsv";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
-const dataDir = path.join(projectRoot, "static", "data");
-const sourceDir = path.resolve(projectRoot, "..", "notebooks", "data");
+const dataRoot = path.join(projectRoot, "static", "data");
+const sourceRoot = path.resolve(projectRoot, "..", "notebooks", "data");
+const requiredSourceFiles = [
+  "message_nodes.csv",
+  "message_edges.csv",
+  "nodes.csv",
+];
 
-const readCsv = async (filename) => {
-  const fullPath = path.join(sourceDir, filename);
+const normalizeGroupId = (value) => (value ?? "").trim().toLowerCase();
+
+const parseEnvSeeds = (envText) => {
+  const match = envText.match(/^TG_START_SEEDS\s*=\s*(.+)$/m);
+  if (!match) return [];
+  let raw = match[1].trim();
+  if (
+    (raw.startsWith('"') && raw.endsWith('"')) ||
+    (raw.startsWith("'") && raw.endsWith("'"))
+  ) {
+    raw = raw.slice(1, -1);
+  }
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => normalizeGroupId(s));
+};
+
+const readEnvSeeds = async () => {
+  const envPath = path.resolve(projectRoot, "..", ".env");
+  try {
+    const contents = await fs.readFile(envPath, "utf8");
+    return parseEnvSeeds(contents);
+  } catch {
+    return [];
+  }
+};
+
+const fileExists = async (fullPath) => {
+  try {
+    await fs.access(fullPath);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const hasRequiredFiles = async (dir) => {
+  for (const filename of requiredSourceFiles) {
+    const exists = await fileExists(path.join(dir, filename));
+    if (!exists) return false;
+  }
+  return true;
+};
+
+const findDatasets = async (preferredSlugs = []) => {
+  const entries = await fs.readdir(sourceRoot, { withFileTypes: true });
+  const dirEntries = entries
+    .filter((e) => e.isDirectory())
+    .map((e) => ({ name: e.name, slug: normalizeGroupId(e.name) }));
+  const dirMap = new Map(dirEntries.map((entry) => [entry.slug, entry.name]));
+
+  const datasets = [];
+  const missingPreferred = preferredSlugs.filter((slug) => !dirMap.has(slug));
+  if (missingPreferred.length) {
+    console.warn(
+      `[precompute] preferred seeds without matching folder in ${sourceRoot}: ${missingPreferred.join(
+        ", "
+      )}`
+    );
+  }
+
+  const tryAddDataset = async (slug) => {
+    if (datasets.some((d) => d.slug === slug)) return;
+    const dirName = dirMap.get(slug);
+    if (!dirName) return;
+    const dirPath = path.join(sourceRoot, dirName);
+    if (!(await hasRequiredFiles(dirPath))) return;
+    datasets.push({ slug, dir: dirPath });
+  };
+
+  if (preferredSlugs.length) {
+    for (const slug of preferredSlugs) {
+      await tryAddDataset(slug);
+    }
+  }
+
+  for (const entry of dirEntries) {
+    if (datasets.some((d) => d.slug === entry.slug)) continue;
+    await tryAddDataset(entry.slug);
+  }
+
+  if (!datasets.length && (await hasRequiredFiles(sourceRoot))) {
+    const fallbackSlug = preferredSlugs[0] ?? "default";
+    datasets.push({ slug: fallbackSlug, dir: sourceRoot, usesRoot: true });
+  }
+
+  if (!datasets.length) {
+    const available = dirEntries.map((e) => e.name).join(", ");
+    throw new Error(
+      `No datasets found in ${sourceRoot}. Checked folders: ${available || "(none)"}`
+    );
+  }
+
+  return datasets;
+};
+
+const readCsv = async (baseDir, filename) => {
+  const fullPath = path.join(baseDir, filename);
   const raw = await fs.readFile(fullPath, "utf8");
   return csvParse(raw);
 };
@@ -56,55 +159,87 @@ const clampAngleToSlice = (angle, slice) => {
   return distToStart < distToEnd ? start : end;
 };
 
-const loadData = async () => {
-  const [postsCsv, linksCsv, groupsCsv] = await Promise.all([
-    readCsv("message_nodes.csv"),
-    readCsv("message_edges.csv"),
-    readCsv("nodes.csv"),
+const loadData = async ({ slug, dir }) => {
+  const [postsRows, linksRows, groupsRows] = await Promise.all([
+    readCsv(dir, "message_nodes.csv"),
+    readCsv(dir, "message_edges.csv"),
+    readCsv(dir, "nodes.csv"),
   ]);
 
   const excludedGroupIds = new Set(["boost"]);
   const excludedGroupLabels = new Set(["update to boost"]);
 
-  const groups = groupsCsv
-    .map((row) => {
-      const id = row.id?.trim() ?? "";
-      return {
+  const canonicalGroups = new Map();
+  for (const row of groupsRows) {
+    const rawId = row.id?.trim() ?? "";
+    const id = normalizeGroupId(rawId);
+    const title = typeof row.title === "string" ? row.title.trim() : "";
+    const label = row.label?.trim?.() || title || rawId || id;
+    if (!id) continue;
+    if (excludedGroupIds.has(id)) continue;
+    if (excludedGroupLabels.has(label.toLowerCase())) continue;
+
+    const subscribers = parseNumber(row.subscribers);
+    const existing = canonicalGroups.get(id);
+    if (!existing) {
+      canonicalGroups.set(id, { id, label, subscribers });
+    } else {
+      const labelIsGeneric = existing.label.toLowerCase() === id;
+      const candidateIsSpecific = label.toLowerCase() !== id;
+      const mergedLabel = labelIsGeneric && candidateIsSpecific
+        ? label
+        : existing.label;
+      const mergedSubscribers = Math.max(
+        Number.isFinite(existing.subscribers) ? existing.subscribers : -Infinity,
+        Number.isFinite(subscribers) ? subscribers : -Infinity
+      );
+      canonicalGroups.set(id, {
         id,
-        label: row.label?.trim() || id,
-        subscribers: parseNumber(row.subscribers),
-      };
-    })
-    .filter(
-      (group) =>
-        group.id !== "" &&
-        !excludedGroupIds.has(group.id.toLowerCase()) &&
-        !excludedGroupLabels.has(group.label.toLowerCase())
-    );
+        label: mergedLabel,
+        subscribers: Number.isFinite(mergedSubscribers)
+          ? mergedSubscribers
+          : undefined,
+      });
+    }
+  }
+  const groups = [...canonicalGroups.values()];
 
   const seenPostIds = new Set();
   const sanitizedPosts = [];
 
-  const posts = postsCsv
+  const posts = postsRows
     .map((row) => {
       const dateMs = parseDateMs(row.date);
       if (!dateMs) return null;
 
       const id = (row.id ?? "").trim();
-      const chat = (row.chat ?? "").trim();
+      const chatRaw = (row.chat ?? "").trim();
+      const chat = normalizeGroupId(chatRaw);
       const rawLabel = row.label?.trim() ?? "";
       const text = row.text?.trim() ?? "";
-      if (!id || !chat || !text) return null;
+      if (!id || !chat) return null;
       if (seenPostIds.has(id)) return null;
 
       const label =
         rawLabel ||
-        `${text.slice(0, 120)}${text.length > 120 ? "…" : ""}`;
+        (text
+          ? `${text.slice(0, 120)}${text.length > 120 ? "…" : ""}`
+          : id);
+
+      let reactionBreakdown = {};
+      if (row.reaction_breakdown) {
+        try {
+          reactionBreakdown = JSON.parse(row.reaction_breakdown);
+        } catch {
+          reactionBreakdown = {};
+        }
+      }
 
       const post = {
         id,
         label,
         chat,
+        chatLabel: canonicalGroups.get(chat)?.label ?? chatRaw ?? chat,
         messageId: row.message_id?.trim() ?? "",
         dateIso: new Date(dateMs).toISOString(),
         dateMs,
@@ -113,19 +248,20 @@ const loadData = async () => {
         url: row.url?.trim(),
         text,
         senderId: row.sender_id?.trim?.() ?? "",
-        reactionBreakdown: row.reaction_breakdown ?? "",
+        reactionBreakdown,
       };
 
       if (
-        excludedGroupIds.has(post.chat.toLowerCase()) ||
-        excludedGroupLabels.has(post.chat.toLowerCase())
-      )
+        excludedGroupIds.has(post.chat) ||
+        excludedGroupLabels.has((post.chatLabel ?? post.chat).toLowerCase())
+      ) {
         return null;
+      }
 
       seenPostIds.add(id);
       sanitizedPosts.push({
         id,
-        chat,
+        chat: post.chat,
         message_id: post.messageId,
         date: row.date,
         url: post.url ?? "",
@@ -144,7 +280,7 @@ const loadData = async () => {
 
   const postIds = new Set(posts.map((p) => p.id));
 
-  const links = linksCsv
+  const links = linksRows
     .map((row) => ({
       source: row.source?.trim?.() ?? row.from?.trim?.() ?? "",
       target: row.target?.trim?.() ?? row.to?.trim?.() ?? "",
@@ -164,7 +300,8 @@ const loadData = async () => {
     type: link.type,
   }));
 
-  await fs.mkdir(dataDir, { recursive: true });
+  const targetDir = path.join(dataRoot, slug);
+  await fs.mkdir(targetDir, { recursive: true });
   const postsOut = csvFormat(sanitizedPosts, [
     "id",
     "chat",
@@ -179,10 +316,38 @@ const loadData = async () => {
     "label",
   ]);
   const linksOut = csvFormat(sanitizedLinks, ["from", "to", "type"]);
-  await fs.writeFile(path.join(dataDir, "message_nodes.csv"), postsOut, "utf8");
-  await fs.writeFile(path.join(dataDir, "message_edges.csv"), linksOut, "utf8");
+  const groupsOut = csvFormat(groups, ["id", "label", "subscribers"]);
+  await fs.writeFile(
+    path.join(targetDir, "message_nodes.csv"),
+    postsOut,
+    "utf8"
+  );
+  await fs.writeFile(
+    path.join(targetDir, "message_edges.csv"),
+    linksOut,
+    "utf8"
+  );
+  await fs.writeFile(path.join(targetDir, "nodes.csv"), groupsOut, "utf8");
 
-  return { posts, links, groups };
+  const datasetLabel =
+    groups.find((g) => normalizeGroupId(g.id) === normalizeGroupId(slug))
+      ?.label ||
+    groups.find((g) => g.label)?.label ||
+    slug;
+
+  return {
+    posts,
+    links,
+    groups,
+    meta: {
+      slug,
+      label: datasetLabel,
+      postCount: posts.length,
+      groupCount: groups.length,
+      startDate: posts[0]?.dateIso ?? null,
+      endDate: posts[posts.length - 1]?.dateIso ?? null,
+    },
+  };
 };
 
 const computeLayout = ({ posts, links, groups }) => {
@@ -604,15 +769,38 @@ const computeLayout = ({ posts, links, groups }) => {
 };
 
 const main = async () => {
-  const dataset = await loadData();
-  const layout = computeLayout(dataset);
-  const outputPath = path.join(dataDir, "layout.json");
-  await fs.writeFile(outputPath, JSON.stringify(layout, null, 2), "utf8");
+  const preferredSlugs = await readEnvSeeds();
+  const datasets = await findDatasets(preferredSlugs);
+  const summaries = [];
+
+  for (const dataset of datasets) {
+    const { posts, links, groups, meta } = await loadData(dataset);
+    const layout = computeLayout({ posts, links, groups });
+    const targetDir = path.join(dataRoot, dataset.slug);
+    await fs.mkdir(targetDir, { recursive: true });
+    const outputPath = path.join(targetDir, "layout.json");
+    await fs.writeFile(outputPath, JSON.stringify(layout, null, 2), "utf8");
+    console.log(
+      `Wrote ${layout.nodes.length} nodes for ${dataset.slug} -> ${path.relative(
+        projectRoot,
+        outputPath
+      )}`
+    );
+    summaries.push({
+      slug: dataset.slug,
+      label: meta.label,
+      postCount: meta.postCount,
+      groupCount: meta.groupCount,
+      startDate: meta.startDate,
+      endDate: meta.endDate,
+    });
+  }
+
+  const indexPath = path.join(dataRoot, "datasets.json");
+  await fs.mkdir(dataRoot, { recursive: true });
+  await fs.writeFile(indexPath, JSON.stringify(summaries, null, 2), "utf8");
   console.log(
-    `Wrote ${layout.nodes.length} nodes to ${path.relative(
-      projectRoot,
-      outputPath
-    )}`
+    `Updated dataset index at ${path.relative(projectRoot, indexPath)}`
   );
 };
 
