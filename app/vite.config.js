@@ -10,7 +10,11 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			gifenc: resolve(__dirname, 'src/lib/gifenc-shim.js')
+			gifenc: resolve(__dirname, 'src/lib/gifenc-shim.js'),
+			'p5-svelte': resolve(__dirname, 'src/lib/p5-svelte/index.js')
 		}
+	},
+	ssr: {
+		noExternal: ['p5', 'gifenc']
 	}
 });

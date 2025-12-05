@@ -1,4 +1,6 @@
-import gifenc from 'gifenc';
+import * as gifencNs from 'gifenc';
+
+const gifenc = gifencNs.default ?? gifencNs;
 
 const {
 	GIFEncoder,

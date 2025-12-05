@@ -82,6 +82,7 @@ export const load = async ({ fetch, params }) => {
 			const chat = normalizeGroupId(chatRaw);
 			const rawLabel = row.label?.trim() ?? '';
 			const text = row.text?.trim() ?? '';
+			if (!text) return null;
 			const label = rawLabel || (text ? `${text.slice(0, 120)}${text.length > 120 ? '…' : ''}` : id);
 			if (!id || !chat) return null;
 
