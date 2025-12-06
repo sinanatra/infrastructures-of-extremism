@@ -619,6 +619,9 @@
 
         p.push();
         for (const slice of slicePaths) {
+          if (trailerVisibleGroups && !trailerVisibleGroups.has(slice.id)) {
+            continue;
+          }
           const pos = slice.labelPos;
           p.push();
           p.translate(pos.x, pos.y);
