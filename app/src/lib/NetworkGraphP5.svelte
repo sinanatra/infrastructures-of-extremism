@@ -114,11 +114,10 @@
       .map(([emoji, count]) => ({ emoji, count }));
   })();
 
-  $: visibleNodes = nodes.filter(
-    (n) =>
-      (selectedGroupId === null || n.groupId === selectedGroupId) &&
-      (selectedEmoji === null || n.topEmoji === selectedEmoji)
-  );
+  $: visibleNodes =
+    selectedEmoji === null
+      ? nodes
+      : nodes.filter((n) => n.topEmoji === selectedEmoji);
 
   $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
 
@@ -593,14 +592,18 @@
           const offsetX = midX - cx;
           const offsetY = midY - cy;
           const ctrlX = midX + offsetX * 0.14;
-          const ctrlY = midY + offsetY * 0.14;
-          const stroke = p.color(highlightColor);
-
-          p.stroke(stroke);
-          p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
-          p.line(source.x, source.y, target.x, target.y);
-        }
-        p.pop();
+        const ctrlY = midY + offsetY * 0.14;
+        const stroke = p.color(highlightColor);
+        const active =
+          selectedGroupId === null ||
+          (selectedGroupId === source.groupId &&
+            selectedGroupId === target.groupId);
+        if (!active) stroke.setAlpha(30);
+        p.stroke(stroke);
+        p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
+        p.line(source.x, source.y, target.x, target.y);
+      }
+      p.pop();
       };
 
       const drawNodes = () => {
@@ -615,12 +618,18 @@
             screenPos.y > canvasSize.h + margin
           ) {
             continue;
+        }
+        const inGroup =
+          selectedGroupId === null || node.groupId === selectedGroupId;
+        const active = inGroup;
+        const r =
+          sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
+        const baseColor = p.color(node.color);
+        if (!active) {
+          baseColor.setAlpha(30);
           }
-          const r =
-            sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
-          p.fill(node.color);
-
-          p.strokeWeight(0.9 * view.scale);
+          p.fill(baseColor);
+          p.noStroke();
           p.circle(node.x, node.y, r * 2);
         }
         p.pop();
