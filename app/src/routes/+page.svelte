@@ -90,7 +90,7 @@
         <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
           <img
             src="/intro/berlin-demo.png"
-            alt="Banner promoting a Telegram channel at a Berlin rally"
+            alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
             class="w-[150px] block"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
@@ -128,8 +128,7 @@
 
         <p class="mb-2">
           Telegram is not only a place for these groups to gather, but also a
-          tool that keeps them connected. Forwarded messages, usernames hidden
-          within images and loosely linked clusters make it easy to jump from
+          tool that keeps them connected. Forwarded messages make it easy to jump from
           one group to another. Messages often cross regional and national
           borders, linking what might appear to be isolated initiatives into a
           wider shared media environment. What looks like a local protest may
