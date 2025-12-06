@@ -122,10 +122,10 @@
             class="w-[350px] block"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
-            Hundreds of <em>CasaPound</em> supporters and other far-right militants
-            gave the fascist salute in Rome during a commemoration for those killed
-            on 7 January 1978 in Via Acca Larentia. The event remains a symbolic
-            reference point for militant youth movements in Italy.
+            Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
+            and other far-right militants gave the fascist salute during a commemoration
+            for those killed on 7 January 1978 in Via Acca Larentia, where left-wing
+            terrorists shot and killed two young neo-fascists; a third died later.
           </figcaption>
         </figure>
 
