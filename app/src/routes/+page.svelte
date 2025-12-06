@@ -59,63 +59,85 @@
     </div>
   {/if}
 
+  <style>
+    img {
+      filter: grayscale(100%);
+      transition: filter 0.3s ease;
+    }
+    img:hover {
+      filter: grayscale(0%);
+    }
+  </style>
+
   <div class="relative flex justify-center px-5">
     <article
-      class="relative z-10 w-full max-w-2xl px-8 pb-10 py-10
-         -mt-[45vh] bg-black"
+      class="relative z-10 w-full max-w-2xl px-8 pt-4 pb-10 -mt-[30vh] bg-black"
     >
-      <h1 class="text-4xl mb-4 max-w-xl italic">Right-wing youth networks</h1>
+      <h1 class="text-3xl mb-4 max-w-xl">Tracing Extremism</h1>
 
       <div class="text-base leading-relaxed text-gray-200">
         <p class="mb-2">
-          Right-wing youth organisations have become increasingly visible in
-          European streets. Demonstrations and counter marches now often display
-          banners that advertise Telegram channels as entry points into a
-          political community. At a rally in Berlin on 29 November 2025
-          participants promoted channels used for youth recruitment and local
-          coordination. This public visibility raises a set of urgent questions.
-          Who are the actors behind these slogans. How do their messages move.
-          What narratives about identity, belonging and threat are being
-          circulated and with what reach.
+          Right-wing youth organisations have gained greater visibility on
+          European streets. During demonstrations, banners often advertise
+          Telegram channels as gateways into tight-knit political communities.
+          For example, at a rally held in Berlin on 29 November 2025 against
+          so-called <em>“criminal foreigners”</em>, participants promoted
+          channels used for youth recruitment and for coordinating activities at
+          the local level. But who is behind these messages? What are they
+          talking about? How are they spread? And who do they reach?
         </p>
 
-        <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+        <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
           <img
             src="/intro/berlin-demo.png"
             alt="Banner promoting a Telegram channel at a Berlin rally"
             class="w-[150px] block"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
-            Young individuals at a demonstration in Berlin on 29 November 2025.
             The banner promotes a Telegram channel used to connect supporters
-            and circulate propaganda among far right youth groups.
+            and spread propaganda among far-right youth groups.
           </figcaption>
         </figure>
 
         <p class="mb-2">
-          In Germany many of these actors orbit around <em
-            >Alternative fuer Deutschland</em
-          >, a party with parliamentary representation and a strongly
-          nationalist and anti immigrant profile. Its former youth wing
-          <em>Junge Alternative</em>
-          has been classified as an extremist organisation and effectively banned
-          from public activity. In this context a new branch has emerged:
-          <em>Generation Deutschland</em>, which seeks to inherit the role of
-          youth mobilisation with a sharper branding and heavier reliance on
-          social media infrastructures such as Telegram.
+          In Germany, many of the people involved are connected to
+          <em>Alternative für Deutschland</em> (AfD), a far-right political
+          party with seats in parliament and a strongly anti-immigration stance.
+          Its former youth wing,
+          <em>Junge Alternative</em>, was recently designated as an extremist
+          organisation and effectively banned from public life. In its place, a
+          new network has emerged:
+          <em>Generation Deutschland</em>. This group is seeking to take over
+          the task of youth mobilisation, using platforms like Telegram even
+          more intensively. In some cases, groups that originally operated under
+          the <em>Junge Alternative</em> name simply rebranded as
+          <em>Generation Deutschland</em> and continued their activities as before.
         </p>
+
+        <figure class="flex flex-col items-end mt-10 mb-6 gap-2 self-end">
+          <img
+            src="/intro/gd.png"
+            alt="Telegram profile of Generation Deutschland"
+            class="w-[220px] block"
+          />
+          <figcaption class="text-sm max-w-80 text-gray-600 pb-8 text-right">
+            Telegram profile <em>@JungeAlternativeLSA</em> renamed as
+            <em>Generation Deutschland</em>.
+          </figcaption>
+        </figure>
 
         <p class="mb-2">
-          This platform does not simply host these communities. Forward chains,
-          usernames embedded in images and informal clusters make it easy for
-          users to move from one group to another. Messages travel across
-          regions and borders, linking otherwise separate initiatives into a
-          shared media environment. What appears as a local scene is often
-          connected to a larger network that includes actors in Italy, France,
-          Austria, the Netherlands, Poland and beyond.
+          Telegram is not only a place for these groups to gather, but also a
+          tool that keeps them connected. Forwarded messages, usernames hidden
+          within images and loosely linked clusters make it easy to jump from
+          one group to another. Messages often cross regional and national
+          borders, linking what might appear to be isolated initiatives into a
+          wider shared media environment. What looks like a local protest may
+          actually be part of a much larger network spanning countries such as
+          Italy, France, Austria, the Netherlands and Poland.
         </p>
 
-        <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+        <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
           <img
             src="/intro/roma.jpg"
             alt="Rome, Italy, 7 January 2025"
@@ -123,22 +145,21 @@
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
             Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
-            and other far-right militants gave the fascist salute during a commemoration
+            and other far-right militants performed the fascist salute during a commemoration
             for those killed on 7 January 1978 in Via Acca Larentia, where left-wing
             terrorists shot and killed two young neo-fascists; a third died later.
           </figcaption>
         </figure>
 
         <p class="mb-2">
-          To understand these connections this investigation starts from the
-          Berlin case and follows publicly visible traces between Telegram
-          channels. We collect mentions, forwards and linked messages through
-          automated scraping and convert them into relational data. Each dataset
-          forms a map that shows how a single cluster expands, which channels
-          act as hubs and which ones serve as bridges to other countries. The
-          result is not a full representation of the movement but an
-          investigative tool that exposes part of the infrastructure driving the
-          circulation of fascist ideas, strategies and identities.
+          This investigation begins with the Berlin protest and follows the
+          connections visible on Telegram. Mentions, forwards, and related
+          messages are collected via automated scraping and transformed into a
+          map. This allows us to see how individual groups grow, which channels
+          serve as key hubs, and which connect different national scenes. While
+          this does not provide a complete picture of the movement, it does
+          provide a way to trace some of the infrastructure behind the
+          circulation of today's fascist ideologies.
         </p>
       </div>
     </article>
