@@ -25,7 +25,9 @@
             class={`emoji-pill ${selectedEmoji === option.emoji ? "active" : ""}`}
             on:click={() => selectEmoji(option.emoji)}
           >
-            <span class="emoji text-xs leading-none">{option.emoji}</span>
+            <span class="emoji text-xs leading-none">
+              {option.emoji.length > 5 ? "?" : option.emoji}
+            </span>
             <span class="count text-xs">
               {option.count.toLocaleString()}
             </span>
@@ -61,7 +63,10 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+    transition:
+      background 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
   }
 
   .emoji-pill.active {
