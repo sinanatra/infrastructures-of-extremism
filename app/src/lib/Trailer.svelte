@@ -90,7 +90,7 @@
       <div class="text-2xl">
         Starting from the right-wing extremist Telegram group
         <span class="italic" style="color: {highlightColor};">{groups[0]?.label ?? "the seed"}</span>,
-        this walkthrough shows the network of related channels: the ones they
+        this visualization shows the network of related channels: the ones they
         talk about and the ones resharing their posts.
       </div>
       {#if state === "playing"}
