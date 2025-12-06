@@ -59,16 +59,6 @@
     </div>
   {/if}
 
-  <style>
-    img {
-      filter: grayscale(100%);
-      transition: filter 0.3s ease;
-    }
-    img:hover {
-      filter: grayscale(0%);
-    }
-  </style>
-
   <div class="relative flex justify-center px-5">
     <article
       class="relative z-10 w-full max-w-2xl px-8 pt-4 pb-10 -mt-[30vh] bg-black"
@@ -91,7 +81,7 @@
           <img
             src="/intro/berlin-demo.png"
             alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
-            class="w-[150px] block"
+            class="w-[150px] block grayscale hover:grayscale-0"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
             The banner promotes a Telegram channel used to connect supporters
@@ -118,7 +108,7 @@
           <img
             src="/intro/gd.png"
             alt="Telegram profile of Generation Deutschland"
-            class="w-[220px] block"
+            class="w-[220px] block grayscale hover:grayscale-0"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8 text-right">
             Telegram profile <em>@JungeAlternativeLSA</em> renamed as
@@ -128,19 +118,19 @@
 
         <p class="mb-2">
           Telegram is not only a place for these groups to gather, but also a
-          tool that keeps them connected. Forwarded messages make it easy to jump from
-          one group to another. Messages often cross regional and national
-          borders, linking what might appear to be isolated initiatives into a
-          wider shared media environment. What looks like a local protest may
-          actually be part of a much larger network spanning countries such as
-          Italy, France, Austria, the Netherlands and Poland.
+          tool that keeps them connected. Forwarded messages make it easy to
+          jump from one group to another. Messages often cross regional and
+          national borders, linking what might appear to be isolated initiatives
+          into a wider shared media environment. What looks like a local protest
+          may actually be part of a much larger network spanning countries such
+          as Italy, France, Austria, the Netherlands and Poland.
         </p>
 
         <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
           <img
             src="/intro/roma.jpg"
             alt="Rome, Italy, 7 January 2025"
-            class="w-[350px] block"
+            class="w-[350px] block grayscale hover:grayscale-0"
           />
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
             Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
