@@ -4,20 +4,25 @@
 
   export let data;
 
-  const datasets = data?.datasets ?? [];
+  const datasets = (data?.datasets ?? [])
+    .slice()
+    .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
   const coverImages = datasets
     .map((d) => (d?.slug ? `/intro/${d.slug}.png` : null))
     .filter(Boolean);
 
+  const cycleDelay = datasets.length * 1200;
   let coverIndex = 0;
   let coverTimer = null;
+  let lastCoverCount = coverImages.length;
 
   const startCoverCycle = () => {
-    if (coverTimer || coverImages.length < 2) return;
+    stopCoverCycle();
+    if (coverImages.length < 2) return;
     coverTimer = setInterval(() => {
       coverIndex = (coverIndex + 1) % coverImages.length;
-    }, 3200);
+    }, cycleDelay);
   };
 
   const stopCoverCycle = () => {
@@ -28,6 +33,12 @@
 
   onMount(startCoverCycle);
   onDestroy(stopCoverCycle);
+
+  $: if (coverImages.length !== lastCoverCount) {
+    lastCoverCount = coverImages.length;
+    coverIndex = 0;
+    startCoverCycle();
+  }
 
   const formatRange = (start, end) => {
     if (!start || !end) return null;
@@ -43,18 +54,15 @@
   {#if coverImages.length}
     <div class="sticky top-0 w-screen h-screen overflow-hidden">
       {#each coverImages as src, i (src)}
-        {#if coverIndex === i}
-          <img
-            {src}
-            alt="Dataset visualization cover"
-            class="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
-            aria-hidden={coverIndex !== i}
-            in:fade={{ duration: 1200 }}
-            out:fade={{ duration: 1200 }}
-          />
-        {/if}
+        <img
+          {src}
+          alt="Dataset visualization cover"
+          class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out will-change-opacity"
+          style={`opacity:${coverIndex === i ? 1 : 0};`}
+          loading="lazy"
+          decoding="async"
+          aria-hidden={coverIndex !== i}
+        />
       {/each}
     </div>
   {/if}
@@ -165,26 +173,26 @@
       <h2 class="text-2xl p-0 m-0">Open a map</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
-        Several groups have been examined. Click on each one to explore its
-        network.
+        Several groups have been examined. <br />
+        Click on each one to explore its network.
       </p>
       {#if datasets.length}
         <div
-          class="flex gap-4 pb-2 overflow-x-auto selection:overflow-visible selection:flex-wrap selection:justify-center"
+          class="flex gap-3 pb-2 overflow-x-auto selection:overflow-visible selection:flex-wrap selection:justify-center"
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="w-[450px] flex-shrink-0 block"
+              class="flex-shrink-0 block"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
               <img
                 src={`/intro/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-100 h-100 object-cover grayscale hover:grayscale-0"
+                class="w-[450px] h-[450px] object-cover grayscale hover:grayscale-0"
                 loading="lazy"
               />
-              <div class="sp-1">
+              <div class="mt-2">
                 <div class="text-lg">
                   {dataset.label || dataset.slug}
                 </div>
