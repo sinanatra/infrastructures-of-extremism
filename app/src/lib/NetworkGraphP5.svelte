@@ -218,7 +218,7 @@
   const minScale = 0.1;
   const maxScale = 0.9;
   let view = {
-    scale: 0.6,
+    scale: 0.4,
     panX: 0,
     panY: 0,
   };
@@ -589,6 +589,7 @@
       };
 
       p.mouseWheel = (event) => {
+        if (trailerBlocking) return false;
         if (overControls(event)) return false;
         zoomAt(event.deltaY, event.offsetX, event.offsetY);
         return false;
