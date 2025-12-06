@@ -100,7 +100,7 @@
       {/if}
       <div class="flex gap-3">
         <button
-          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)]"
+          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
           style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
           on:click={start}
           disabled={state !== "idle"}
@@ -109,7 +109,7 @@
           Start
         </button>
         <button
-          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)]"
+          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
           style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
           on:click={skip}
           title="Skip the trailer"
