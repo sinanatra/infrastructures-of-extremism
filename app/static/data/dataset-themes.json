@@ -12,9 +12,18 @@
     "slug": "tricoloredelsangueitalico",
     "theme": {
       "backgroundColor": "#111",
-      "circleColor": "yellow",
-      "textColor": "darkgray",
-      "highlightColor": "white"
+      "circleColor": "#FF4701",
+      "textColor": "#FF4701",
+      "highlightColor": "steelblue"
+    }
+  },
+  {
+    "slug": "generationidentitaire",
+    "theme": {
+      "backgroundColor": "#111",
+      "circleColor": "red",
+      "textColor": "red",
+      "highlightColor": "darkred"
     }
   }
 ]

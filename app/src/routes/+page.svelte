@@ -14,16 +14,16 @@
   };
 </script>
 
-<section class="home bg-black text-white min-h-screen p-6">
+<section class="home bg-black text-xl text-white min-h-screen p-6">
   {#if datasets.length}
     <ul>
       {#each datasets as dataset (dataset.slug)}
-        <li>
+        <li class="mt-2">
           <a data-sveltekit-reload href={`/${encodeURIComponent(dataset.slug)}`}>
             {dataset.label || dataset.slug}
           </a>
           {#if dataset.postCount || dataset.groupCount || dataset.startDate}
-            <small>
+            <small class="text-gray-500">
               {#if dataset.postCount}{dataset.postCount.toLocaleString()} messages{/if}
               {#if dataset.postCount && dataset.groupCount}
                 ·
