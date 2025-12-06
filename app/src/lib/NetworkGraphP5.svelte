@@ -4,12 +4,14 @@
   import NetworkControls from "$lib/NetworkControls.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
   import Tooltip from "$lib/Tooltip.svelte";
+  import Trailer from "$lib/Trailer.svelte";
 
   export let data;
   export let backgroundColor = "#000000";
   export let circleColor = "#ffffff";
   export let textColor = "#ffffff";
   export let highlightColor = "yellow";
+  export let datasetSlug = null;
   const { posts, links } = data;
 
   const prepared = prepareNetwork(data, { circleColor });
@@ -114,10 +116,75 @@
       .map(([emoji, count]) => ({ emoji, count }));
   })();
 
-  $: visibleNodes =
-    selectedEmoji === null
-      ? nodes
-      : nodes.filter((n) => n.topEmoji === selectedEmoji);
+  const trailerGroups = (() => {
+    const labelById = new Map(
+      slicePaths.map((s) => [s.id, s.group?.label || s.group?.id || s.id])
+    );
+    const startId = (() => {
+      if (!datasetSlug) return slicePaths[0]?.id ?? null;
+      const match = slicePaths.find(
+        (s) => s.id && s.id.toLowerCase() === datasetSlug.toLowerCase()
+      );
+      return match?.id ?? slicePaths[0]?.id ?? null;
+    })();
+
+    const edgeMap = new Map();
+    for (const link of linkSegments) {
+      const a = link.source.groupId;
+      const b = link.target.groupId;
+      if (!a || !b || a === b) continue;
+      const key = a < b ? `${a}::${b}` : `${b}::${a}`;
+      const t = Math.min(link.source.post.dateMs, link.target.post.dateMs);
+      const prev = edgeMap.get(key);
+      if (!prev || t < prev.time) {
+        edgeMap.set(key, { a, b, time: t });
+      }
+    }
+    const edges = [...edgeMap.values()].sort((x, y) => x.time - y.time);
+
+    const visited = new Set();
+    const order = [];
+    if (startId) {
+      visited.add(startId);
+      order.push(startId);
+    }
+    for (const e of edges) {
+      const { a, b } = e;
+      if (visited.has(a) && !visited.has(b)) {
+        visited.add(b);
+        order.push(b);
+      } else if (visited.has(b) && !visited.has(a)) {
+        visited.add(a);
+        order.push(a);
+      }
+    }
+    for (const s of slicePaths) {
+      if (!visited.has(s.id)) {
+        visited.add(s.id);
+        order.push(s.id);
+      }
+    }
+
+    return order.map((id) => ({
+      id,
+      label: labelById.get(id) ?? id ?? "group",
+    }));
+  })();
+  const trailerAvailable = trailerGroups.length > 0;
+  const groupLabelById = new Map(
+    slicePaths.map((s) => [s.id, s.group?.label || s.group?.id || s.id])
+  );
+  let trailerVisibleGroups = null;
+  let trailerBlocking = trailerAvailable;
+
+  $: visibleNodes = (() => {
+    const base =
+      trailerVisibleGroups === null
+        ? nodes
+        : nodes.filter((n) => trailerVisibleGroups.has(n.groupId));
+    if (selectedEmoji === null) return base;
+    return base.filter((n) => n.topEmoji === selectedEmoji);
+  })();
 
   $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
 
@@ -488,18 +555,21 @@
       };
 
       p.mousePressed = (evt) => {
+        if (trailerBlocking) return;
         if (evt.button !== 0 || overControls(evt)) return;
         pressStarted = true;
         startPan(p.mouseX, p.mouseY);
       };
 
       p.mouseDragged = (evt) => {
+        if (trailerBlocking) return;
         if (!isPanning || overControls(evt)) return;
         movePan(p.mouseX, p.mouseY);
         return false;
       };
 
       p.mouseReleased = (evt) => {
+        if (trailerBlocking) return;
         if (!pressStarted) return;
         pressStarted = false;
         if (!isPanning) return;
@@ -507,6 +577,7 @@
       };
 
       p.mouseMoved = (evt) => {
+        if (trailerBlocking) return;
         if (isPanning || overControls(evt)) return;
         const hoverChanged = updateHover(p.mouseX, p.mouseY);
         const clickable =
@@ -723,7 +794,7 @@
   class="relative h-screen overflow-hidden"
   style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
-  <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
+  <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none" hidden={trailerBlocking}>
     <div
       class="pointer-events-auto max-w-5xl mx-auto"
       bind:this={controlsEl}
@@ -777,9 +848,27 @@
     on:instance={handleP5Instance}
   />
 
+  {#if trailerAvailable}
+    <Trailer
+      groups={trailerGroups}
+      {highlightColor}
+      {backgroundColor}
+      {textColor}
+      on:update={(event) => {
+        trailerVisibleGroups = event.detail?.visible ?? null;
+        trailerBlocking = trailerVisibleGroups !== null;
+        requestRedraw();
+      }}
+      on:block={(event) => {
+        trailerBlocking = event.detail?.blocking ?? false;
+      }}
+    />
+  {/if}
+
   {#if hoveredNode}
     <Tooltip text={hoveredText} />
   {/if}
+
 </section>
 
 <style>

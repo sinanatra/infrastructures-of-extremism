@@ -21,5 +21,6 @@
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}
+    datasetSlug={data?.dataset?.slug}
   />
 </section>

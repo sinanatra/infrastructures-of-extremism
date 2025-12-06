@@ -7,6 +7,7 @@
   export let circleColor = "#ffffff";
   export let textColor = "#ffffff";
   export let highlightColor = "yellow";
+  export let datasetSlug = null;
 </script>
 
 <NetworkGraph
@@ -15,4 +16,5 @@
   {circleColor}
   {textColor}
   {highlightColor}
+  {datasetSlug}
 />
