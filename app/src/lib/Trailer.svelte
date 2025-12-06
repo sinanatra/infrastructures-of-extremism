@@ -13,7 +13,7 @@
   let timer = null;
   let visible = new Set();
   let visitedOrder = [];
-  const perGroupMs = 500;
+  const perGroupMs = 250;
 
   const reset = () => {
     clearTimer();

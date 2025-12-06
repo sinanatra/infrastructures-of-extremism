@@ -9,7 +9,7 @@
     .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
   const coverImages = datasets
-    .map((d) => (d?.slug ? `/intro/${d.slug}.png` : null))
+    .map((d) => (d?.slug ? `/cover/${d.slug}.png` : null))
     .filter(Boolean);
 
   const cycleDelay = datasets.length * 1200;
@@ -187,7 +187,7 @@
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
               <img
-                src={`/intro/${dataset.slug}.png`}
+                src={`/cover/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
                 class="w-[450px] h-[450px] object-cover grayscale hover:grayscale-0"
                 loading="lazy"
