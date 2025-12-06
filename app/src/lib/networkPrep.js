@@ -1,6 +1,6 @@
 const TAU = Math.PI * 2;
 const VIEW_PADDING = 280;
-const INNER_RADIUS = 3;
+const INNER_RADIUS = 50;
 
 const normalizeAngle = (angle) => {
   const wrapped = angle % TAU;
@@ -58,10 +58,6 @@ export const prepareNetwork = (
 
   const linkCountByPost = new Map();
   for (const link of links) {
-    linkCountByPost.set(
-      link.source,
-      (linkCountByPost.get(link.source) ?? 0) + 1
-    );
     linkCountByPost.set(
       link.target,
       (linkCountByPost.get(link.target) ?? 0) + 1
@@ -180,6 +176,13 @@ export const prepareNetwork = (
     node.color = colorByGroup.get(node.groupId) ?? circleColor;
   }
 
+  const maxRadiusByGroup = new Map();
+  for (const node of nodes) {
+    const r = Math.hypot(node.x - cx, node.y - cy);
+    const prev = maxRadiusByGroup.get(node.groupId) ?? 0;
+    if (r > prev) maxRadiusByGroup.set(node.groupId, r);
+  }
+
   const sizeStats = {
     links: { min: Infinity, max: 0 },
     reactions: { min: Infinity, max: 0 },
@@ -235,13 +238,15 @@ export const prepareNetwork = (
     const angleDeg = (slice.center * 180) / Math.PI;
     const normalized = ((angleDeg % 360) + 360) % 360;
     const flipped = normalized > 90 && normalized < 270;
+    const baseLabelRadius = maxRadiusByGroup.get(slice.group.id) ?? outerRadius;
+    const labelRadius = baseLabelRadius + 36;
 
     return {
       id: slice.group.id,
       label: slice.group.label ?? slice.group.id,
       color: slice.color,
       path: arcPath(innerRadius - 28, outerRadius + 12, slice.start, slice.end),
-      labelPos: toCartesian(outerRadius + 26, slice.center),
+      labelPos: toCartesian(labelRadius, slice.center),
       angleDeg,
       labelRotation: flipped ? angleDeg + 180 : angleDeg,
       labelAnchor: flipped ? "end" : "start",

@@ -104,7 +104,9 @@ const findDatasets = async (preferredSlugs = []) => {
   if (!datasets.length) {
     const available = dirEntries.map((e) => e.name).join(", ");
     throw new Error(
-      `No datasets found in ${sourceRoot}. Checked folders: ${available || "(none)"}`
+      `No datasets found in ${sourceRoot}. Checked folders: ${
+        available || "(none)"
+      }`
     );
   }
 
@@ -186,11 +188,12 @@ const loadData = async ({ slug, dir }) => {
     } else {
       const labelIsGeneric = existing.label.toLowerCase() === id;
       const candidateIsSpecific = label.toLowerCase() !== id;
-      const mergedLabel = labelIsGeneric && candidateIsSpecific
-        ? label
-        : existing.label;
+      const mergedLabel =
+        labelIsGeneric && candidateIsSpecific ? label : existing.label;
       const mergedSubscribers = Math.max(
-        Number.isFinite(existing.subscribers) ? existing.subscribers : -Infinity,
+        Number.isFinite(existing.subscribers)
+          ? existing.subscribers
+          : -Infinity,
         Number.isFinite(subscribers) ? subscribers : -Infinity
       );
       canonicalGroups.set(id, {
@@ -212,19 +215,18 @@ const loadData = async ({ slug, dir }) => {
       const dateMs = parseDateMs(row.date);
       if (!dateMs) return null;
 
-      const id = (row.id ?? "").trim();
+      const id = (row.id ?? "").trim().toLowerCase();
       const chatRaw = (row.chat ?? "").trim();
       const chat = normalizeGroupId(chatRaw);
       const rawLabel = row.label?.trim() ?? "";
       const text = row.text?.trim() ?? "";
+      if (!text) return null;
       if (!id || !chat) return null;
       if (seenPostIds.has(id)) return null;
 
       const label =
         rawLabel ||
-        (text
-          ? `${text.slice(0, 120)}${text.length > 120 ? "…" : ""}`
-          : id);
+        (text ? `${text.slice(0, 120)}${text.length > 120 ? "…" : ""}` : id);
 
       let reactionBreakdown = {};
       if (row.reaction_breakdown) {
@@ -282,8 +284,8 @@ const loadData = async ({ slug, dir }) => {
 
   const links = linksRows
     .map((row) => ({
-      source: row.source?.trim?.() ?? row.from?.trim?.() ?? "",
-      target: row.target?.trim?.() ?? row.to?.trim?.() ?? "",
+      source: (row.source?.trim?.() ?? row.from?.trim?.() ?? "").toLowerCase(),
+      target: (row.target?.trim?.() ?? row.to?.trim?.() ?? "").toLowerCase(),
       type: row.type?.trim() || "link",
     }))
     .filter(
@@ -356,7 +358,7 @@ const computeLayout = ({ posts, links, groups }) => {
   const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
-  const innerRadius = 3;
+  const innerRadius = 50;
   const outerRadius = Math.min(width, height) / 2 - 50;
 
   const minTime = posts.length
@@ -367,6 +369,8 @@ const computeLayout = ({ posts, links, groups }) => {
     : minTime + 1;
 
   const sortedTimes = [...posts.map((p) => p.dateMs)].sort((a, b) => a - b);
+  const dayMs = 24 * 60 * 60 * 1000;
+  const maxDayIndex = Math.max(0, Math.floor((maxTime - minTime) / dayMs));
   const radiusForTime = (ms) => {
     const total = sortedTimes.length;
     if (total === 0) return (innerRadius + outerRadius) / 2;
@@ -382,31 +386,41 @@ const computeLayout = ({ posts, links, groups }) => {
     return innerRadius + fraction * (outerRadius - innerRadius);
   };
 
+  // Count how many times a post is referenced (shared) as a target.
   const linkCountByPost = new Map();
+  const forwardCountByPost = new Map();
   for (const link of links) {
-    linkCountByPost.set(
-      link.source,
-      (linkCountByPost.get(link.source) ?? 0) + 1
-    );
     linkCountByPost.set(
       link.target,
       (linkCountByPost.get(link.target) ?? 0) + 1
     );
+    if ((link.type ?? "").toLowerCase() === "forward") {
+      forwardCountByPost.set(
+        link.target,
+        (forwardCountByPost.get(link.target) ?? 0) + 1
+      );
+    }
+  }
+  // Use forward counts for sizing when available, falling back to generic link counts.
+  const sizeCountByPost = new Map(linkCountByPost);
+  for (const [postId, count] of forwardCountByPost.entries()) {
+    sizeCountByPost.set(postId, count);
   }
 
   const maxReactions = posts.reduce((m, p) => Math.max(m, p.reactions ?? 0), 0);
-  const maxLinks = [...linkCountByPost.values()].reduce(
+  const maxLinks = [...sizeCountByPost.values()].reduce(
     (m, v) => Math.max(m, v),
     0
   );
   const minNodeRadius = 2;
-  const maxNodeRadiusDesired = 20;
+  const maxNodeRadiusDesired = 16;
 
   const radiusForReactions = (value) => {
     const v = Math.max(0, value ?? 0);
     if (!maxReactions) return minNodeRadius;
     const span = maxNodeRadiusDesired - minNodeRadius;
-    return minNodeRadius + Math.sqrt(v / maxReactions) * span;
+    // Slightly compress reaction-based sizes to avoid excessive overlap in reaction view.
+    return minNodeRadius + Math.sqrt(v / maxReactions) * span * 0.8;
   };
 
   const radiusForLinks = (value) => {
@@ -454,14 +468,44 @@ const computeLayout = ({ posts, links, groups }) => {
     });
 
   const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
-  const sliceGap = Math.min(0.4, sliceAngle * 0.18);
+  const sliceGap = Math.min(0.12, sliceAngle * 0.08);
   const baseStart = -Math.PI / 2;
 
   const colorForGroup = () => "#ffffff";
 
+  const sizeWeight = orderedGroups.map((group) =>
+    Math.max(1, Math.sqrt(group.postCount ?? 1))
+  );
+  const perSliceGap = Math.min(0.08, sliceAngle * 0.08);
+  const totalGap = perSliceGap * orderedGroups.length;
+  const availableAngle = Math.max(TAU - totalGap, TAU * 0.7);
+
+  const labelRadius = outerRadius + 64;
+  const labelCharPx = 9;
+  const labelPadPx = 80;
+  const minAngles = orderedGroups.map((group) => {
+    const label = group.label || group.id || "";
+    const px = label.length * labelCharPx + labelPadPx;
+    return clamp(px / labelRadius, 0.05, 0.8);
+  });
+
+  let minTotal = minAngles.reduce((s, a) => s + a, 0);
+  if (minTotal > availableAngle) {
+    const scale = availableAngle / minTotal;
+    minAngles.forEach((a, i) => (minAngles[i] = a * scale));
+    minTotal = availableAngle;
+  }
+
+  const remaining = Math.max(0, availableAngle - minTotal);
+  const totalSize = sizeWeight.reduce((sum, w) => sum + w, 0) || 1;
+
+  let angleCursor = baseStart;
   const groupSlices = orderedGroups.map((group, idx) => {
-    const start = baseStart + idx * sliceAngle + sliceGap / 2;
-    const end = baseStart + (idx + 1) * sliceAngle - sliceGap / 2;
+    const weight = sizeWeight[idx] ?? 1;
+    const span = minAngles[idx] + (weight / totalSize) * remaining;
+    const start = angleCursor + perSliceGap / 2;
+    const end = start + span;
+    angleCursor = end + perSliceGap / 2;
     return {
       group,
       start,
@@ -486,22 +530,59 @@ const computeLayout = ({ posts, links, groups }) => {
 
   for (const slice of groupSlices) {
     const groupPosts = postsByGroup.get(slice.group.id) ?? [];
-    const usableAngle = Math.max(0.01, slice.end - slice.start);
+    const sliceSpan = Math.max(0.01, slice.end - slice.start);
+    const edgePad = sliceSpan * 0.02;
+    const usableAngle = Math.max(0.001, sliceSpan - edgePad * 2);
+
+    // Bucket by day; within each day sort by popularity (views desc, then forwards/reactions/date).
+    const dayBuckets = new Map();
+    for (const post of groupPosts) {
+      const dayIndex = Math.max(0, Math.floor((post.dateMs - minTime) / dayMs));
+      if (!dayBuckets.has(dayIndex)) dayBuckets.set(dayIndex, []);
+      dayBuckets.get(dayIndex).push(post);
+    }
+    const dayOrder = [...dayBuckets.keys()].sort((a, b) => a - b);
+    const orderByDay = new Map(dayOrder.map((d, i) => [d, i]));
+    const withinDayRank = new Map();
+    for (const [dayIndex, arr] of dayBuckets.entries()) {
+      arr.sort((a, b) => {
+        const va = Math.max(0, a.views ?? 0);
+        const vb = Math.max(0, b.views ?? 0);
+        if (va !== vb) return vb - va;
+        const fa = forwardCountByPost.get(a.id) ?? 0;
+        const fb = forwardCountByPost.get(b.id) ?? 0;
+        if (fa !== fb) return fb - fa;
+        const ra = Math.max(0, a.reactions ?? 0);
+        const rb = Math.max(0, b.reactions ?? 0);
+        if (ra !== rb) return rb - ra;
+        return a.dateMs - b.dateMs;
+      });
+      arr.forEach((post, idx) =>
+        withinDayRank.set(post.id, { idx, total: arr.length, dayIndex })
+      );
+    }
+    const perDaySpan = dayOrder.length ? 1 / dayOrder.length : 1;
+    const dayGap = perDaySpan * 0.1;
+    const usablePerDay = Math.max(0, perDaySpan - dayGap);
 
     for (let i = 0; i < groupPosts.length; i++) {
       const post = groupPosts[i];
-      const fraction =
-        groupPosts.length > 1 ? i / (groupPosts.length - 1) : 0.5;
-      const angleBase = slice.start + fraction * usableAngle;
-      const jitterAngle =
-        (hashToUnit(post.id) - 0.5) *
-        (usableAngle / Math.max(6, groupPosts.length));
-      const preferredAngle = angleBase + jitterAngle;
+      const rank = withinDayRank.get(post.id);
+      const dayIndex =
+        rank?.dayIndex ?? Math.max(0, Math.floor((post.dateMs - minTime) / dayMs));
+      const dayPos = orderByDay.get(dayIndex) ?? 0;
+      const baseFraction = dayPos * perDaySpan + dayGap / 2;
+      const dayTotal = rank?.total ?? 1;
+      const within =
+        dayTotal > 1 ? (rank.idx / (dayTotal - 1)) * usablePerDay : usablePerDay * 0.5;
+      const fraction = clamp(baseFraction + within, 0, 1);
+      const angleBase = slice.start + edgePad + fraction * usableAngle;
+      const preferredAngle = clampAngleToSlice(angleBase, slice);
 
       const targetRadius = radiusForTime(post.dateMs);
       const radial = targetRadius;
       const radiusReactions = radiusForReactions(post.reactions);
-      const linkCount = linkCountByPost.get(post.id) ?? 0;
+      const linkCount = sizeCountByPost.get(post.id) ?? 0;
       const radiusLinks = radiusForLinks(linkCount);
       const collisionRadius = Math.max(radiusReactions, radiusLinks);
 
@@ -552,7 +633,7 @@ const computeLayout = ({ posts, links, groups }) => {
     const anchorStrength = 0.25;
     const linkStrength = 0.01;
     const damping = 0.2;
-    const collisionPadding = 4;
+    const collisionPadding = 8;
     const cellSize = Math.max(32, maxNodeRadius * 4);
 
     for (let step = 0; step < iterations; step++) {
@@ -605,32 +686,38 @@ const computeLayout = ({ posts, links, groups }) => {
         bucket.push(node);
       }
 
-      for (const node of nodes) {
-        const col = Math.floor(node.x / cellSize);
-        const row = Math.floor(node.y / cellSize);
-        for (let dx = -1; dx <= 1; dx++) {
-          for (let dy = -1; dy <= 1; dy++) {
-            const bucket = grid.get(`${col + dx},${row + dy}`);
-            if (!bucket) continue;
-            for (const other of bucket) {
-              if (other.index <= node.index) continue;
-              const ddx = node.x - other.x;
-              const ddy = node.y - other.y;
-              const dist = Math.hypot(ddx, ddy) || 1e-6;
-              const minDist =
-                node.collisionRadius + other.collisionRadius + collisionPadding;
-              if (dist < minDist) {
-                const overlap = (minDist - dist) / dist;
-                const adjust = overlap * 0.9;
-                node.x += ddx * adjust;
-                node.y += ddy * adjust;
-                other.x -= ddx * adjust;
-                other.y -= ddy * adjust;
+      const resolveCollisions = () => {
+        for (const node of nodes) {
+          const col = Math.floor(node.x / cellSize);
+          const row = Math.floor(node.y / cellSize);
+          for (let dx = -1; dx <= 1; dx++) {
+            for (let dy = -1; dy <= 1; dy++) {
+              const bucket = grid.get(`${col + dx},${row + dy}`);
+              if (!bucket) continue;
+              for (const other of bucket) {
+                if (other.index <= node.index) continue;
+                const ddx = node.x - other.x;
+                const ddy = node.y - other.y;
+                const dist = Math.hypot(ddx, ddy) || 1e-6;
+                const minDist =
+                  node.collisionRadius +
+                  other.collisionRadius +
+                  collisionPadding;
+                if (dist < minDist) {
+                  const overlap = (minDist - dist) / dist;
+                  const adjust = overlap * 0.9;
+                  node.x += ddx * adjust;
+                  node.y += ddy * adjust;
+                  other.x -= ddx * adjust;
+                  other.y -= ddy * adjust;
+                }
               }
             }
           }
         }
-      }
+      };
+
+      resolveCollisions();
 
       for (const node of nodes) {
         node.vx *= damping;
@@ -711,15 +798,8 @@ const computeLayout = ({ posts, links, groups }) => {
     if (!sortedTimes.length) return [];
     const start = new Date(minTime);
     const end = new Date(maxTime);
-    
-    let cursor = Date.UTC(
-      end.getUTCFullYear(),
-      end.getUTCMonth(),
-      1,
-      0,
-      0,
-      0
-    );
+
+    let cursor = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), 1, 0, 0, 0);
     const first = Date.UTC(
       start.getUTCFullYear(),
       start.getUTCMonth(),
@@ -781,10 +861,9 @@ const main = async () => {
     const outputPath = path.join(targetDir, "layout.json");
     await fs.writeFile(outputPath, JSON.stringify(layout, null, 2), "utf8");
     console.log(
-      `Wrote ${layout.nodes.length} nodes for ${dataset.slug} -> ${path.relative(
-        projectRoot,
-        outputPath
-      )}`
+      `Wrote ${layout.nodes.length} nodes for ${
+        dataset.slug
+      } -> ${path.relative(projectRoot, outputPath)}`
     );
     summaries.push({
       slug: dataset.slug,

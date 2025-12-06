@@ -29,17 +29,16 @@
   } = prepared;
 
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
-  let resolvedHighlightColor = highlightColor;
 
   onMount(() => {
     if (highlightColor) return;
     const cssColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue("--highlite-color");
-    const fallback = (cssColor || resolvedHighlightColor).trim();
-    resolvedHighlightColor = fallback || resolvedHighlightColor;
+    const fallback = (cssColor || highlightColor).trim();
+    highlightColor = fallback || highlightColor;
   });
-  $: resolvedHighlightColor = highlightColor || resolvedHighlightColor;
+  $: highlightColor = highlightColor || highlightColor;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   let redrawPending = false;
@@ -157,6 +156,18 @@
     panX: 0,
     panY: 0,
   };
+  const textSizeFor = (base) => {
+    const s = clamp(view.scale, minScale, maxScale);
+
+    const scaled = base * (1.3 - s * 0.6);
+    return clamp(scaled, base * 0.7, base * 1.3);
+  };
+  const labelMetricsCache = new Map();
+  let lastLabelScale = view.scale;
+  $: if (view.scale !== lastLabelScale) {
+    labelMetricsCache.clear();
+    lastLabelScale = view.scale;
+  }
 
   const worldToScreen = (x, y) => ({
     x: (x - cx) * view.scale + canvasSize.w / 2 + view.panX,
@@ -170,20 +181,132 @@
 
   let hoveredNode = null;
   let hoveredText = "";
-  const hitSliceLabel = (sx, sy, tolerance = 32) => {
-    return slicePaths.some((slice) => {
-      const pos = worldToScreen(slice.labelPos.x, slice.labelPos.y);
-      return Math.hypot(pos.x - sx, pos.y - sy) <= tolerance;
-    });
+  const rotatePoint = (point, origin, angle) => {
+    const dx = point.x - origin.x;
+    const dy = point.y - origin.y;
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    return {
+      x: origin.x + dx * cos - dy * sin,
+      y: origin.y + dx * sin + dy * cos,
+    };
+  };
+
+  const sliceLabelMetrics = (slice) => {
+    if (!pInstance) return null;
+    const size = textSizeFor(14);
+    const cacheKey = `${slice.id}-${size.toFixed(3)}`;
+    const cached = labelMetricsCache.get(cacheKey);
+    if (cached) return cached;
+    pInstance.push();
+    pInstance.textFont("sans-serif");
+    pInstance.textSize(size);
+    const width = pInstance.textWidth(slice.label);
+    const ascent = pInstance.textAscent();
+    const descent = pInstance.textDescent();
+    pInstance.pop();
+    const height = ascent + descent;
+    const metrics = { width, height, ascent, descent };
+    labelMetricsCache.set(cacheKey, metrics);
+    return metrics;
+  };
+  const labelCorners = (pos, metrics, rotation, anchor) => {
+    const halfH = metrics.height / 2;
+    const startX = anchor === "end" ? -metrics.width : 0;
+    const endX = startX + metrics.width;
+    const corners = [
+      { x: startX, y: -metrics.ascent },
+      { x: endX, y: -metrics.ascent },
+      { x: endX, y: metrics.descent },
+      { x: startX, y: metrics.descent },
+    ];
+    return corners.map((c) =>
+      rotatePoint({ x: pos.x + c.x, y: pos.y + c.y }, pos, rotation)
+    );
+  };
+  const boxFromCorners = (corners) => {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const corner of corners) {
+      const screen = worldToScreen(corner.x, corner.y);
+      minX = Math.min(minX, screen.x);
+      maxX = Math.max(maxX, screen.x);
+      minY = Math.min(minY, screen.y);
+      maxY = Math.max(maxY, screen.y);
+    }
+    return { minX, minY, maxX, maxY };
+  };
+  const inflateBox = (box, pad) => ({
+    minX: box.minX - pad,
+    maxX: box.maxX + pad,
+    minY: box.minY - pad,
+    maxY: box.maxY + pad,
+  });
+  const convexHull = (pts) => {
+    if (pts.length <= 1) return pts;
+    const sorted = [...pts].sort((a, b) =>
+      a.x === b.x ? a.y - b.y : a.x - b.x
+    );
+    const cross = (o, a, b) =>
+      (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+    const lower = [];
+    for (const p of sorted) {
+      while (
+        lower.length >= 2 &&
+        cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0
+      ) {
+        lower.pop();
+      }
+      lower.push(p);
+    }
+    const upper = [];
+    for (let i = sorted.length - 1; i >= 0; i--) {
+      const p = sorted[i];
+      while (
+        upper.length >= 2 &&
+        cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0
+      ) {
+        upper.pop();
+      }
+      upper.push(p);
+    }
+    upper.pop();
+    lower.pop();
+    return lower.concat(upper);
+  };
+
+  const hitSliceLabel = (sx, sy, paddingScreen = 10) => {
+    if (!pInstance) return null;
+    const padding = paddingScreen;
+    for (const slice of slicePaths) {
+      const metrics = sliceLabelMetrics(slice);
+      if (!metrics) continue;
+      const pos = slice.labelPos;
+      const rotation = (slice.labelRotation * Math.PI) / 180;
+      const rotated = rotatePoint(screenToWorld(sx, sy), pos, -rotation);
+      const localX = rotated.x - pos.x;
+      const localY = rotated.y - pos.y;
+      const startX = slice.labelAnchor === "end" ? -metrics.width : 0;
+      const endX = startX + metrics.width;
+      const withinX = localX >= startX - padding && localX <= endX + padding;
+      const withinY =
+        localY >= -metrics.ascent - padding &&
+        localY <= metrics.descent + padding;
+      if (withinX && withinY) return slice;
+    }
+    return null;
   };
   let cursorMode = "grab";
 
   const setCursor = (mode, canvasOverride = null) => {
     const canvas = canvasOverride ?? pInstance?.canvas;
-    if (!canvas) return;
-    if (mode === cursorMode) return;
+    if (!canvas) return false;
+    if (mode === cursorMode) return false;
     cursorMode = mode;
     canvas.style.cursor = mode;
+    return true;
   };
 
   const clearHover = () => {
@@ -192,6 +315,8 @@
   };
 
   const updateHover = (sx, sy) => {
+    const prevId = hoveredNode?.id ?? null;
+    const prevText = hoveredText;
     const world = screenToWorld(sx, sy);
     let best = null;
     let bestDist = Infinity;
@@ -223,6 +348,7 @@
     } else {
       clearHover();
     }
+    return prevId !== (hoveredNode?.id ?? null) || prevText !== hoveredText;
   };
 
   const requestRedraw = () => {
@@ -241,7 +367,7 @@
     selectedEmoji;
     sizeMode;
     showLinks;
-    resolvedHighlightColor;
+    highlightColor;
     textColor;
     backgroundColor;
     circleColor;
@@ -260,7 +386,7 @@
   };
 
   const zoomAt = (deltaY, sx, sy) => {
-    const zoomStep = 1.15;
+    const zoomStep = 1.1;
     const direction = deltaY > 0 ? 1 / zoomStep : zoomStep;
     const nextScale = clamp(view.scale * direction, minScale, maxScale);
     const worldBefore = screenToWorld(sx, sy);
@@ -275,6 +401,7 @@
   let panStart = null;
   let panPointerId = null;
   let dragDistance = 0;
+  let pressStarted = false;
 
   const handleClick = (sx, sy) => {
     updateHover(sx, sy);
@@ -283,30 +410,20 @@
       return;
     }
 
-    const hit = slicePaths.find((slice) => {
-      const pos = worldToScreen(slice.labelPos.x, slice.labelPos.y);
-      const dx = pos.x - sx;
-      const dy = pos.y - sy;
-      const dist = Math.hypot(dx, dy);
-      return dist <= 36;
-    });
+    const hit = hitSliceLabel(sx, sy);
     if (hit) {
       toggleGroup(hit.id);
+      requestRedraw();
     }
   };
 
   const createSketch = () => {
     return (p) => {
-      const textSizeFor = (base) => {
-        const s = clamp(view.scale, minScale, maxScale);
-        return base * (0.8 + s * 0.8);
-      };
-
       p.setup = () => {
         const w = canvasParent?.clientWidth || window.innerWidth || width;
         const h = canvasParent?.clientHeight || window.innerHeight || height;
         p.createCanvas(w, h, p.P2D);
-        // p.pixelDensity(1);
+        p.pixelDensity(1);
         canvasSize = { w, h };
         p.noLoop();
         p.angleMode(p.RADIANS);
@@ -329,7 +446,9 @@
         const touch = evt.touches?.[0];
         const x = evt.clientX ?? touch?.clientX ?? 0;
         const y = evt.clientY ?? touch?.clientY ?? 0;
-        return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+        return (
+          x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
+        );
       };
 
       const startPan = (x, y) => {
@@ -358,18 +477,20 @@
       const endPan = (x, y) => {
         if (!isPanning) return;
         isPanning = false;
-        updateHover(x, y);
+        const hoverChanged = updateHover(x, y);
         if (dragDistance < 6) {
           handleClick(x, y);
+        }
+        const clickable = Boolean(hoveredNode) || Boolean(hitSliceLabel(x, y));
+        const cursorChanged = setCursor(clickable ? "pointer" : "grab");
+        if (hoverChanged || cursorChanged || dragDistance < 6) {
           requestRedraw();
         }
-        const clickable = Boolean(hoveredNode) || hitSliceLabel(x, y);
-        setCursor(clickable ? "pointer" : "grab");
-        requestRedraw();
       };
 
       p.mousePressed = (evt) => {
         if (evt.button !== 0 || overControls(evt)) return;
+        pressStarted = true;
         startPan(p.mouseX, p.mouseY);
       };
 
@@ -380,16 +501,21 @@
       };
 
       p.mouseReleased = (evt) => {
+        if (!pressStarted) return;
+        pressStarted = false;
         if (!isPanning) return;
         endPan(p.mouseX, p.mouseY);
       };
 
       p.mouseMoved = (evt) => {
         if (isPanning || overControls(evt)) return;
-        updateHover(p.mouseX, p.mouseY);
-        const clickable = Boolean(hoveredNode) || hitSliceLabel(p.mouseX, p.mouseY);
-        setCursor(clickable ? "pointer" : "grab");
-        requestRedraw();
+        const hoverChanged = updateHover(p.mouseX, p.mouseY);
+        const clickable =
+          Boolean(hoveredNode) || Boolean(hitSliceLabel(p.mouseX, p.mouseY));
+        const cursorChanged = setCursor(clickable ? "pointer" : "grab");
+        if (hoverChanged || cursorChanged) {
+          requestRedraw();
+        }
       };
 
       p.mouseWheel = (event) => {
@@ -401,7 +527,7 @@
       const drawSlices = () => {
         p.push();
         p.noFill();
-        p.stroke(resolvedHighlightColor);
+        p.stroke(highlightColor);
         p.strokeWeight(0.9 / view.scale);
         for (const slice of slicePaths) {
           if (
@@ -427,15 +553,18 @@
           p.push();
           p.translate(pos.x, pos.y);
           p.rotate((slice.labelRotation * Math.PI) / 180);
-          p.textAlign(slice.labelAnchor === "end" ? p.RIGHT : p.LEFT, p.CENTER);
+          p.textAlign(
+            slice.labelAnchor === "end" ? p.RIGHT : p.LEFT,
+            p.BASELINE
+          );
           const active =
             selectedGroupId === null || selectedGroupId === slice.id;
           const inactiveLabel = p.color(textColor);
-          inactiveLabel.setAlpha(90);
-          p.fill(active ? resolvedHighlightColor : inactiveLabel);
+
+          p.fill(active ? highlightColor : inactiveLabel);
           p.noStroke();
           p.textStyle(p.NORMAL);
-          p.textSize(textSizeFor(14));
+          p.textSize(textSizeFor(12));
           p.text(slice.label, 0, 0);
           p.pop();
         }
@@ -465,55 +594,12 @@
           const offsetY = midY - cy;
           const ctrlX = midX + offsetX * 0.14;
           const ctrlY = midY + offsetY * 0.14;
-          const stroke = p.color(resolvedHighlightColor);
-          stroke.setAlpha(crossGroup ? 160 : 110);
+          const stroke = p.color(highlightColor);
+
           p.stroke(stroke);
           p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
           p.line(source.x, source.y, target.x, target.y);
         }
-        p.pop();
-      };
-
-      const drawRings = () => {
-        p.push();
-        p.noFill();
-        const ctx = p.drawingContext;
-        if (ctx?.setLineDash) {
-          ctx.setLineDash([8 / view.scale, 10 / view.scale]);
-        }
-        p.stroke(resolvedHighlightColor);
-        p.strokeWeight(0.9 / view.scale);
-        p.noFill();
-
-        for (const tick of innerTicks) {
-          p.circle(cx, cy, tick.radius * 2);
-          p.push();
-          p.noStroke();
-          p.fill(resolvedHighlightColor);
-          p.textAlign(p.CENTER, p.BOTTOM);
-          p.textSize(textSizeFor(12));
-          p.text(
-            formatTick.format(tick.time),
-            cx,
-            cy - tick.radius - 8 / view.scale
-          );
-          p.pop();
-        }
-        if (outerTick) {
-          p.circle(cx, cy, outerRingRadius * 2);
-          p.push();
-          p.noStroke();
-          p.fill(resolvedHighlightColor);
-          p.textAlign(p.CENTER, p.BOTTOM);
-          p.textSize(textSizeFor(14));
-          p.text(
-            formatTick.format(outerTick.time),
-            cx,
-            cy - outerRingRadius - 10 / view.scale
-          );
-          p.pop();
-        }
-        if (ctx?.setLineDash) ctx.setLineDash([]);
         p.pop();
       };
 
@@ -533,7 +619,8 @@
           const r =
             sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
           p.fill(node.color);
-          p.noStroke();
+
+          p.strokeWeight(0.9 * view.scale);
           p.circle(node.x, node.y, r * 2);
         }
         p.pop();
@@ -545,13 +632,56 @@
               : hoveredNode.radiusReactions;
           p.push();
           p.noFill();
-          const halo = p.color(resolvedHighlightColor);
-          halo.setAlpha(220);
+          const halo = p.color(highlightColor);
+
           p.stroke(halo);
           p.strokeWeight(1.8 / view.scale);
           p.circle(hoveredNode.x, hoveredNode.y, r * 2 + 6 / view.scale);
           p.pop();
         }
+      };
+
+      const drawRings = () => {
+        p.push();
+        p.noFill();
+        const ctx = p.drawingContext;
+        if (ctx?.setLineDash) {
+          ctx.setLineDash([8 / view.scale, 10 / view.scale]);
+        }
+        p.stroke(highlightColor);
+        p.strokeWeight(0.9 / view.scale);
+        p.noFill();
+
+        for (const tick of innerTicks) {
+          p.circle(cx, cy, tick.radius * 2);
+          p.push();
+          p.noStroke();
+          p.fill(highlightColor);
+          p.textAlign(p.CENTER, p.BOTTOM);
+          p.textSize(textSizeFor(36));
+          p.text(
+            formatTick.format(tick.time),
+            cx,
+            cy - tick.radius - 8 / view.scale
+          );
+          p.pop();
+        }
+        if (outerTick) {
+          p.circle(cx, cy, outerRingRadius * 2);
+          p.push();
+          p.noStroke();
+          p.fill(highlightColor);
+          p.textAlign(p.CENTER, p.BOTTOM);
+          p.textSize(textSizeFor(14));
+          p.text(
+            formatTick.format(outerTick.time),
+            cx,
+            cy - outerRingRadius - 10 / view.scale
+          );
+          p.pop();
+        }
+        if (ctx?.setLineDash) ctx.setLineDash([]);
+        p.pop();
       };
 
       p.draw = () => {
@@ -563,8 +693,8 @@
 
         drawSlices();
         drawLinks();
-        drawRings();
         drawNodes();
+        drawRings();
 
         p.pop();
       };
@@ -582,7 +712,7 @@
 
 <section
   class="relative h-screen overflow-hidden"
-  style={`--highlite-color:${resolvedHighlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; background:${backgroundColor}; color:${circleColor};`}
+  style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
   <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
     <div
@@ -606,9 +736,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
-        textColor={circleColor}
-        backgroundColor={backgroundColor}
-        highlightColor={resolvedHighlightColor}
+        {textColor}
+        {backgroundColor}
+        {highlightColor}
         on:sizeMode={(event) => {
           sizeMode = event.detail;
         }}

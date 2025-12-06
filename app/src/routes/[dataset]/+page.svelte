@@ -4,23 +4,14 @@
 
   const title = data?.dataset?.label || data?.dataset?.slug || "Dataset";
 
-  const themeBySlug = {
-    jungenationalisten: {
-      backgroundColor: "#111",
-      circleColor: "#FFBF00",
-      textColor: "#FFBF00",
-      highlightColor: "#7B68EE",
-    },
-  };
-
   const defaultTheme = {
-    backgroundColor: "black",
-    circleColor: "white",
-    textColor: "white",
-    highlightColor: "yellow",
+    backgroundColor: "#111",
+    circleColor: "#fff8bc",
+    textColor: "#fff8bc",
+    highlightColor: "#7B68EE",
   };
 
-  const theme = themeBySlug[data?.dataset?.slug] ?? defaultTheme;
+  const theme = data?.dataset?.theme ?? defaultTheme;
 </script>
 
 <section class="dataset">

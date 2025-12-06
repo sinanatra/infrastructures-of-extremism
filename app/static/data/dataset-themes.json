@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "jungenationalisten",
+    "theme": {
+      "backgroundColor": "#111",
+      "circleColor": "#fff8bc",
+      "textColor": "#fff8bc",
+      "highlightColor": "#7B68EE"
+    }
+  },
+  {
+    "slug": "tricoloredelsangueitalico",
+    "theme": {
+      "backgroundColor": "#111",
+      "circleColor": "yellow",
+      "textColor": "darkgray",
+      "highlightColor": "white"
+    }
+  }
+]

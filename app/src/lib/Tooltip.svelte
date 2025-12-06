@@ -6,7 +6,7 @@
 
 <div
   class="tooltip pointer-events-none fixed z-20 max-w-xs text-xs p-1"
-  style="right: 16px; bottom: 16px; background: var(--graph-bg, black); color: var(--graph-circle, white); border: 0.75px solid var(--highlite-color, yellow);"
+  style="right: 16px; bottom: 16px; background: var(--graph-bg, black); color: var(--graph-text, var(--graph-circle, white)); border: 0.75px solid var(--highlite-color, yellow);"
 >
   {#if text}
     {#each text.split("\n") as line, i}

@@ -2,9 +2,17 @@
   {
     "slug": "jungenationalisten",
     "label": "Junge Nationalisten",
-    "postCount": 30249,
+    "postCount": 19789,
     "groupCount": 103,
-    "startDate": "2019-07-04T21:29:38.000Z",
+    "startDate": "2019-11-13T18:15:52.000Z",
     "endDate": "2025-12-04T12:39:44.000Z"
+  },
+  {
+    "slug": "tricoloredelsangueitalico",
+    "label": "Tricolore del Sangue Italico(canale)",
+    "postCount": 24955,
+    "groupCount": 147,
+    "startDate": "2020-06-26T23:45:44.000Z",
+    "endDate": "2025-12-05T20:34:42.000Z"
   }
 ]

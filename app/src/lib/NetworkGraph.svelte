@@ -1,6 +1,6 @@
 <script>
-  // import NetworkGraphSvg from "$lib/NetworkGraphSvg.svelte";
-  import NetworkGraphP5 from "$lib/NetworkGraphP5.svelte";
+  // import NetworkGraph from "$lib/NetworkGraphSvg.svelte";
+  import NetworkGraph from "$lib/NetworkGraphP5.svelte";
 
   export let data;
   export let backgroundColor = "#000000";
@@ -9,7 +9,7 @@
   export let highlightColor = "yellow";
 </script>
 
-<NetworkGraphP5
+<NetworkGraph
   {data}
   {backgroundColor}
   {circleColor}

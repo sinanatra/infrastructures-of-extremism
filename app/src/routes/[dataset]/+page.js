@@ -17,11 +17,13 @@ export const load = async ({ fetch, params }) => {
 	const datasetSlug = params.dataset;
 	const basePath = `/data/${encodeURIComponent(datasetSlug)}`;
 
-	const [postsRes, linksRes, groupsRes, layoutRes] = await Promise.all([
+	const [postsRes, linksRes, groupsRes, layoutRes, datasetsRes, themesRes] = await Promise.all([
 		fetch(`${basePath}/message_nodes.csv`),
 		fetch(`${basePath}/message_edges.csv`),
 		fetch(`${basePath}/nodes.csv`),
-		fetch(`${basePath}/layout.json`)
+		fetch(`${basePath}/layout.json`),
+		fetch(`/data/datasets.json`),
+		fetch(`/data/dataset-themes.json`)
 	]);
 
 	if ([postsRes, linksRes, groupsRes, layoutRes].some((res) => res.status === 404)) {
@@ -32,11 +34,13 @@ export const load = async ({ fetch, params }) => {
 		throw error(500, `Failed to load dataset files for "${datasetSlug}".`);
 	}
 
-	const [postsCsv, linksCsv, groupsCsv, layoutJson] = await Promise.all([
+	const [postsCsv, linksCsv, groupsCsv, layoutJson, datasetsJson, themesJson] = await Promise.all([
 		postsRes.text(),
 		linksRes.text(),
 		groupsRes.text(),
-		layoutRes.text()
+		layoutRes.text(),
+		datasetsRes.ok ? datasetsRes.text() : Promise.resolve('[]'),
+		themesRes.ok ? themesRes.text() : Promise.resolve('[]')
 	]);
 
 	const excludedGroupIds = new Set(['boost']);
@@ -135,11 +139,35 @@ export const load = async ({ fetch, params }) => {
 		throw error(500, `Failed to parse layout for dataset "${datasetSlug}".`);
 	}
 
+	let datasetMeta = null;
+	try {
+		const parsed = JSON.parse(datasetsJson);
+		if (Array.isArray(parsed)) {
+			datasetMeta = parsed.find((d) => d?.slug === datasetSlug) ?? null;
+		}
+	} catch (err) {
+		console.warn('Failed to parse datasets.json', err);
+		datasetMeta = null;
+	}
+
+	let datasetTheme = datasetMeta?.theme ?? null;
+	try {
+		const parsedThemes = JSON.parse(themesJson);
+		if (Array.isArray(parsedThemes)) {
+			const found = parsedThemes.find((t) => t?.slug === datasetSlug);
+			if (found?.theme) datasetTheme = found.theme;
+		}
+	} catch (err) {
+		console.warn('Failed to parse dataset-themes.json', err);
+	}
+
 	const datasetLabel =
-		groups.find((g) => normalizeGroupId(g.id) === normalizeGroupId(datasetSlug))?.label ?? datasetSlug;
+		datasetMeta?.label ??
+		groups.find((g) => normalizeGroupId(g.id) === normalizeGroupId(datasetSlug))?.label ??
+		datasetSlug;
 
 	return {
-		dataset: { slug: datasetSlug, label: datasetLabel },
+		dataset: { slug: datasetSlug, label: datasetLabel, theme: datasetTheme },
 		posts,
 		groups,
 		links,

@@ -51,12 +51,14 @@
       <button
         class={`toggle-btn px-3 py-2 ${sizeMode === "reactions" ? "active" : ""}`}
         on:click={() => setSizeMode("reactions")}
+        style={`color:${textColor};`}
       >
         Size by reactions
       </button>
       <button
         class={`toggle-btn px-3 py-2 ${sizeMode === "links" ? "active" : ""}`}
         on:click={() => setSizeMode("links")}
+        style={`color:${textColor};`}
       >
         Size by forwards
       </button>
@@ -101,12 +103,12 @@
 
   .toggle-btn {
     background: transparent;
-    color: var(--controls-text);
+    color: inherit;
     transition: background 120ms ease, color 120ms ease;
   }
 
   .toggle-btn.active {
-    background: var(--controls-text);
+    background: var(--controls-highlight);
     color: var(--controls-bg);
   }
 

@@ -19,7 +19,7 @@
     <ul>
       {#each datasets as dataset (dataset.slug)}
         <li>
-          <a href={`/${encodeURIComponent(dataset.slug)}`}>
+          <a data-sveltekit-reload href={`/${encodeURIComponent(dataset.slug)}`}>
             {dataset.label || dataset.slug}
           </a>
           {#if dataset.postCount || dataset.groupCount || dataset.startDate}
