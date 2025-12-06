@@ -423,7 +423,7 @@
         const w = canvasParent?.clientWidth || window.innerWidth || width;
         const h = canvasParent?.clientHeight || window.innerHeight || height;
         p.createCanvas(w, h, p.P2D);
-        p.pixelDensity(1);
+        // p.pixelDensity(1);
         canvasSize = { w, h };
         p.noLoop();
         p.angleMode(p.RADIANS);
@@ -564,7 +564,7 @@
           p.fill(active ? highlightColor : inactiveLabel);
           p.noStroke();
           p.textStyle(p.NORMAL);
-          p.textSize(textSizeFor(12));
+          p.textSize(textSizeFor(24));
           p.text(slice.label, 0, 0);
           p.pop();
         }
