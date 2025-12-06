@@ -555,6 +555,19 @@
         }
       };
 
+      const touchPoint = (touch) => {
+        const rect = p.canvas?.getBoundingClientRect();
+        if (!rect) return { x: touch.clientX, y: touch.clientY };
+        return {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+        };
+      };
+
+      let pinchActive = false;
+      let pinchStartDistance = 0;
+      let lastTouch = null;
+
       p.mousePressed = (evt) => {
         if (trailerBlocking) return;
         if (evt.button !== 0 || overControls(evt)) return;
@@ -593,6 +606,77 @@
         if (trailerBlocking) return false;
         if (overControls(event)) return false;
         zoomAt(event.deltaY, event.offsetX, event.offsetY);
+        return false;
+      };
+
+      p.touchStarted = (evt) => {
+        if (trailerBlocking) return;
+        if (overControls(evt)) return false;
+        const touches = evt.touches ?? [];
+        if (touches.length >= 2) {
+          const a = touchPoint(touches[0]);
+          const b = touchPoint(touches[1]);
+          pinchStartDistance = Math.hypot(b.x - a.x, b.y - a.y);
+          pinchActive = true;
+          pressStarted = false;
+          isPanning = false;
+        } else if (touches.length === 1) {
+          const pt = touchPoint(touches[0]);
+          lastTouch = pt;
+          pressStarted = true;
+          startPan(pt.x, pt.y);
+        }
+        return false;
+      };
+
+      p.touchMoved = (evt) => {
+        if (trailerBlocking) return false;
+        if (overControls(evt)) return false;
+        const touches = evt.touches ?? [];
+        if (pinchActive && touches.length >= 2) {
+          const a = touchPoint(touches[0]);
+          const b = touchPoint(touches[1]);
+          const dist = Math.hypot(b.x - a.x, b.y - a.y);
+          if (dist > 0 && pinchStartDistance > 0) {
+            const factor = dist / pinchStartDistance;
+            const center = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+            const worldBefore = screenToWorld(center.x, center.y);
+            view.scale = clamp(view.scale * factor, minScale, maxScale);
+            const screenAfter = worldToScreen(worldBefore.x, worldBefore.y);
+            view.panX += center.x - screenAfter.x;
+            view.panY += center.y - screenAfter.y;
+            requestRedraw();
+          }
+          return false;
+        }
+        if (touches.length === 1) {
+          const pt = touchPoint(touches[0]);
+          lastTouch = pt;
+          if (!isPanning && pressStarted) startPan(pt.x, pt.y);
+          movePan(pt.x, pt.y);
+        }
+        return false;
+      };
+
+      p.touchEnded = (evt) => {
+        if (trailerBlocking) return;
+        const touches = evt.touches ?? [];
+        if (pinchActive && touches.length < 2) {
+          pinchActive = false;
+          pinchStartDistance = 0;
+        }
+        if (touches.length === 1) {
+          lastTouch = touchPoint(touches[0]);
+        }
+        if (pressStarted) {
+          pressStarted = false;
+          if (isPanning && lastTouch) {
+            endPan(lastTouch.x, lastTouch.y);
+          } else if (!isPanning && lastTouch) {
+            handleClick(lastTouch.x, lastTouch.y);
+          }
+        }
+        isPanning = false;
         return false;
       };
 
