@@ -8,7 +8,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let state = "idle"; // idle | playing | done
+  let state = "idle"; // idle | playing | paused | done
   let idx = 0;
   let timer = null;
   let visible = new Set();
@@ -60,6 +60,19 @@
     step();
   };
 
+  const pause = () => {
+    if (state !== "playing") return;
+    clearTimer();
+    state = "paused";
+    notify();
+  };
+
+  const resume = () => {
+    if (state !== "paused") return;
+    state = "playing";
+    step();
+  };
+
   const finish = () => {
     clearTimer();
     state = "done";
@@ -107,6 +120,16 @@
             </div>
           </div>
         {/if}
+        {#if state === "paused"}
+          <div class="flex-1 min-w-0">
+            <div class="text-sm opacity-80 truncate">
+              Paused
+            </div>
+            <div class="text-[11px] opacity-60">
+              {Math.min(idx, groups.length)} / {groups.length}
+            </div>
+          </div>
+        {/if}
         {#if state === "idle"}
           <button
             class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
@@ -116,6 +139,16 @@
             title="Play the group-by-group reveal"
           >
             Start
+          </button>
+        {/if}
+        {#if state === "playing" || state === "paused"}
+          <button
+            class="px-3 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+            style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+            on:click={state === "playing" ? pause : resume}
+            title={state === "playing" ? "Pause trailer" : "Resume trailer"}
+          >
+            {state === "playing" ? "Pause" : "Resume"}
           </button>
         {/if}
         <button
