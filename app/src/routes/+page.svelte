@@ -67,9 +67,9 @@
     </div>
   {/if}
 
-  <div class="relative flex justify-center px-5">
+  <div class="relative flex justify-center px-4">
     <article
-      class="relative z-10 w-full max-w-2xl px-8 pt-4 pb-10 -mt-[30vh] bg-black"
+      class="relative z-10 w-full max-w-2xl px-4 pt-8 pb-10 -mt-[30vh] bg-black"
     >
       <h1 class="text-3xl mb-4 max-w-xl">Tracing Extremism</h1>
 
@@ -147,8 +147,8 @@
           <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
             Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
             and other far-right militants performed the fascist salute during a commemoration
-            for those killed on 7 January 1978 in Via Acca Larentia, where left-wing
-            terrorists shot and killed two young neo-fascists; a third died later.
+            for those killed on 7 January 1978 in Via Acca Larentia, where far-left
+            militants shot and killed two young neo-fascists.
           </figcaption>
         </figure>
 
