@@ -1,5 +1,21 @@
 [
   {
+    "slug": "afdjugendbw",
+    "label": "Generation Deutschland - BW Info-Kanal",
+    "postCount": 21507,
+    "groupCount": 124,
+    "startDate": "2019-04-13T10:23:37.000Z",
+    "endDate": "2025-12-06T17:28:21.000Z"
+  },
+  {
+    "slug": "generationidentitaire",
+    "label": "Génération Identitaire",
+    "postCount": 3243,
+    "groupCount": 16,
+    "startDate": "2018-05-23T19:14:54.000Z",
+    "endDate": "2025-12-06T16:29:04.000Z"
+  },
+  {
     "slug": "jungenationalisten",
     "label": "Junge Nationalisten",
     "postCount": 19789,

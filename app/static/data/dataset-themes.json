@@ -25,5 +25,16 @@
       "textColor": "red",
       "highlightColor": "darkred"
     }
+  }, {
+    "slug": "afdjugendbw",
+    "theme": {
+      "backgroundColor": "#111",
+      "circleColor": "#896F61",
+      "textColor": "#896F61",
+      "highlightColor": "#017BF7"
+    }
   }
 ]
+
+
+
