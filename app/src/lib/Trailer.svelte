@@ -13,7 +13,7 @@
   let timer = null;
   let visible = new Set();
   let visitedOrder = [];
-  const perGroupMs = 20;
+  const perGroupMs = 500;
 
   const reset = () => {
     clearTimer();
@@ -32,6 +32,7 @@
     dispatch("update", {
       visible: state === "done" ? null : new Set(visible),
       order: visitedOrder,
+      state,
     });
     dispatch("headline", {
       group: groups[idx - 1] ?? groups[0] ?? null,
@@ -78,36 +79,45 @@
 
 {#if state !== "done"}
   <div
-    class="overlay pointer-events-auto absolute inset-0 z-30 flex items-center justify-center"
+    class={`overlay absolute z-30 ${state === "idle" ? "inset-0 flex items-center justify-center" : "top-4 right-4 flex justify-end"}`}
     on:click|stopPropagation
     on:pointerdown|stopPropagation
     style={`backdrop-filter:${state === "idle" ? "blur(2px)" : "none"};`}
   >
     <div
-      class="pointer-events-auto flex flex-col items-center gap-4 px-6 py-5 rounded shadow-lg max-w-2xl w-[90vw] text-center"
+      class={`pointer-events-auto px-5 py-4 rounded shadow-lg ${state === "idle" ? "flex flex-col gap-3 items-center max-w-2xl w-[90vw] text-center" : "flex items-center gap-3 w-[360px] max-w-full text-left"}`}
       style={`background:${backgroundColor}; border:1px solid ${highlightColor}; color:${textColor};`}
     >
-      <div class="text-2xl">
-        Starting from the right-wing extremist Telegram group
-        <span class="italic" style="color: {highlightColor};">{groups[0]?.label ?? "the seed"}</span>,
-        this visualization shows the network of related channels: the ones they
-        talk about and the ones resharing their posts.
-      </div>
-      {#if state === "playing"}
-        <div class="text-sm opacity-80">
-          {groups[Math.min(idx, groups.length - 1)]?.label ?? ""}
+      {#if state === "idle"}
+        <div class="text-2xl">
+          Starting from the right-wing extremist Telegram group
+          <span class="italic" style="color: {highlightColor};">{groups[0]?.label ?? "the seed"}</span>,
+          this visualization shows the network of related channels: the ones they
+          talk about and the ones resharing their posts.
         </div>
       {/if}
-      <div class="flex gap-3">
-        <button
-          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
-          style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
-          on:click={start}
-          disabled={state !== "idle"}
-          title="Play the group-by-group reveal"
-        >
-          Start
-        </button>
+      <div class={`flex ${state === "idle" ? "items-center justify-center gap-3" : "items-center gap-3 w-full"}`}>
+        {#if state === "playing"}
+          <div class="flex-1 min-w-0">
+            <div class="text-sm opacity-80 truncate">
+              {groups[Math.min(idx, groups.length - 1)]?.label ?? ""}
+            </div>
+            <div class="text-[11px] opacity-60">
+              {Math.min(idx + 1, groups.length)} / {groups.length}
+            </div>
+          </div>
+        {/if}
+        {#if state === "idle"}
+          <button
+            class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+            style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+            on:click={start}
+            disabled={state !== "idle"}
+            title="Play the group-by-group reveal"
+          >
+            Start
+          </button>
+        {/if}
         <button
           class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
           style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
@@ -117,11 +127,6 @@
           Skip
         </button>
       </div>
-      {#if state === "playing"}
-        <div class="text-sm opacity-80">
-          {Math.min(idx + 1, groups.length)} / {groups.length}
-        </div>
-      {/if}
     </div>
   </div>
 {/if}
