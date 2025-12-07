@@ -255,9 +255,9 @@
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
               <img
-                src={`/cover/${dataset.slug}.png`}
+                src={`/preview/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover grayscale hover:grayscale-0"
+                class="w-[450px] h-[450px] object-cover  hover:grayscale"
                 loading="lazy"
               />
               <div class="mt-2">

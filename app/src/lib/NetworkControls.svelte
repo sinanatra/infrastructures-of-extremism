@@ -31,7 +31,9 @@
     <span>{counts.groups} groups</span>
     <span>{counts.links} links</span>
     {#if selectedGroup}
-      <span class="group-pill flex items-center gap-3 px-3 py-1 rounded-full text-sm">
+      <span
+        class="group-pill flex items-center gap-3 px-3 py-1 rounded-full text-sm"
+      >
         <span>{selectedGroup.label}</span>
         {#if subscriberText(selectedGroup.subscribers)}
           <span>
@@ -77,9 +79,9 @@
   <EmojiFilter
     {topEmojis}
     {selectedEmoji}
-    textColor={textColor}
-    backgroundColor={backgroundColor}
-    highlightColor={highlightColor}
+    {textColor}
+    {backgroundColor}
+    {highlightColor}
     on:select={(event) => setEmoji(event.detail)}
   />
 </header>
@@ -104,12 +106,16 @@
   .toggle-btn {
     background: transparent;
     color: inherit;
-    transition: background 120ms ease, color 120ms ease;
+    transition:
+      background 120ms ease,
+      color 120ms ease;
   }
 
   .toggle-btn.active {
-    background: var(--controls-highlight);
-    color: var(--controls-bg);
+    /* background: var(--controls-highlight);
+    color: var(--controls-bg); */
+    background-color: var(--controls-highlight);
+    color: black !important;
   }
 
   .toggle-btn + .toggle-btn {
