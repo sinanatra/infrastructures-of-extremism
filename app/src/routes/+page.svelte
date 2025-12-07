@@ -257,7 +257,7 @@
               <img
                 src={`/preview/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover  hover:grayscale"
+                class="w-[450px] h-[450px] object-cover hover:grayscale"
                 loading="lazy"
               />
               <div class="mt-2">
@@ -278,13 +278,13 @@
       {/if}
     </section>
   </div>
-  <div class="custom-shadow flex relative z-10 w-full px-5 pt-10 bg-black">
-    <section id="data" class="max-w-5xl w-full pb-10 space-y-4">
+  <div class="custom-shadow justify-center flex relative z-10 w-full px-5 pt-10 bg-black">
+    <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
       <h2 class="text-2xl p-0 m-0 text-white">Download the datasets</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         All the scraped material is publicly available.<br />
-        Click to download the three CSVs (messages, links, nodes).
+        Click to download the datasets.
       </p>
       {#if datasets.length}
         <div class="grid gap-2 max-h-[320px] overflow-auto pr-1">
@@ -293,11 +293,12 @@
               class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-white/10 bg-black/60 text-left hover:bg-gray-400 hover:text-black transition text-sm"
               on:click={() => downloadDataset(dataset.slug)}
             >
-              <span class="font-semibold truncate">
+              <span class="truncate">
                 {dataset.label || dataset.slug}
               </span>
               <span class="text-xs whitespace-nowrap">
-                {dataset.postCount?.toLocaleString() ?? "—"} msgs · {dataset.groupCount ?? "—"} groups
+                {dataset.postCount?.toLocaleString() ?? "—"} msgs · {dataset.groupCount ??
+                  "—"} groups
               </span>
             </button>
           {/each}
