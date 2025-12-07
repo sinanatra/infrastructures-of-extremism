@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white text-black antialiased font-sans;
+  @apply bg-black text-black antialiased font-sans;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  --highlite-color: yellow;
+  --highlite-color: orangered;
 
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
