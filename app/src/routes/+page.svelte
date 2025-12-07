@@ -12,17 +12,38 @@
     .map((d) => (d?.slug ? `/cover/${d.slug}.png` : null))
     .filter(Boolean);
 
-  const downloadDataset = (slug) => {
+  let zipLib = null;
+  const loadZip = async () => {
+    if (zipLib) return zipLib;
+    const mod = await import("jszip");
+    zipLib = mod.default || mod;
+    return zipLib;
+  };
+
+  const downloadDataset = async (slug) => {
+    const JSZip = await loadZip();
+    const zip = new JSZip();
     const files = ["message_nodes.csv", "message_edges.csv", "nodes.csv"];
+
     for (const file of files) {
-      const link = document.createElement("a");
-      link.href = `/data/${encodeURIComponent(slug)}/${file}`;
-      link.download = file;
-      link.rel = "noopener";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const url = `/data/${encodeURIComponent(slug)}/${file}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.warn(`Missing file: ${url}`);
+        continue;
+      }
+      zip.file(file, await res.blob());
     }
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${slug}.zip`;
+    link.rel = "noopener";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
   };
 
   const cycleDelay = datasets.length * 1200;
@@ -89,17 +110,18 @@
       </h1>
 
       <div class="text-base leading-relaxed">
-        <p class="mb-2">
-          Right-wing youth organisations have gained greater visibility on
-          European streets. During demonstrations, banners often advertise
-          Telegram channels as gateways to extremist communities.
+        <p class="mb-3">
+          Right-wing organisations have gained greater visibility on European
+          streets. During demonstrations, banners often advertise Telegram
+          channels as gateways to extremist communities.
         </p>
         <p>
           At a rally held in Berlin on 29 November 2025 against so-called
           <em>“criminal foreigners”</em>, participants promoted channels used
           for youth recruitment and for coordinating activities at the local
-          level. But who is behind these messages and what do they say?
-          Moreover, how are they disseminated and who do they reach?
+          level.Understanding how these channels operate is essential to reveal
+          how street-level mobilisation connects to a broader digital ecosystem
+          that fuels the growth of extremism.
         </p>
 
         <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
@@ -108,16 +130,18 @@
             alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
             class="w-[150px] block grayscale hover:grayscale-0"
           />
-          <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
-            The banner promotes a Telegram channel used to connect supporters
-            and spread propaganda among far-right youth groups.
+          <figcaption class="text-sm max-w-60 text-gray-600 pb-8">
+            A banner that promotes a link to a Telegram far-right youth group.
           </figcaption>
         </figure>
 
         <p class="mb-2">
-          Across Germany, numerous activists within this network maintain ties
-          to various far-right ultranationalist parties: <em>Die Heimat</em>,
-          which has openly neo-Nazi roots, and
+          These types of Telegram channels collectively form a digital
+          infrastructure that supports the mobilisation of ultranationalist
+          ideologies, enabling the spread of ideology among younger supporters.
+          Across Germany, numerous members of these networks maintain ties to
+          various far-right ultranationalist parties: <em>Die Heimat</em>, which
+          has openly neo-Nazi roots, and
 
           <em>Alternative für Deutschland</em> which holds seats in parliament and
           campaigns strongly against immigration, are just two examples.
@@ -128,9 +152,9 @@
           ousted from the public sphere, leading to the recent emergence (29
           November 2025) of a successor movement called
           <em>Generation Deutschland</em>. This new formation has taken on the
-          role of mobilising younger supporters, relying heavily on platforms
-          such as Telegram. Although the national intelligence service has
-          declared <em>Junge Alternative</em>
+          role of mobilising younger supporters, relying on platforms such as
+          Telegram. Although the national intelligence service has declared
+          <em>Junge Alternative</em>
           anti-democratic, some local groups that once operated under that banner
           seem to have simply changed their name to
           <em>Generation Deutschland</em> and continued their activities as before.
@@ -158,9 +182,7 @@
           ultra-nationalist messages. These links extend far beyond Germany,
           reaching similar nationalist scenes in countries such as Italy,
           France, Austria, the Netherlands and Ukraine, sometimes even across
-          the Globe. These same channels also signal targets for coordinated
-          harassment, revealing a hostile infrastructure that thrives on vicious
-          circles of mutual recommendation and amplification.
+          the Globe.
         </p>
         <p>
           Telegram plays a central role in sustaining this ecosystem. It is not
@@ -193,11 +215,13 @@
         <p>
           This approach shows how individual groups expand and contract, which
           channels serve as crucial hubs, and how various national factions are
-          connected to one another. Although these sample maps cannot capture
-          the entire movement (e.g. some of these groups are private, some links
-          we tried to obtain were deleted, probably blocked), they expose part
-          of the infrastructure that allows today's far-right ideologies to
-          circulate uncensored.
+          connected to one another. Although these maps cannot capture the
+          entire movement (e.g. some of these groups are private, some links we
+          tried to obtain were deleted, probably blocked), they expose part of
+          the infrastructure that allows today's far-right ideologies to
+          circulate uncensored.The lack of moderation on Telegram allows
+          extremists to spread their views, while making their content and
+          relational structures available for monitoring.
         </p>
         <p>
           Finally, the investigation extends to a wider selection of Telegram
@@ -259,8 +283,8 @@
       <h2 class="text-2xl p-0 m-0 text-white">Download the datasets</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
-        All the scraped material is publically available.<br />
-        Click on each one to download a series of spreadsheets.
+        All the scraped material is publicly available.<br />
+        Click to download the three CSVs (messages, links, nodes).
       </p>
       {#if datasets.length}
         <div class="grid gap-2 max-h-[320px] overflow-auto pr-1">
@@ -273,8 +297,7 @@
                 {dataset.label || dataset.slug}
               </span>
               <span class="text-xs whitespace-nowrap">
-                {dataset.postCount?.toLocaleString() ?? "—"} msgs · {dataset.groupCount ??
-                  "—"} groups
+                {dataset.postCount?.toLocaleString() ?? "—"} msgs · {dataset.groupCount ?? "—"} groups
               </span>
             </button>
           {/each}
