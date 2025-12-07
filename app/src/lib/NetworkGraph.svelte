@@ -1,13 +1,16 @@
+<svelte:options runes={true} />
 <script>
   // import NetworkGraph from "$lib/NetworkGraphSvg.svelte";
   import NetworkGraph from "$lib/NetworkGraphP5.svelte";
 
-  export let data;
-  export let backgroundColor = "#000000";
-  export let circleColor = "#ffffff";
-  export let textColor = "#ffffff";
-  export let highlightColor = "yellow";
-  export let datasetSlug = null;
+  let {
+    data,
+    backgroundColor = "#000000",
+    circleColor = "#ffffff",
+    textColor = "#ffffff",
+    highlightColor = "yellow",
+    datasetSlug = null,
+  } = $props();
 </script>
 
 <NetworkGraph

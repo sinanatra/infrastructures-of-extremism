@@ -1,7 +1,6 @@
+<svelte:options runes={true} />
 <script>
-  export let x = 0;
-  export let y = 0;
-  export let text = "";
+  let { x = 0, y = 0, text = "" } = $props();
 </script>
 
 <div

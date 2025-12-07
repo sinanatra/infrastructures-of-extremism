@@ -2,16 +2,17 @@
   import { onMount, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
 
-  export let data;
+  let { data } = $props();
 
   const datasets = (data?.datasets ?? [])
     .slice()
     .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
-  const coverImages = datasets
-    .map((d) => (d?.slug ? `/cover/${d.slug}.png` : null))
-    .filter(Boolean);
-
+  const coverImages = [
+    "/cover/tricoloredelsangueitalico.png",
+    "/cover/afdjugendbw.png",
+    "/cover/jungenationalisten.png",
+  ];
   let zipLib = null;
   const loadZip = async () => {
     if (zipLib) return zipLib;
@@ -47,9 +48,9 @@
   };
 
   const cycleDelay = datasets.length * 1200;
-  let coverIndex = 0;
+  let coverIndex = $state(0);
   let coverTimer = null;
-  let lastCoverCount = coverImages.length;
+  let lastCoverCount = $state(coverImages.length);
 
   const startCoverCycle = () => {
     stopCoverCycle();
@@ -68,11 +69,13 @@
   onMount(startCoverCycle);
   onDestroy(stopCoverCycle);
 
-  $: if (coverImages.length !== lastCoverCount) {
-    lastCoverCount = coverImages.length;
-    coverIndex = 0;
-    startCoverCycle();
-  }
+  $effect(() => {
+    if (coverImages.length !== lastCoverCount) {
+      lastCoverCount = coverImages.length;
+      coverIndex = 0;
+      startCoverCycle();
+    }
+  });
 
   const formatRange = (start, end) => {
     if (!start || !end) return null;
@@ -278,7 +281,9 @@
       {/if}
     </section>
   </div>
-  <div class="custom-shadow justify-center flex relative z-10 w-full px-5 pt-10 bg-black">
+  <div
+    class="custom-shadow justify-center flex relative z-10 w-full px-5 pt-10 bg-black"
+  >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
       <h2 class="text-2xl p-0 m-0 text-white">Download the datasets</h2>
 
@@ -297,7 +302,7 @@
                 {dataset.label || dataset.slug}
               </span>
               <span class="text-xs whitespace-nowrap">
-                {dataset.postCount?.toLocaleString() ?? "—"} msgs · {dataset.groupCount ??
+                {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
                   "—"} groups
               </span>
             </button>

@@ -1,18 +1,21 @@
+<svelte:options runes={true} />
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
 
-  export let groups = [];
-  export let highlightColor = "yellow";
-  export let backgroundColor = "#000";
-  export let textColor = "#fff";
+  let {
+    groups = [],
+    highlightColor = "yellow",
+    backgroundColor = "#000",
+    textColor = "#fff",
+  } = $props();
 
   const dispatch = createEventDispatcher();
 
-  let state = "idle"; // idle | playing | paused | done
-  let idx = 0;
+  let state = $state("idle"); // idle | playing | paused | done
+  let idx = $state(0);
   let timer = null;
-  let visible = new Set();
-  let visitedOrder = [];
+  let visible = $state(new Set());
+  let visitedOrder = $state([]);
   const perGroupMs = 250;
 
   const reset = () => {

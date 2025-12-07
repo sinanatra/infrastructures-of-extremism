@@ -1,6 +1,7 @@
+<svelte:options runes={true} />
 <script>
   import NetworkGraph from "$lib/NetworkGraph.svelte";
-  export let data;
+  let { data } = $props();
 
   const title = data?.dataset?.label || data?.dataset?.slug || "Dataset";
 

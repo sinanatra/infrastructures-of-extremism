@@ -1,12 +1,15 @@
+<svelte:options runes={true} />
 <script>
   import NetworkControls from "$lib/NetworkControls.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
 
-  export let data;
-  export let backgroundColor = "#000000";
-  export let circleColor = "#ffffff";
-  export let textColor = "#ffffff";
-  export let highlightColor = "yellow";
+  let {
+    data,
+    backgroundColor = "#000000",
+    circleColor = "#ffffff",
+    textColor = "#ffffff",
+    highlightColor = "yellow",
+  } = $props();
   const { posts, links } = data;
   const prepared = prepareNetwork(data, { circleColor });
   const {
@@ -44,14 +47,15 @@
   const minScale = 0.1;
   const maxScale = 0.9;
 
-  let sizeMode = "links";
-  let showLinks = false;
-  let selectedEmoji = null;
-  let selectedGroupId = null;
-  $: selectedGroup =
+  let sizeMode = $state("links");
+  let showLinks = $state(false);
+  let selectedEmoji = $state(null);
+  let selectedGroupId = $state(null);
+  const selectedGroup = $derived(() =>
     selectedGroupId === null
       ? null
-      : (sliceForGroup.get(selectedGroupId)?.group ?? null);
+      : sliceForGroup.get(selectedGroupId)?.group ?? null
+  );
 
   const toggleGroup = (groupId) => {
     selectedGroupId = selectedGroupId === groupId ? null : groupId;

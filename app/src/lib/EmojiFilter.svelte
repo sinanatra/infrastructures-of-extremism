@@ -1,11 +1,14 @@
+<svelte:options runes={true} />
 <script>
   import { createEventDispatcher } from "svelte";
 
-  export let topEmojis = [];
-  export let selectedEmoji = null;
-  export let textColor = "#ffffff";
-  export let backgroundColor = "#000000";
-  export let highlightColor = "yellow";
+  let {
+    topEmojis = [],
+    selectedEmoji = null,
+    textColor = "#ffffff",
+    backgroundColor = "#000000",
+    highlightColor = "yellow",
+  } = $props();
 
   const dispatch = createEventDispatcher();
   const selectEmoji = (emoji) =>

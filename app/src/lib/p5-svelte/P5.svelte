@@ -1,9 +1,8 @@
+<svelte:options runes={true} />
 <script>
-  import { createEventDispatcher, onDestroy, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
-  export let sketch;
-  export let className = "";
-  export let style = "";
+  let { sketch, className = "", style = "" } = $props();
 
   let container;
   let instance = null;
@@ -21,4 +20,4 @@
   });
 </script>
 
-<div bind:this={container} class={className} {style} {...$$restProps}></div>
+<div bind:this={container} class={className} style={style}></div>

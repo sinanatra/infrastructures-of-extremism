@@ -1,17 +1,20 @@
+<svelte:options runes={true} />
 <script>
   import { createEventDispatcher } from "svelte";
   import EmojiFilter from "$lib/EmojiFilter.svelte";
 
-  export let counts = { posts: 0, groups: 0, links: 0 };
-  export let selectedGroup = null;
-  export let sizeMode = "links";
-  export let showLinks = false;
-  export let topEmojis = [];
-  export let selectedEmoji = null;
-  export let subscriberText = () => null;
-  export let textColor = "#ffffff";
-  export let backgroundColor = "#000000";
-  export let highlightColor = "yellow";
+  let {
+    counts = { posts: 0, groups: 0, links: 0 },
+    selectedGroup = null,
+    sizeMode = "links",
+    showLinks = false,
+    topEmojis = [],
+    selectedEmoji = null,
+    subscriberText = () => null,
+    textColor = "#ffffff",
+    backgroundColor = "#000000",
+    highlightColor = "yellow",
+  } = $props();
 
   const dispatch = createEventDispatcher();
 

@@ -6,12 +6,15 @@
   import Tooltip from "$lib/Tooltip.svelte";
   import Trailer from "$lib/Trailer.svelte";
 
-  export let data;
-  export let backgroundColor = "#000000";
-  export let circleColor = "#ffffff";
-  export let textColor = "#ffffff";
-  export let highlightColor = "yellow";
-  export let datasetSlug = null;
+  let {
+    data,
+    backgroundColor = "#000000",
+    circleColor = "#ffffff",
+    textColor = "#ffffff",
+    highlightColor: highlightColorProp = "yellow",
+    datasetSlug = null,
+  } = $props();
+
   const { posts, links } = data;
 
   const prepared = prepareNetwork(data, { circleColor });
@@ -32,27 +35,32 @@
 
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
 
+  let highlightColorFallback = $state(null);
   onMount(() => {
-    if (highlightColor) return;
+    if (highlightColorProp) return;
     const cssColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue("--highlite-color");
-    const fallback = (cssColor || highlightColor).trim();
-    highlightColor = fallback || highlightColor;
+    const fallback = (cssColor || "").trim();
+    highlightColorFallback = fallback || "yellow";
   });
-  $: highlightColor = highlightColor || highlightColor;
+
+  const highlightColor = $derived(
+    highlightColorProp ?? highlightColorFallback ?? "yellow"
+  );
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   let redrawPending = false;
 
-  let sizeMode = "links";
-  let showLinks = false;
-  let selectedEmoji = null;
-  let selectedGroupId = null;
-  $: selectedGroup =
+  let sizeMode = $state("links");
+  let showLinks = $state(false);
+  let selectedEmoji = $state(null);
+  let selectedGroupId = $state(null);
+  const selectedGroup = $derived(
     selectedGroupId === null
       ? null
-      : (sliceForGroup.get(selectedGroupId)?.group ?? null);
+      : sliceForGroup.get(selectedGroupId)?.group ?? null
+  );
 
   const tooltipForPost = (post) => {
     const groupLabel = post.chatLabel ?? post.chat;
@@ -101,7 +109,7 @@
     hoverGrid.set(key, bucket);
   }
 
-  $: topEmojis = (() => {
+  const topEmojis = $derived.by(() => {
     const counts = new Map();
     for (const node of nodes) {
       if (!node.topEmoji || node.topEmojiCount <= 0) continue;
@@ -114,7 +122,7 @@
       .sort((a, b) => b[1] - a[1])
       .slice(0, 30)
       .map(([emoji, count]) => ({ emoji, count }));
-  })();
+  });
 
   const trailerGroups = (() => {
     const labelById = new Map(
@@ -174,32 +182,39 @@
   const groupLabelById = new Map(
     slicePaths.map((s) => [s.id, s.group?.label || s.group?.id || s.id])
   );
-  let trailerVisibleGroups = null;
-  let trailerState = trailerAvailable ? "idle" : "done";
-  let trailerBlocking = trailerAvailable;
+  let trailerVisibleGroups = $state(null);
+  let trailerState = $state(trailerAvailable ? "idle" : "done");
+  let trailerBlocking = $state(trailerAvailable);
 
-  $: visibleNodes = (() => {
+  const visibleNodes = $derived.by(() => {
     const base =
       trailerVisibleGroups === null
         ? nodes
         : nodes.filter((n) => trailerVisibleGroups.has(n.groupId));
     if (selectedEmoji === null) return base;
     return base.filter((n) => n.topEmoji === selectedEmoji);
-  })();
+  });
 
-  $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+  const visibleNodeIds = $derived.by(() => new Set(visibleNodes.map((n) => n.id)));
 
-  $: visibleLinks = showLinks
-    ? linkSegments.filter(
-        (link) =>
-          visibleNodeIds.has(link.source.id) &&
-          visibleNodeIds.has(link.target.id)
-      )
-    : [];
+  const visibleLinks = $derived.by(() =>
+    showLinks
+      ? linkSegments.filter(
+          (link) =>
+            visibleNodeIds.has(link.source.id) &&
+            visibleNodeIds.has(link.target.id)
+        )
+      : []
+  );
 
-  $: if (hoveredNode && !visibleNodeIds.has(hoveredNode.id)) {
-    clearHover();
-  }
+  let hoveredNode = $state(null);
+  let hoveredText = $state("");
+
+  $effect(() => {
+    if (hoveredNode && !visibleNodeIds.has(hoveredNode.id)) {
+      clearHover();
+    }
+  });
 
   const subscriberText = (value) => {
     if (!value) return null;
@@ -213,16 +228,16 @@
   };
 
   let canvasParent = null;
-  let pInstance = null;
+  let pInstance = $state(null);
   let canvasSize = { w: 0, h: 0 };
   let controlsEl = null;
   const minScale = 0.1;
   const maxScale = 0.9;
-  let view = {
+  let view = $state({
     scale: 0.35,
     panX: 0,
     panY: 0,
-  };
+  });
   const textSizeFor = (base) => {
     const s = clamp(view.scale, minScale, maxScale);
 
@@ -231,10 +246,12 @@
   };
   const labelMetricsCache = new Map();
   let lastLabelScale = view.scale;
-  $: if (view.scale !== lastLabelScale) {
-    labelMetricsCache.clear();
-    lastLabelScale = view.scale;
-  }
+  $effect(() => {
+    if (view.scale !== lastLabelScale) {
+      labelMetricsCache.clear();
+      lastLabelScale = view.scale;
+    }
+  });
 
   const worldToScreen = (x, y) => ({
     x: (x - cx) * view.scale + canvasSize.w / 2 + view.panX,
@@ -246,8 +263,6 @@
     y: (y - canvasSize.h / 2 - view.panY) / view.scale + cy,
   });
 
-  let hoveredNode = null;
-  let hoveredText = "";
   const rotatePoint = (point, origin, angle) => {
     const dx = point.x - origin.x;
     const dy = point.y - origin.y;
@@ -427,7 +442,8 @@
     });
   };
 
-  $: if (pInstance) {
+  $effect(() => {
+    if (!pInstance) return;
     visibleNodes;
     visibleLinks;
     selectedGroupId;
@@ -443,7 +459,7 @@
     view.panX;
     view.panY;
     requestRedraw();
-  }
+  });
 
   const setupCanvasSize = (p) => {
     const w = canvasParent?.clientWidth || window.innerWidth || width;
@@ -490,7 +506,6 @@
         const w = canvasParent?.clientWidth || window.innerWidth || width;
         const h = canvasParent?.clientHeight || window.innerHeight || height;
         p.createCanvas(w, h, p.P2D);
-        // p.pixelDensity(1);
         canvasSize = { w, h };
         p.noLoop();
         p.angleMode(p.RADIANS);
@@ -752,18 +767,18 @@
           const offsetX = midX - cx;
           const offsetY = midY - cy;
           const ctrlX = midX + offsetX * 0.14;
-        const ctrlY = midY + offsetY * 0.14;
-        const stroke = p.color(highlightColor);
-        const active =
-          selectedGroupId === null ||
-          (selectedGroupId === source.groupId &&
-            selectedGroupId === target.groupId);
-        if (!active) stroke.setAlpha(30);
-        p.stroke(stroke);
-        p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
-        p.line(source.x, source.y, target.x, target.y);
-      }
-      p.pop();
+          const ctrlY = midY + offsetY * 0.14;
+          const stroke = p.color(highlightColor);
+          const active =
+            selectedGroupId === null ||
+            (selectedGroupId === source.groupId &&
+              selectedGroupId === target.groupId);
+          if (!active) stroke.setAlpha(30);
+          p.stroke(stroke);
+          p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
+          p.line(source.x, source.y, target.x, target.y);
+        }
+        p.pop();
       };
 
       const drawNodes = () => {
@@ -778,15 +793,15 @@
             screenPos.y > canvasSize.h + margin
           ) {
             continue;
-        }
-        const inGroup =
-          selectedGroupId === null || node.groupId === selectedGroupId;
-        const active = inGroup;
-        const r =
-          sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
-        const baseColor = p.color(node.color);
-        if (!active) {
-          baseColor.setAlpha(30);
+          }
+          const inGroup =
+            selectedGroupId === null || node.groupId === selectedGroupId;
+          const active = inGroup;
+          const r =
+            sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
+          const baseColor = p.color(node.color);
+          if (!active) {
+            baseColor.setAlpha(30);
           }
           p.fill(baseColor);
           p.noStroke();
@@ -856,7 +871,10 @@
       p.draw = () => {
         p.background(backgroundColor);
         p.push();
-        p.translate(canvasSize.w / 2 + view.panX, canvasSize.h / 2 + view.panY);
+        p.translate(
+          canvasSize.w / 2 + view.panX,
+          canvasSize.h / 2 + view.panY
+        );
         p.scale(view.scale);
         p.translate(-cx, -cy);
 
@@ -961,7 +979,6 @@
   {#if hoveredNode}
     <Tooltip text={hoveredText} />
   {/if}
-
 </section>
 
 <style>
