@@ -267,13 +267,6 @@
                 <div class="text-lg">
                   {dataset.label || dataset.slug}
                 </div>
-                <div class="text-sm text-gray-400">
-                  {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
-                    "—"} groups
-                  {#if formatRange(dataset.startDate, dataset.endDate)}
-                    · {formatRange(dataset.startDate, dataset.endDate)}
-                  {/if}
-                </div>
               </div>
             </a>
           {/each}
@@ -304,6 +297,9 @@
               <span class="text-xs whitespace-nowrap">
                 {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
                   "—"} groups
+                {#if formatRange(dataset.startDate, dataset.endDate)}
+                  · {formatRange(dataset.startDate, dataset.endDate)}
+                {/if}
               </span>
             </button>
           {/each}
