@@ -222,7 +222,7 @@
           entire movement (e.g. some of these groups are private, some links we
           tried to obtain were deleted, probably blocked), they expose part of
           the infrastructure that allows today's far-right ideologies to
-          circulate uncensored.The lack of moderation on Telegram allows
+          circulate uncensored. The lack of moderation on Telegram allows
           extremists to spread their views, while making their content and
           relational structures available for monitoring.
         </p>

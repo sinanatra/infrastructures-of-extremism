@@ -1,4 +1,3 @@
-<svelte:options runes={true} />
 <script>
   import { createEventDispatcher } from "svelte";
   import EmojiFilter from "$lib/EmojiFilter.svelte";
