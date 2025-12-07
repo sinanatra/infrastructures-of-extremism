@@ -108,7 +108,7 @@
     <article
       class="relative z-10 w-full max-w-2xl px-4 pt-20 pb-10 -mt-[30vh] bg-black"
     >
-      <h1 class="text-3xl mb-4 max-w-xl text-white">
+      <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
       </h1>
 
@@ -122,7 +122,7 @@
           At a rally held in Berlin on 29 November 2025 against so-called
           <em>“criminal foreigners”</em>, participants promoted channels used
           for youth recruitment and for coordinating activities at the local
-          level.Understanding how these channels operate is essential to reveal
+          level. Understanding how these channels operate is essential to reveal
           how street-level mobilisation connects to a broader digital ecosystem
           that fuels the growth of extremism.
         </p>
@@ -294,7 +294,7 @@
               <span class="truncate">
                 {dataset.label || dataset.slug}
               </span>
-              <span class="text-xs whitespace-nowrap">
+              <span class="text-xs whitespace-nowrap text-gray-700">
                 {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
                   "—"} groups
                 {#if formatRange(dataset.startDate, dataset.endDate)}

@@ -1,4 +1,5 @@
 <svelte:options runes={true} />
+
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
 
@@ -101,18 +102,37 @@
     style={`backdrop-filter:${state === "idle" ? "blur(2px)" : "none"};`}
   >
     <div
-      class={`pointer-events-auto px-5 py-4 rounded shadow-lg ${state === "idle" ? "flex flex-col gap-3 items-center max-w-2xl w-[90vw] text-center" : "flex items-center gap-3 w-[360px] max-w-full text-left"}`}
+      class={`pointer-events-auto px-5 py-4 rounded shadow-lg ${
+        state === "idle"
+          ? "flex flex-col gap-3 items-center max-w-2xl w-[90vw] text-center"
+          : "flex flex-col gap-3 w-[360px] max-w-full text-left"
+      }`}
       style={`background:${backgroundColor}; border:1px solid ${highlightColor}; color:${textColor};`}
     >
+      {#if state === "playing"}
+        <div class="w-full text-sm opacity-80">
+          Showing all groups in order of appearance.
+        </div>
+      {/if}
+
       {#if state === "idle"}
         <div class="text-2xl">
           Starting from the right-wing extremist Telegram group
-          <span class="italic" style="color: {highlightColor};">{groups[0]?.label ?? "the seed"}</span>,
-          this visualization shows the network of related channels: the ones they
+          <span class="italic" style="color: {highlightColor};">
+            {groups[0]?.label ?? "the seed"}
+          </span>
+          , this visualization shows the network of related channels: the ones they
           talk about and the ones resharing their posts.
         </div>
       {/if}
-      <div class={`flex ${state === "idle" ? "items-center justify-center gap-3" : "items-center gap-3 w-full"}`}>
+
+      <div
+        class={`flex ${
+          state === "idle"
+            ? "items-center justify-center gap-3"
+            : "items-center gap-3 w-full"
+        }`}
+      >
         {#if state === "playing"}
           <div class="flex-1 min-w-0">
             <div class="text-sm opacity-80 truncate">
@@ -123,16 +143,16 @@
             </div>
           </div>
         {/if}
+
         {#if state === "paused"}
           <div class="flex-1 min-w-0">
-            <div class="text-sm opacity-80 truncate">
-              Paused
-            </div>
+            <div class="text-sm opacity-80 truncate">Paused</div>
             <div class="text-[11px] opacity-60">
               {Math.min(idx, groups.length)} / {groups.length}
             </div>
           </div>
         {/if}
+
         {#if state === "idle"}
           <button
             class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
@@ -144,6 +164,7 @@
             Start
           </button>
         {/if}
+
         {#if state === "playing" || state === "paused"}
           <button
             class="px-3 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
@@ -154,6 +175,7 @@
             {state === "playing" ? "Pause" : "Resume"}
           </button>
         {/if}
+
         <button
           class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
           style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
