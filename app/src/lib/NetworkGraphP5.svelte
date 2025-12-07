@@ -468,14 +468,14 @@
       });
 
     try {
-      p.pixelDensity(3);
+      // p.pixelDensity(3);
       p.redraw();
       await new Promise((r) => requestAnimationFrame(r));
       await capture();
     } catch (err) {
       console.error("Export failed", err);
     } finally {
-      p.pixelDensity(prevDensity);
+      // p.pixelDensity(prevDensity);
       requestRedraw();
     }
   };

@@ -94,7 +94,7 @@
         <img
           {src}
           alt="Dataset visualization cover"
-          class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out will-change-opacity"
+          class="absolute inset-0 h-[150vh] w-full object-cover transition-opacity duration-[1200ms] ease-in-out will-change-opacity"
           style={`opacity:${coverIndex === i ? 1 : 0};`}
           loading="lazy"
           decoding="async"
