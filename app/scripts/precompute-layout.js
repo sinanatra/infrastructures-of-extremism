@@ -85,8 +85,6 @@ const findDatasets = async (preferredSlugs = []) => {
     datasets.push({ slug, dir: dirPath });
   };
 
-
-
   if (preferredSlugs.length) {
     for (const slug of preferredSlugs) {
       await tryAddDataset(slug);
@@ -126,6 +124,19 @@ const parseNumber = (value) => {
   return Number.isFinite(num) ? num : undefined;
 };
 
+const parseSubscribers = (value) => {
+  if (value == null) return undefined;
+  let s = String(value).trim();
+  let factor = 1;
+  if (/k$/i.test(s)) {
+    factor = 1000;
+    s = s.slice(0, -1);
+  }
+  s = s.replace(/[\s,]/g, "");
+  const num = Number(s);
+  return Number.isFinite(num) ? num * factor : undefined;
+};
+
 const parseDateMs = (value) => {
   const ms = Date.parse(value ?? "");
   return Number.isFinite(ms) ? ms : undefined;
@@ -144,13 +155,13 @@ const hashToUnit = (str) => {
 };
 
 const normalizeAngle = (angle) => {
-  const TAU = Math.PI * 2;
-  const wrapped = angle % TAU;
-  return wrapped < 0 ? wrapped + TAU : wrapped;
+  const tau = Math.PI * 2;
+  const wrapped = angle % tau;
+  return wrapped < 0 ? wrapped + tau : wrapped;
 };
 
 const clampAngleToSlice = (angle, slice) => {
-  const TAU = Math.PI * 2;
+  const tau = Math.PI * 2;
   const a = normalizeAngle(angle);
   const start = normalizeAngle(slice.start);
   const end = normalizeAngle(slice.end);
@@ -158,8 +169,8 @@ const clampAngleToSlice = (angle, slice) => {
     start <= end ? a >= start && a <= end : a >= start || a <= end;
   if (inSlice) return a;
   if (start <= end) return a < start ? start : end;
-  const distToStart = (start - a + TAU) % TAU;
-  const distToEnd = (a - end + TAU) % TAU;
+  const distToStart = (start - a + tau) % tau;
+  const distToEnd = (a - end + tau) % tau;
   return distToStart < distToEnd ? start : end;
 };
 
@@ -183,7 +194,7 @@ const loadData = async ({ slug, dir }) => {
     if (excludedGroupIds.has(id)) continue;
     if (excludedGroupLabels.has(label.toLowerCase())) continue;
 
-    const subscribers = parseNumber(row.subscribers);
+    const subscribers = parseSubscribers(row.subscribers);
     const existing = canonicalGroups.get(id);
     if (!existing) {
       canonicalGroups.set(id, { id, label, subscribers });
@@ -355,14 +366,14 @@ const loadData = async ({ slug, dir }) => {
 };
 
 const computeLayout = ({ posts, links, groups }) => {
-  const TAU = Math.PI * 2;
+  const tau = Math.PI * 2;
   const width = 5000;
   const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
   const innerRadius = 0;
   const outerRadius = Math.min(width, height) / 2 - 50;
-  const polygonSides = 12; 
+  const polygonSides = 12;
   const baseStart = -Math.PI / 2;
 
   const minTime = posts.length
@@ -390,11 +401,11 @@ const computeLayout = ({ posts, links, groups }) => {
     return innerRadius + fraction * (outerRadius - innerRadius);
   };
 
-  const polygonPointAtAngle = (R, n, angle) => {
+  const polygonPointAtAngle = (r, n, angle) => {
     const verts = new Array(n);
     for (let k = 0; k < n; k++) {
-      const a = baseStart + (TAU * k) / n;
-      verts[k] = { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+      const a = baseStart + (tau * k) / n;
+      verts[k] = { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
     }
 
     const dx = Math.cos(angle);
@@ -425,11 +436,11 @@ const computeLayout = ({ posts, links, groups }) => {
     }
 
     if (!best) {
-      return { x: cx + R * Math.cos(angle), y: cy + R * Math.sin(angle), r: R };
+      return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle), r };
     }
 
-    const r = Math.hypot(best.p.x - cx, best.p.y - cy);
-    return { x: best.p.x, y: best.p.y, r };
+    const finalR = Math.hypot(best.p.x - cx, best.p.y - cy);
+    return { x: best.p.x, y: best.p.y, r: finalR };
   };
 
   const linkCountByPost = new Map();
@@ -494,6 +505,7 @@ const computeLayout = ({ posts, links, groups }) => {
         id: chat,
         label: chat,
         postCount: postCountByGroup.get(chat) ?? 0,
+        subscribers: undefined,
       });
     }
   }
@@ -507,10 +519,10 @@ const computeLayout = ({ posts, links, groups }) => {
       const aPosts = a.postCount ?? 0;
       const bPosts = b.postCount ?? 0;
       if (aPosts !== bPosts) return bPosts - aPosts;
-      return a.label.localeCompare(b.label);
+      return (a.label || "").localeCompare(b.label || "");
     });
 
-  const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
+  const sliceAngle = orderedGroups.length ? tau / orderedGroups.length : tau;
   const sliceGap = Math.min(0.12, sliceAngle * 0.08);
 
   const colorForGroup = () => "#ffffff";
@@ -520,7 +532,7 @@ const computeLayout = ({ posts, links, groups }) => {
   );
   const perSliceGap = Math.min(0.08, sliceAngle * 0.08);
   const totalGap = perSliceGap * orderedGroups.length;
-  const availableAngle = Math.max(TAU - totalGap, TAU * 0.7);
+  const availableAngle = Math.max(tau - totalGap, tau * 0.7);
 
   const labelRadius = outerRadius + 64;
   const labelCharPx = 9;
@@ -610,12 +622,15 @@ const computeLayout = ({ posts, links, groups }) => {
       const post = groupPosts[i];
       const rank = withinDayRank.get(post.id);
       const dayIndex =
-        rank?.dayIndex ?? Math.max(0, Math.floor((post.dateMs - minTime) / dayMs));
+        rank?.dayIndex ??
+        Math.max(0, Math.floor((post.dateMs - minTime) / dayMs));
       const dayPos = orderByDay.get(dayIndex) ?? 0;
       const baseFraction = dayPos * perDaySpan + dayGap / 2;
       const dayTotal = rank?.total ?? 1;
       const within =
-        dayTotal > 1 ? (rank.idx / (dayTotal - 1)) * usablePerDay : usablePerDay * 0.5;
+        dayTotal > 1
+          ? (rank.idx / (dayTotal - 1)) * usablePerDay
+          : usablePerDay * 0.5;
       const fraction = clamp(baseFraction + within, 0, 1);
       const angleBase = slice.start + edgePad + fraction * usableAngle;
       const preferredAngle = clampAngleToSlice(angleBase, slice);
@@ -713,7 +728,11 @@ const computeLayout = ({ posts, links, groups }) => {
         const clampedAngle = clampAngleToSlice(currentAngle, slice);
         if (clampedAngle !== currentAngle) {
           const radial = Math.hypot(node.x - cx, node.y - cy);
-          const mapped = polygonPointAtAngle(radial, polygonSides, clampedAngle);
+          const mapped = polygonPointAtAngle(
+            radial,
+            polygonSides,
+            clampedAngle
+          );
           const x = mapped.x;
           const y = mapped.y;
           node.vx += (x - node.x) * 0.18;
@@ -827,7 +846,11 @@ const computeLayout = ({ posts, links, groups }) => {
 
     for (const node of nodes) {
       const angle = Math.atan2(node.y - cy, node.x - cx);
-      const finalPt = polygonPointAtAngle(node.targetRadius, polygonSides, angle);
+      const finalPt = polygonPointAtAngle(
+        node.targetRadius,
+        polygonSides,
+        angle
+      );
       node.x = finalPt.x;
       node.y = finalPt.y;
     }
