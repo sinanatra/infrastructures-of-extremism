@@ -371,8 +371,10 @@ const computeLayout = ({ posts, links, groups }) => {
   const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
-  const innerRadius = 0;
-  const outerRadius = Math.min(width, height) / 2 - 50;
+  // const outerRadius = Math.min(width, height) / 2 - 50;
+  const outerRadius = Math.max(width, height) / 1.2;
+  const innerRadius = outerRadius * 0.05;
+
   const polygonSides = 12;
   const baseStart = -Math.PI / 2;
 
@@ -385,8 +387,8 @@ const computeLayout = ({ posts, links, groups }) => {
 
   const sortedTimes = [...posts.map((p) => p.dateMs)].sort((a, b) => a - b);
   const dayMs = 24 * 60 * 60 * 1000;
-  const maxDayIndex = Math.max(0, Math.floor((maxTime - minTime) / dayMs));
-  const radiusForTime = (ms) => {
+
+  const radiusForTimeRaw = (ms) => {
     const total = sortedTimes.length;
     if (total === 0) return (innerRadius + outerRadius) / 2;
     if (total === 1) return (innerRadius + outerRadius) / 2;
@@ -399,6 +401,49 @@ const computeLayout = ({ posts, links, groups }) => {
     }
     const fraction = Math.min(1, lo / (total - 1));
     return innerRadius + fraction * (outerRadius - innerRadius);
+  };
+
+  const minTimeDate = new Date(minTime);
+  const minDayStartMs = Date.UTC(
+    minTimeDate.getUTCFullYear(),
+    minTimeDate.getUTCMonth(),
+    minTimeDate.getUTCDate(),
+    0,
+    0,
+    0,
+    0
+  );
+
+  const dayIndexForMs = (ms) =>
+    Math.max(0, Math.floor((ms - minDayStartMs) / dayMs));
+
+  const dayBuckets = new Map();
+  for (const post of posts) {
+    const dayIndex = dayIndexForMs(post.dateMs);
+    let bucket = dayBuckets.get(dayIndex);
+    if (!bucket) {
+      bucket = [];
+      dayBuckets.set(dayIndex, bucket);
+    }
+    bucket.push(post);
+  }
+
+  const dayRadiusMap = new Map();
+  for (const [dayIndex, bucket] of dayBuckets.entries()) {
+    let sum = 0;
+    for (const post of bucket) {
+      sum += radiusForTimeRaw(post.dateMs);
+    }
+    const avg = sum / bucket.length;
+    dayRadiusMap.set(dayIndex, avg);
+  }
+
+  const radiusForTime = (ms) => {
+    if (!posts.length) return (innerRadius + outerRadius) / 2;
+    const dayIndex = dayIndexForMs(ms);
+    const r = dayRadiusMap.get(dayIndex);
+    if (typeof r === "number") return r;
+    return radiusForTimeRaw(ms);
   };
 
   const polygonPointAtAngle = (r, n, angle) => {
@@ -857,40 +902,97 @@ const computeLayout = ({ posts, links, groups }) => {
   };
 
   simulate(200);
-
   const ringTicks = (() => {
-    if (!sortedTimes.length) return [];
-    const start = new Date(minTime);
-    const end = new Date(maxTime);
-
-    let cursor = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), 1, 0, 0, 0);
-    const first = Date.UTC(
-      start.getUTCFullYear(),
-      start.getUTCMonth(),
+    if (!sortedTimes.length || !posts.length) return [];
+    const monthCounts = new Map();
+    for (const post of posts) {
+      const d = new Date(post.dateMs);
+      const key = d.getUTCFullYear() * 12 + d.getUTCMonth();
+      monthCounts.set(key, (monthCounts.get(key) ?? 0) + 1);
+    }
+    const startDate = new Date(minTime);
+    const endDate = new Date(maxTime);
+    let cursor = Date.UTC(
+      startDate.getUTCFullYear(),
+      startDate.getUTCMonth(),
       1,
       0,
       0,
       0
     );
-    const ticks = [];
-    const minRadiusGap = 220;
-    let lastRadius = Infinity;
-    while (cursor >= first) {
-      const r = radiusForTime(cursor);
-      if (ticks.length === 0 || lastRadius - r >= minRadiusGap) {
-        ticks.push(cursor);
-        lastRadius = r;
-      }
-
+    const lastMonthMs = Date.UTC(
+      endDate.getUTCFullYear(),
+      endDate.getUTCMonth(),
+      1,
+      0,
+      0,
+      0
+    );
+    const monthInfo = [];
+    while (cursor <= lastMonthMs) {
       const d = new Date(cursor);
-      cursor = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1, 0, 0, 0);
+      const key = d.getUTCFullYear() * 12 + d.getUTCMonth();
+      const hasPosts = (monthCounts.get(key) ?? 0) > 0;
+      const radius = radiusForTime(cursor);
+      monthInfo.push({ time: cursor, radius, hasPosts });
+      cursor = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1, 0, 0, 0);
     }
-    return ticks
-      .sort((a, b) => a - b)
-      .map((t) => ({
-        time: t,
-        radius: radiusForTime(t),
-      }));
+    if (!monthInfo.length) return [];
+    const span = outerRadius - innerRadius;
+    const minRadiusGap = span / 10;
+    const baseTicks = [];
+    let lastRadius = -Infinity;
+    for (const m of monthInfo) {
+      if (!m.hasPosts) continue;
+      if (!baseTicks.length || m.radius - lastRadius >= minRadiusGap) {
+        baseTicks.push({ time: m.time, radius: m.radius, empty: false });
+        lastRadius = m.radius;
+      }
+    }
+    if (!baseTicks.length) {
+      const mid = monthInfo[Math.floor(monthInfo.length / 2)];
+      return [{ time: mid.time, radius: mid.radius, empty: true }];
+    }
+    const indexByTime = new Map(monthInfo.map((m, i) => [m.time, i]));
+    const gapTicks = [];
+    const gapMonthsThreshold = 3;
+    for (let i = 0; i < baseTicks.length - 1; i++) {
+      const a = baseTicks[i];
+      const b = baseTicks[i + 1];
+      const ai = indexByTime.get(a.time);
+      const bi = indexByTime.get(b.time);
+      if (ai == null || bi == null || bi - ai <= 1) continue;
+      let longestStart = -1;
+      let longestLen = 0;
+      let currentStart = -1;
+      let currentLen = 0;
+      for (let j = ai + 1; j < bi; j++) {
+        const m = monthInfo[j];
+        if (!m.hasPosts) {
+          if (currentStart === -1) currentStart = j;
+          currentLen++;
+        } else if (currentLen > 0) {
+          if (currentLen > longestLen) {
+            longestLen = currentLen;
+            longestStart = currentStart;
+          }
+          currentStart = -1;
+          currentLen = 0;
+        }
+      }
+      if (currentLen > 0 && currentLen > longestLen) {
+        longestLen = currentLen;
+        longestStart = currentStart;
+      }
+      if (longestLen >= gapMonthsThreshold && longestStart !== -1) {
+        const midIndex = longestStart + Math.floor(longestLen / 2);
+        const m = monthInfo[midIndex];
+        gapTicks.push({ time: m.time, radius: m.radius, empty: true });
+      }
+    }
+    const allTicks = [...baseTicks, ...gapTicks];
+    allTicks.sort((a, b) => a.time - b.time);
+    return allTicks;
   })();
 
   return {
