@@ -85,6 +85,8 @@ const findDatasets = async (preferredSlugs = []) => {
     datasets.push({ slug, dir: dirPath });
   };
 
+
+
   if (preferredSlugs.length) {
     for (const slug of preferredSlugs) {
       await tryAddDataset(slug);
@@ -358,8 +360,10 @@ const computeLayout = ({ posts, links, groups }) => {
   const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
-  const innerRadius = 50;
+  const innerRadius = 0;
   const outerRadius = Math.min(width, height) / 2 - 50;
+  const polygonSides = 8; 
+  const baseStart = -Math.PI / 2;
 
   const minTime = posts.length
     ? Math.min(...posts.map((p) => p.dateMs))
@@ -386,7 +390,48 @@ const computeLayout = ({ posts, links, groups }) => {
     return innerRadius + fraction * (outerRadius - innerRadius);
   };
 
-  // Count how many times a post is referenced (shared) as a target.
+  const polygonPointAtAngle = (R, n, angle) => {
+    const verts = new Array(n);
+    for (let k = 0; k < n; k++) {
+      const a = baseStart + (TAU * k) / n;
+      verts[k] = { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+    }
+
+    const dx = Math.cos(angle);
+    const dy = Math.sin(angle);
+    let best = null;
+
+    for (let k = 0; k < n; k++) {
+      const p1 = verts[k];
+      const p2 = verts[(k + 1) % n];
+      const a1x = p1.x - cx;
+      const a1y = p1.y - cy;
+      const ex = p2.x - p1.x;
+      const ey = p2.y - p1.y;
+
+      const det = ex * -dy - -dx * ey;
+      if (Math.abs(det) < 1e-12) continue;
+
+      const u = (a1x * dy - dx * a1y) / det;
+      const t = (a1x * ey - ex * a1y) / det;
+
+      if (u >= -1e-9 && u <= 1 + 1e-9 && t >= 0) {
+        if (!best || t < best.t) {
+          const px = cx + t * dx;
+          const py = cy + t * dy;
+          best = { t, p: { x: px, y: py } };
+        }
+      }
+    }
+
+    if (!best) {
+      return { x: cx + R * Math.cos(angle), y: cy + R * Math.sin(angle), r: R };
+    }
+
+    const r = Math.hypot(best.p.x - cx, best.p.y - cy);
+    return { x: best.p.x, y: best.p.y, r };
+  };
+
   const linkCountByPost = new Map();
   const forwardCountByPost = new Map();
   for (const link of links) {
@@ -401,7 +446,6 @@ const computeLayout = ({ posts, links, groups }) => {
       );
     }
   }
-  // Use forward counts for sizing when available, falling back to generic link counts.
   const sizeCountByPost = new Map(linkCountByPost);
   for (const [postId, count] of forwardCountByPost.entries()) {
     sizeCountByPost.set(postId, count);
@@ -419,7 +463,6 @@ const computeLayout = ({ posts, links, groups }) => {
     const v = Math.max(0, value ?? 0);
     if (!maxReactions) return minNodeRadius;
     const span = maxNodeRadiusDesired - minNodeRadius;
-    // Slightly compress reaction-based sizes to avoid excessive overlap in reaction view.
     return minNodeRadius + Math.sqrt(v / maxReactions) * span * 0.8;
   };
 
@@ -469,7 +512,6 @@ const computeLayout = ({ posts, links, groups }) => {
 
   const sliceAngle = orderedGroups.length ? TAU / orderedGroups.length : TAU;
   const sliceGap = Math.min(0.12, sliceAngle * 0.08);
-  const baseStart = -Math.PI / 2;
 
   const colorForGroup = () => "#ffffff";
 
@@ -534,7 +576,6 @@ const computeLayout = ({ posts, links, groups }) => {
     const edgePad = sliceSpan * 0.02;
     const usableAngle = Math.max(0.001, sliceSpan - edgePad * 2);
 
-    // Bucket by day; within each day sort by popularity (views desc, then forwards/reactions/date).
     const dayBuckets = new Map();
     for (const post of groupPosts) {
       const dayIndex = Math.max(0, Math.floor((post.dateMs - minTime) / dayMs));
@@ -587,8 +628,9 @@ const computeLayout = ({ posts, links, groups }) => {
       const collisionRadius = Math.max(radiusReactions, radiusLinks);
 
       const angle = preferredAngle;
-      const x = cx + radial * Math.cos(angle);
-      const y = cy + radial * Math.sin(angle);
+      const pt = polygonPointAtAngle(radial, polygonSides, angle);
+      const x = pt.x;
+      const y = pt.y;
 
       nodes.push({
         index: nodeIndex++,
@@ -655,8 +697,13 @@ const computeLayout = ({ posts, links, groups }) => {
         const slice = sliceForGroup.get(node.groupId);
         if (!slice) continue;
 
-        const targetX = cx + node.targetRadius * Math.cos(node.preferredAngle);
-        const targetY = cy + node.targetRadius * Math.sin(node.preferredAngle);
+        const targetPt = polygonPointAtAngle(
+          node.targetRadius,
+          polygonSides,
+          node.preferredAngle
+        );
+        const targetX = targetPt.x;
+        const targetY = targetPt.y;
         node.vx += (targetX - node.x) * anchorStrength;
         node.vy += (targetY - node.y) * anchorStrength;
 
@@ -666,8 +713,9 @@ const computeLayout = ({ posts, links, groups }) => {
         const clampedAngle = clampAngleToSlice(currentAngle, slice);
         if (clampedAngle !== currentAngle) {
           const radial = Math.hypot(node.x - cx, node.y - cy);
-          const x = cx + radial * Math.cos(clampedAngle);
-          const y = cy + radial * Math.sin(clampedAngle);
+          const mapped = polygonPointAtAngle(radial, polygonSides, clampedAngle);
+          const x = mapped.x;
+          const y = mapped.y;
           node.vx += (x - node.x) * 0.18;
           node.vy += (y - node.y) * 0.18;
         }
@@ -725,14 +773,11 @@ const computeLayout = ({ posts, links, groups }) => {
         node.x += node.vx;
         node.y += node.vy;
 
-        const radial = Math.hypot(node.x - cx, node.y - cy);
         const target = node.targetRadius;
-        const bounded = clamp(radial, target - 4, target + 4);
-        if (Math.abs(radial - bounded) > 0.01) {
-          const angle = Math.atan2(node.y - cy, node.x - cx);
-          node.x = cx + bounded * Math.cos(angle);
-          node.y = cy + bounded * Math.sin(angle);
-        }
+        const angle = Math.atan2(node.y - cy, node.x - cx);
+        const snapped = polygonPointAtAngle(target, polygonSides, angle);
+        node.x = snapped.x;
+        node.y = snapped.y;
       }
     }
 
@@ -781,14 +826,10 @@ const computeLayout = ({ posts, links, groups }) => {
     resolvePass();
 
     for (const node of nodes) {
-      const radial = Math.hypot(node.x - cx, node.y - cy);
-      const target = node.targetRadius;
-      const bounded = clamp(radial, target - 1, target + 1);
-      if (Math.abs(radial - bounded) > 0.01) {
-        const angle = Math.atan2(node.y - cy, node.x - cx);
-        node.x = cx + bounded * Math.cos(angle);
-        node.y = cy + bounded * Math.sin(angle);
-      }
+      const angle = Math.atan2(node.y - cy, node.x - cx);
+      const finalPt = polygonPointAtAngle(node.targetRadius, polygonSides, angle);
+      node.x = finalPt.x;
+      node.y = finalPt.y;
     }
   };
 
@@ -844,6 +885,7 @@ const computeLayout = ({ posts, links, groups }) => {
       collisionRadius: n.collisionRadius,
     })),
     ringTicks,
+    polygonSides,
     generatedAt: new Date().toISOString(),
   };
 };

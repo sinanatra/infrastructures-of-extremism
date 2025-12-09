@@ -25,8 +25,11 @@
     nodes,
     sizeStats,
     ringTicks,
+    ringPaths,
     innerTicks,
     outerTick,
+    outerPolygonPath,
+    polygonSides,
     radialPosts,
     ticksByRadius,
     linkCountByPost,
@@ -79,6 +82,16 @@
   };
 
   let hoverTick = null;
+
+  const baseStart = -Math.PI / 2;
+  const polygonPathFor = (R, n) => {
+    if (!Number.isFinite(R) || n < 3) return null;
+    const pts = new Array(n).fill(0).map((_, k) => {
+      const a = baseStart + (Math.PI * 2 * k) / n;
+      return `${cx + R * Math.cos(a)} ${cy + R * Math.sin(a)}`;
+    });
+    return `M ${pts.join(" L ")} Z`;
+  };
 
   const toViewCoords = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -342,16 +355,27 @@
 
       {#if hoverTick}
         <g>
-          <circle
-            {cx}
-            {cy}
-            r={hoverTick.radius}
-            fill="none"
-            class="guide"
-            stroke="var(--highlite-color)"
-            stroke-dasharray="4 6"
-            opacity="0.7"
-          />
+          {#if polygonSides}
+            <path
+              d={polygonPathFor(hoverTick.radius, polygonSides)}
+              fill="none"
+              class="guide"
+              stroke="var(--highlite-color)"
+              stroke-dasharray="4 6"
+              opacity="0.7"
+            />
+          {:else}
+            <circle
+              {cx}
+              {cy}
+              r={hoverTick.radius}
+              fill="none"
+              class="guide"
+              stroke="var(--highlite-color)"
+              stroke-dasharray="4 6"
+              opacity="0.7"
+            />
+          {/if}
           <text
             x={cx}
             y={cy - hoverTick.radius - 12}
@@ -417,19 +441,30 @@
       </g>
 
       <g class="rings">
-        {#if innerTicks.length}
-          {#each innerTicks as tick}
+        {#if ringPaths.length}
+            {#each ringPaths as tick}
             <g>
-              <circle
-                class="guide"
-                {cx}
-                {cy}
-                r={tick.radius}
-                fill="none"
-                stroke="var(--highlite-color)"
-                stroke-width="0.8"
-                stroke-dasharray="3 5"
-              />
+                {#if tick.path}
+                  <path
+                    d={tick.path}
+                    fill="none"
+                    class="guide"
+                    stroke="var(--highlite-color)"
+                    stroke-width="0.8"
+                    stroke-dasharray="3 5"
+                  />
+                {:else}
+                  <circle
+                    class="guide"
+                    {cx}
+                    {cy}
+                    r={tick.radius}
+                    fill="none"
+                    stroke="var(--highlite-color)"
+                    stroke-width="0.8"
+                    stroke-dasharray="3 5"
+                  />
+                {/if}
               <text
                 class="guide"
                 x={cx}
@@ -449,16 +484,27 @@
 
         {#if outerTick}
           <g>
-            <circle
-              {cx}
-              {cy}
-              r={outerRingRadius}
-              fill="none"
-              class="guide"
-              stroke="var(--highlite-color)"
-              stroke-width="0.8"
-              stroke-dasharray="3 5"
-            />
+            {#if outerPolygonPath}
+              <path
+                d={outerPolygonPath}
+                fill="none"
+                class="guide"
+                stroke="var(--highlite-color)"
+                stroke-width="0.8"
+                stroke-dasharray="3 5"
+              />
+            {:else}
+              <circle
+                {cx}
+                {cy}
+                r={outerRingRadius}
+                fill="none"
+                class="guide"
+                stroke="var(--highlite-color)"
+                stroke-width="0.8"
+                stroke-dasharray="3 5"
+              />
+            {/if}
             <text
               x={cx}
               y={cy - outerRingRadius - 12}

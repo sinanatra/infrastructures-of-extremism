@@ -18,6 +18,8 @@ export const prepareNetwork = (
   const viewPadding = VIEW_PADDING;
   const innerRadius = INNER_RADIUS;
   const outerRadius = Math.min(width, height) / 2 - 50;
+  const baseStart = -Math.PI / 2;
+  const polygonSides = layout?.polygonSides ?? 12;
 
   const postCountByGroup = new Map();
   const postLabelByGroup = new Map();
@@ -223,6 +225,15 @@ export const prepareNetwork = (
     y: cy + radius * Math.sin(angle),
   });
 
+  const polygonPath = (R, n) => {
+    if (!Number.isFinite(R) || n < 3) return "";
+    const pts = new Array(n).fill(0).map((_, k) => {
+      const a = baseStart + (TAU * k) / n;
+      return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+    });
+    return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+  };
+
   const arcPath = (r0, r1, startAngle, endAngle) => {
     const delta = normalizeAngle(endAngle - startAngle) || TAU;
     const end = startAngle + delta;
@@ -274,6 +285,11 @@ export const prepareNetwork = (
   });
 
   const ringTicks = layout?.ringTicks ?? [];
+  const ringPaths = ringTicks.map((t) => ({
+    time: t.time,
+    radius: t.radius,
+    path: polygonPath(t.radius, polygonSides),
+  }));
   const outerTick = ringTicks.length ? ringTicks[ringTicks.length - 1] : null;
   const innerTicks =
     ringTicks.length > 1 ? ringTicks.slice(0, ringTicks.length - 1) : [];
@@ -290,6 +306,7 @@ export const prepareNetwork = (
     Math.min(width, height) / 2 - 50;
 
   const ticksByRadius = [...ringTicks].sort((a, b) => a.radius - b.radius);
+  const outerPolygonPath = polygonPath(outerRingRadius, polygonSides);
 
   return {
     width,
@@ -304,11 +321,14 @@ export const prepareNetwork = (
     linkPaths,
     nodes,
     sizeStats,
+    polygonSides,
     ringTicks,
+    ringPaths,
     innerTicks,
     outerTick,
     radialPosts,
     outerRingRadius,
+    outerPolygonPath,
     ticksByRadius,
     linkCountByPost,
     sliceForGroup,

@@ -26,9 +26,12 @@
     cy,
     slicePaths,
     ringTicks,
+    ringPaths,
     innerTicks,
     outerTick,
     outerRingRadius,
+    outerPolygonPath,
+    polygonSides,
     nodes,
     linkCountByPost,
     sliceForGroup,
@@ -863,6 +866,8 @@
         }
       };
 
+      const baseStart = -Math.PI / 2;
+
       const drawRings = () => {
         p.push();
         p.noFill();
@@ -875,7 +880,16 @@
         p.noFill();
 
         for (const tick of innerTicks) {
-          p.circle(cx, cy, tick.radius * 2);
+          if (polygonSides && polygonSides >= 3) {
+            p.beginShape();
+            for (let k = 0; k < polygonSides; k++) {
+              const a = baseStart + (Math.PI * 2 * k) / polygonSides;
+              p.vertex(cx + tick.radius * Math.cos(a), cy + tick.radius * Math.sin(a));
+            }
+            p.endShape(p.CLOSE);
+          } else {
+            p.circle(cx, cy, tick.radius * 2);
+          }
           p.push();
           p.noStroke();
           p.fill(highlightColor);
@@ -889,7 +903,16 @@
           p.pop();
         }
         if (outerTick) {
-          p.circle(cx, cy, outerRingRadius * 2);
+          if (polygonSides && polygonSides >= 3) {
+            p.beginShape();
+            for (let k = 0; k < polygonSides; k++) {
+              const a = baseStart + (Math.PI * 2 * k) / polygonSides;
+              p.vertex(cx + outerRingRadius * Math.cos(a), cy + outerRingRadius * Math.sin(a));
+            }
+            p.endShape(p.CLOSE);
+          } else {
+            p.circle(cx, cy, outerRingRadius * 2);
+          }
           p.push();
           p.noStroke();
           p.fill(highlightColor);
