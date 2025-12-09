@@ -282,7 +282,7 @@
 
   const sliceLabelMetrics = (slice) => {
     if (!pInstance) return null;
-    const size = textSizeFor(14);
+    const size = textSizeFor(24);
     const cacheKey = `${slice.id}-${size.toFixed(3)}`;
     const cached = labelMetricsCache.get(cacheKey);
     if (cached) return cached;
@@ -298,6 +298,7 @@
     labelMetricsCache.set(cacheKey, metrics);
     return metrics;
   };
+
   const labelCorners = (pos, metrics, rotation, anchor) => {
     const halfH = metrics.height / 2;
     const startX = anchor === "end" ? -metrics.width : 0;
@@ -367,25 +368,26 @@
 
   const hitSliceLabel = (sx, sy, paddingScreen = 10) => {
     if (!pInstance) return null;
-    const padding = paddingScreen;
     for (const slice of slicePaths) {
       const metrics = sliceLabelMetrics(slice);
       if (!metrics) continue;
       const pos = slice.labelPos;
       const rotation = (slice.labelRotation * Math.PI) / 180;
-      const rotated = rotatePoint(screenToWorld(sx, sy), pos, -rotation);
-      const localX = rotated.x - pos.x;
-      const localY = rotated.y - pos.y;
-      const startX = slice.labelAnchor === "end" ? -metrics.width : 0;
-      const endX = startX + metrics.width;
-      const withinX = localX >= startX - padding && localX <= endX + padding;
-      const withinY =
-        localY >= -metrics.ascent - padding &&
-        localY <= metrics.descent + padding;
+      const cornersWorld = labelCorners(
+        pos,
+        metrics,
+        rotation,
+        slice.labelAnchor
+      );
+      let box = boxFromCorners(cornersWorld);
+      box = inflateBox(box, paddingScreen);
+      const withinX = sx >= box.minX && sx <= box.maxX;
+      const withinY = sy >= box.minY && sy <= box.maxY;
       if (withinX && withinY) return slice;
     }
     return null;
   };
+
   let cursorMode = "grab";
 
   const setCursor = (mode, canvasOverride = null) => {
@@ -884,7 +886,10 @@
             p.beginShape();
             for (let k = 0; k < polygonSides; k++) {
               const a = baseStart + (Math.PI * 2 * k) / polygonSides;
-              p.vertex(cx + tick.radius * Math.cos(a), cy + tick.radius * Math.sin(a));
+              p.vertex(
+                cx + tick.radius * Math.cos(a),
+                cy + tick.radius * Math.sin(a)
+              );
             }
             p.endShape(p.CLOSE);
           } else {
@@ -907,7 +912,10 @@
             p.beginShape();
             for (let k = 0; k < polygonSides; k++) {
               const a = baseStart + (Math.PI * 2 * k) / polygonSides;
-              p.vertex(cx + outerRingRadius * Math.cos(a), cy + outerRingRadius * Math.sin(a));
+              p.vertex(
+                cx + outerRingRadius * Math.cos(a),
+                cy + outerRingRadius * Math.sin(a)
+              );
             }
             p.endShape(p.CLOSE);
           } else {
