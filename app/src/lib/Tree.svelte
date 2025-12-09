@@ -129,7 +129,7 @@
 
     const edgesG = zoomG
       .append("g")
-      .attr("stroke", theme.textColor)
+      .attr("stroke", theme.highlightColor)
       .attr("stroke-opacity", 0.35)
       .attr("stroke-width", 1.3)
       .attr("fill", "none");
@@ -158,13 +158,13 @@
 
     node
       .append("circle")
-      .attr("r", (id) => (id === seed ? 20 : 13))
-      .attr("fill", theme.highlightColor);
+      .attr("r", 5)
+      .attr("fill", theme.textColor);
 
     node
       .append("text")
-      .attr("x", 28)
-      .attr("dy", "0.35em")
+      .attr("x", 0)
+      .attr("dy", "-0.45em")
       .attr("fill", theme.textColor)
       .attr("font-size", 17)
       .text((id) => groupInfo.get(id)?.label || id);

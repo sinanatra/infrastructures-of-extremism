@@ -371,9 +371,8 @@ const computeLayout = ({ posts, links, groups }) => {
   const height = 5000;
   const cx = width / 2;
   const cy = height / 2;
-  // const outerRadius = Math.min(width, height) / 2 - 50;
   const outerRadius = Math.max(width, height) / 1.2;
-  const innerRadius = outerRadius * 0.05;
+  const innerRadius = outerRadius * 0.01;
 
   const polygonSides = 12;
   const baseStart = -Math.PI / 2;
@@ -388,10 +387,29 @@ const computeLayout = ({ posts, links, groups }) => {
   const sortedTimes = [...posts.map((p) => p.dateMs)].sort((a, b) => a - b);
   const dayMs = 24 * 60 * 60 * 1000;
 
+  const bigGapThresholdDays = 30;
+  const bigGapThresholdMs = bigGapThresholdDays * dayMs;
+
+  const gapBreakTimes = [];
+  if (sortedTimes.length > 1) {
+    for (let i = 1; i < sortedTimes.length; i++) {
+      const gap = sortedTimes[i] - sortedTimes[i - 1];
+      if (gap > bigGapThresholdMs) {
+        gapBreakTimes.push(sortedTimes[i]);
+      }
+    }
+  }
+
+  const rawSpan = outerRadius - innerRadius;
+  const gapRadiusPx = 50;
+  const totalGapPx = gapRadiusPx * gapBreakTimes.length;
+  const baseSpan = Math.max(rawSpan - totalGapPx, rawSpan * 0.8);
+
   const radiusForTimeRaw = (ms) => {
     const total = sortedTimes.length;
     if (total === 0) return (innerRadius + outerRadius) / 2;
     if (total === 1) return (innerRadius + outerRadius) / 2;
+
     let lo = 0;
     let hi = total;
     while (lo < hi) {
@@ -400,7 +418,15 @@ const computeLayout = ({ posts, links, groups }) => {
       else hi = mid;
     }
     const fraction = Math.min(1, lo / (total - 1));
-    return innerRadius + fraction * (outerRadius - innerRadius);
+    let r = innerRadius + fraction * baseSpan;
+
+    let gapsBefore = 0;
+    for (let i = 0; i < gapBreakTimes.length; i++) {
+      if (ms >= gapBreakTimes[i]) gapsBefore++;
+    }
+    if (gapsBefore > 0) r += gapsBefore * gapRadiusPx;
+
+    return r;
   };
 
   const minTimeDate = new Date(minTime);
