@@ -1,4 +1,3 @@
-<svelte:options runes={true} />
 <script>
   import NetworkControls from "$lib/NetworkControls.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
@@ -57,7 +56,7 @@
   const selectedGroup = $derived(() =>
     selectedGroupId === null
       ? null
-      : sliceForGroup.get(selectedGroupId)?.group ?? null
+      : (sliceForGroup.get(selectedGroupId)?.group ?? null)
   );
 
   const toggleGroup = (groupId) => {
@@ -163,37 +162,40 @@
     return lines.join("\n");
   };
 
-  $: topEmojis =
-    (() => {
-      const counts = new Map();
-      for (const node of nodes) {
-        if (!node.topEmoji || node.topEmojiCount <= 0) continue;
-        counts.set(
-          node.topEmoji,
-          (counts.get(node.topEmoji) ?? 0) + node.topEmojiCount
-        );
-      }
-      return [...counts.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 30)
-        .map(([emoji, count]) => ({ emoji, count }));
-    })();
+  const topEmojis = $derived(() => {
+    const counts = new Map();
+    for (const node of nodes) {
+      if (!node.topEmoji || node.topEmojiCount <= 0) continue;
+      counts.set(
+        node.topEmoji,
+        (counts.get(node.topEmoji) ?? 0) + node.topEmojiCount
+      );
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 30)
+      .map(([emoji, count]) => ({ emoji, count }));
+  });
 
-  $: visibleNodes =
+  const visibleNodes = $derived(() =>
     nodes.filter(
       (n) =>
         (selectedGroupId === null || n.groupId === selectedGroupId) &&
         (selectedEmoji === null || n.topEmoji === selectedEmoji)
-    );
+    )
+  );
 
-  $: visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+  const visibleNodeIds = $derived(() => new Set(visibleNodes.map((n) => n.id)));
 
-  $: visibleLinks = showLinks
-    ? linkPaths.filter(
-        (link) =>
-          visibleNodeIds.has(link.sourceId) && visibleNodeIds.has(link.targetId)
-      )
-    : [];
+  const visibleLinks = $derived(() =>
+    showLinks
+      ? linkPaths.filter(
+          (link) =>
+            visibleNodeIds.has(link.sourceId) &&
+            visibleNodeIds.has(link.targetId)
+        )
+      : []
+  );
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const nodeSize = (node) =>
@@ -288,9 +290,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
-        textColor={textColor}
-        backgroundColor={backgroundColor}
-        highlightColor={highlightColor}
+        {textColor}
+        {backgroundColor}
+        {highlightColor}
         on:sizeMode={(event) => {
           sizeMode = event.detail;
         }}
@@ -409,14 +411,16 @@
                 class="cursor-pointer"
                 role="presentation"
               >
-              <circle
-                r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
-                fill={node.color}
-                fill-opacity="1"
-                stroke="var(--graph-bg)"
-                stroke-width="0.7"
-                stroke-opacity="0.7"
-              />
+                <circle
+                  r={sizeMode === "links"
+                    ? node.radiusLinks
+                    : node.radiusReactions}
+                  fill={node.color}
+                  fill-opacity="1"
+                  stroke="var(--graph-bg)"
+                  stroke-width="0.7"
+                  stroke-opacity="0.7"
+                />
                 <title>{tooltipForPost(node.post)}</title>
               </g>
             </a>
@@ -427,7 +431,9 @@
               role="presentation"
             >
               <circle
-                r={sizeMode === "links" ? node.radiusLinks : node.radiusReactions}
+                r={sizeMode === "links"
+                  ? node.radiusLinks
+                  : node.radiusReactions}
                 fill={node.color}
                 fill-opacity="1"
                 stroke="var(--graph-bg)"
@@ -442,29 +448,29 @@
 
       <g class="rings">
         {#if ringPaths.length}
-            {#each ringPaths as tick}
+          {#each ringPaths as tick}
             <g>
-                {#if tick.path}
-                  <path
-                    d={tick.path}
-                    fill="none"
-                    class="guide"
-                    stroke="var(--highlite-color)"
-                    stroke-width="0.8"
-                    stroke-dasharray="3 5"
-                  />
-                {:else}
-                  <circle
-                    class="guide"
-                    {cx}
-                    {cy}
-                    r={tick.radius}
-                    fill="none"
-                    stroke="var(--highlite-color)"
-                    stroke-width="0.8"
-                    stroke-dasharray="3 5"
-                  />
-                {/if}
+              {#if tick.path}
+                <path
+                  d={tick.path}
+                  fill="none"
+                  class="guide"
+                  stroke="var(--highlite-color)"
+                  stroke-width="0.8"
+                  stroke-dasharray="3 5"
+                />
+              {:else}
+                <circle
+                  class="guide"
+                  {cx}
+                  {cy}
+                  r={tick.radius}
+                  fill="none"
+                  stroke="var(--highlite-color)"
+                  stroke-width="0.8"
+                  stroke-dasharray="3 5"
+                />
+              {/if}
               <text
                 class="guide"
                 x={cx}

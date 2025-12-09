@@ -1,4 +1,4 @@
-<svelte:options runes={true} />
+
 <script>
   // import NetworkGraph from "$lib/NetworkGraphSvg.svelte";
   import NetworkGraph from "$lib/NetworkGraphP5.svelte";

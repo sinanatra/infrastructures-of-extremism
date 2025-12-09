@@ -1,4 +1,4 @@
-<svelte:options runes={true} />
+
 <script>
   import NetworkGraph from "$lib/NetworkGraph.svelte";
   let { data } = $props();

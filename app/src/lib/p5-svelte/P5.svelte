@@ -1,4 +1,4 @@
-<svelte:options runes={true} />
+
 <script>
   import { createEventDispatcher, onMount } from "svelte";
 
