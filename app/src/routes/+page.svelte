@@ -12,6 +12,7 @@
     "/cover/tricoloredelsangueitalico.png",
     "/cover/afdjugendbw.png",
     "/cover/jungenationalisten.png",
+    "/cover/generationidentitaire.png",
   ];
   let zipLib = null;
   const loadZip = async () => {
@@ -258,7 +259,7 @@
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
               <img
-                src={`/preview/${dataset.slug}.png`}
+                src={`/cover/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
                 class="w-[450px] h-[450px] object-cover hover:grayscale"
                 loading="lazy"
