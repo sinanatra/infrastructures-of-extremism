@@ -362,7 +362,7 @@ const computeLayout = ({ posts, links, groups }) => {
   const cy = height / 2;
   const innerRadius = 0;
   const outerRadius = Math.min(width, height) / 2 - 50;
-  const polygonSides = 8; 
+  const polygonSides = 12; 
   const baseStart = -Math.PI / 2;
 
   const minTime = posts.length
