@@ -21,9 +21,9 @@
     "slug": "generationidentitaire",
     "theme": {
       "backgroundColor": "#111",
-      "circleColor": "red",
-      "textColor": "red",
-      "highlightColor": "darkred"
+      "circleColor": "#76b68d",
+      "textColor": "#76b68d",
+      "highlightColor": "steelblue"
     }
   }, {
     "slug": "afdjugendbw",

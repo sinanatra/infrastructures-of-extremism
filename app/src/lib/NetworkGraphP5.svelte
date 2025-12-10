@@ -967,9 +967,9 @@
   class="relative h-screen overflow-hidden"
   style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
-  <div class="flex justify-end mb-2">
+  <!-- <div class="flex justify-end mb-2">
     <ExportControl label="Export PNG" on:export={exportPng} />
-  </div>
+  </div> -->
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
     hidden={trailerState !== "done"}
