@@ -1,19 +1,21 @@
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { fade } from "svelte/transition";
 
   let { data } = $props();
 
   const datasets = (data?.datasets ?? [])
     .slice()
     .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
+
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
+
   const coverImages = [
     "/cover/tricoloredelsangueitalico.png",
     "/cover/afdjugendbw.png",
     "/cover/jungenationalisten.png",
     "/cover/generationidentitaire.png",
-  ];
+  ].sort(() => Math.random() - 0.5);
+
   let zipLib = null;
   const loadZip = async () => {
     if (zipLib) return zipLib;
@@ -48,10 +50,11 @@
     setTimeout(() => URL.revokeObjectURL(link.href), 0);
   };
 
-  const cycleDelay = datasets.length * 1200;
+  const fadeDuration = 1500;
+  const cycleDelay = fadeDuration + 2000;
+
   let coverIndex = $state(0);
   let coverTimer = null;
-  let lastCoverCount = $state(coverImages.length);
 
   const startCoverCycle = () => {
     stopCoverCycle();
@@ -70,14 +73,6 @@
   onMount(startCoverCycle);
   onDestroy(stopCoverCycle);
 
-  $effect(() => {
-    if (coverImages.length !== lastCoverCount) {
-      lastCoverCount = coverImages.length;
-      coverIndex = 0;
-      startCoverCycle();
-    }
-  });
-
   const formatRange = (start, end) => {
     if (!start || !end) return null;
     try {
@@ -95,8 +90,8 @@
         <img
           {src}
           alt="Dataset visualization cover"
-          class="absolute inset-0 h-[150vh] w-full object-cover transition-opacity duration-[1200ms] ease-in-out will-change-opacity"
-          style={`opacity:${coverIndex === i ? 1 : 0};`}
+          class="absolute inset-0 h-[150vh] w-full object-cover"
+          style={`opacity:${coverIndex === i ? 1 : 0};transition:opacity ${fadeDuration}ms ease-in-out;`}
           loading="lazy"
           decoding="async"
           aria-hidden={coverIndex !== i}
@@ -105,9 +100,9 @@
     </div>
   {/if}
 
-  <div class="relative flex justify-center px-4">
+  <div class="relative flex justify-end">
     <article
-      class="relative z-10 w-full max-w-2xl px-4 pt-20 pb-10 -mt-[30vh] bg-black"
+      class="relative z-10 w-full max-w-xl px-4 pt-20 pb-10 -mt-[60vh] bg-black"
     >
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
@@ -239,7 +234,7 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-center relative z-10 w-full px-5 pt-10 bg-black"
+    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-white">Open a map</h2>
@@ -276,7 +271,7 @@
     </section>
   </div>
   <div
-    class="custom-shadow justify-center flex relative z-10 w-full px-5 pt-10 bg-black"
+    class="custom-shadow justify-center flex relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
       <h2 class="text-2xl p-0 m-0 text-white">Download the datasets</h2>

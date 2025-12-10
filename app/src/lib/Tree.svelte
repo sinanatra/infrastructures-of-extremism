@@ -87,12 +87,12 @@
   onMount(() => {
     if (!layers.length) return;
 
-    const width = 6200;
-    const height = 3800;
+    const width = 2200;
+    const height = 800;
     const left = 200;
     const top = 200;
 
-    const xGap = 760;
+    const xGap = 260;
     const yGap = 140;
 
     const pos = new Map();
@@ -130,18 +130,18 @@
     const edgesG = zoomG
       .append("g")
       .attr("stroke", theme.highlightColor)
-      .attr("stroke-opacity", 0.35)
-      .attr("stroke-width", 1.3)
       .attr("fill", "none");
 
-    edgesG
+    const lines = edgesG
       .selectAll("line")
       .data(visibleEdges)
       .join("line")
       .attr("x1", (d) => pos.get(d.source).x)
       .attr("y1", (d) => pos.get(d.source).y)
       .attr("x2", (d) => pos.get(d.target).x)
-      .attr("y2", (d) => pos.get(d.target).y);
+      .attr("y2", (d) => pos.get(d.target).y)
+      .attr("stroke-width", 1.3)
+      .attr("stroke-opacity", 0.35);
 
     const node = zoomG
       .append("g")
@@ -156,10 +156,7 @@
       .attr("target", "_blank")
       .attr("rel", "noopener noreferrer");
 
-    node
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", theme.textColor);
+    node.append("circle").attr("r", 5).attr("fill", theme.textColor);
 
     node
       .append("text")
@@ -168,6 +165,16 @@
       .attr("fill", theme.textColor)
       .attr("font-size", 17)
       .text((id) => groupInfo.get(id)?.label || id);
+
+    node
+      .on("mouseenter", (event, id) => {
+        lines.attr("stroke-opacity", (d) =>
+          d.source === id || d.target === id ? 0.85 : 0.05
+        );
+      })
+      .on("mouseleave", () => {
+        lines.attr("stroke-opacity", 0.35);
+      });
 
     const zoom = d3
       .zoom()
@@ -188,5 +195,6 @@
 
 <div
   bind:this={container}
-  style="width:100%;height:100%;overflow:hidden;"
+  style="width:100vw;height:100vh;overflow:hidden;"
 ></div>
+
