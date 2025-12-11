@@ -9,8 +9,21 @@
     highlightColor = "yellow",
   } = $props();
 
-  const normalize = (v) => (v ?? "").trim().toLowerCase();
+  const normalize = (v) =>
+    (v ?? "")
+      .toString()
+      .trim()
+      .replace(/^https?:\/\/t\.me\//i, "")
+      .replace(/^@/, "")
+      .replace(/\s+/g, "")
+      .toLowerCase();
+
   const strip = (v) => normalize(v).split(":")[0];
+
+  const cleanLabel = (g) => {
+    const base = g?.label ?? g?.username ?? g?.id ?? "";
+    return base.toString().trim().replace(/^@/, "");
+  };
 
   const theme = (() => {
     const base = data?.dataset?.theme ?? {};
@@ -23,20 +36,31 @@
   })();
 
   const groupInfo = new Map(
-    (data.groups ?? []).map((g) => [
-      strip(g.id),
-      { label: g.label || g.id, subscribers: g.subscribers ?? 0 },
-    ])
+    (data.groups ?? []).map((g) => {
+      const id = strip(g.id);
+      return [
+        id,
+        {
+          label: cleanLabel(g) || id,
+          subscribers: g.subscribers ?? 0,
+        },
+      ];
+    })
   );
 
   const edges = (data.links ?? [])
     .map((l) => ({
-      source: strip(l.source || l.from),
-      target: strip(l.target || l.to),
+      source: strip(l.source),
+      target: strip(l.target),
     }))
     .filter((l) => l.source && l.target && l.source !== l.target);
 
+  // console.log(data.links);
+  // console.log(edges.find((d) => d.target.includes("ita")));
+
   const datasetRoot = strip(data?.dataset?.slug ?? "");
+  const groupRoot =
+    (data.groups?.length ? strip(data.groups[0].id) : null) || null;
 
   const allNodes = new Set();
   edges.forEach((e) => {
@@ -44,7 +68,8 @@
     allNodes.add(e.target);
   });
 
-  let seed = datasetRoot || (edges.length ? edges[0].source : null);
+  let seed =
+    groupRoot || datasetRoot || (edges.length ? edges[0].source : null);
 
   const children = new Map();
   for (const { source, target } of edges) {
@@ -490,7 +515,6 @@
           const a = link.source;
           const b = link.target;
           const c = p.color(theme.highlightColor);
-          // c.setAlpha(180);
           p.stroke(c);
           p.strokeWeight(0.5);
           p.line(a.x, a.y, b.x, b.y);
@@ -505,9 +529,9 @@
           const ringIndex =
             node.layerIndex === 0 ? 0 : (node.visualRing ?? node.layerIndex);
           const aFactor = node.layerIndex === 0 ? 1 : alphaFactor(ringIndex);
-          // baseColor.setAlpha(node.id === hoveredId ? 255 : 200 * aFactor);
           p.fill(baseColor);
-          p.noStroke();
+          p.strokeWeight(3);
+          p.stroke(backgroundColor);
           p.circle(node.x, node.y, r * 2);
         });
 
@@ -518,20 +542,17 @@
           const ringIndex =
             node.layerIndex === 0 ? 0 : (node.visualRing ?? node.layerIndex);
           const aFactor = node.layerIndex === 0 ? 1 : alphaFactor(ringIndex);
-          // labelColor.setAlpha(node.id === hoveredId ? 255 : 220 * aFactor);
           p.fill(labelColor);
           p.textAlign(p.CENTER, p.TOP);
           p.textSize(node.layerIndex === 0 ? 16 : 13);
           const offset = node.layerIndex === 0 ? 22 : r + 4;
+          p.strokeWeight(2);
+          p.stroke(backgroundColor);
           p.text(node.label, node.x, node.y + offset);
         });
 
         if (centerNode && nodeVisible(centerNode)) {
           const r = nodeRadiusFor(centerNode.subscribers);
-          const halo = p.color(theme.highlightColor);
-          // halo.setAlpha(200);
-          p.noFill();
-          p.stroke(halo);
           p.strokeWeight(2);
           p.circle(centerNode.x, centerNode.y, r * 2 + 10);
         }
