@@ -15,7 +15,6 @@
     extrudeOffsetY = 150,
     pieFill = "#ffffff",
     pieBackground = "gainsboro",
-
   } = $props();
 
   const TOPIC_LABELS = [
@@ -412,20 +411,35 @@
     };
 
     const drawArcText = (ctx, txt, cx, cy, r, startAngle, endAngle) => {
+      const textSize = ctx.textSize();
+      const measuredSpaceWidth = ctx.textWidth(" ");
+      const fallbackSpaceWidth = Math.max(Math.round(textSize * 0.2), 2);
+      const spaceWidth =
+        measuredSpaceWidth > 0 ? measuredSpaceWidth : fallbackSpaceWidth;
+      const fallbackCharWidth = Math.max(Math.round(textSize * 0.5), 1);
+      const charWidths = [];
       let totalWidth = 0;
       for (const ch of txt) {
-        totalWidth += ctx.textWidth(ch);
+        const measured = ctx.textWidth(ch);
+        const width =
+          measured > 0
+            ? measured
+            : /\s/.test(ch)
+              ? spaceWidth
+              : fallbackCharWidth;
+        charWidths.push(width);
+        totalWidth += width;
       }
       const spacingFactor = 1.26;
-      const gap = ctx.textWidth(" ") * 0.35;
-      const totalAngle = totalWidth / r;
+      const gap = spaceWidth * 0.35;
+      const totalAngle = totalWidth / Math.max(r, 1);
       const midAngle = (startAngle + endAngle) / 2;
       const reverse = midAngle < Math.PI;
       let currentAngle = reverse
         ? midAngle + totalAngle / 2
         : midAngle - totalAngle / 2;
       for (let i = 0; i < txt.length; i += 1) {
-        const charWidth = ctx.textWidth(txt[i]);
+        const charWidth = charWidths[i];
         let theta;
         const adjust = (charWidth * spacingFactor + gap) / 2;
         if (reverse) {
@@ -544,7 +558,7 @@
         outerRadius * 2,
         outerRadius * 2
       );
-      const extrusionMargin = dotSize * 0.10;
+      const extrusionMargin = dotSize * 0.1;
       p.noStroke();
       p.fill(pieFill);
       p.beginShape();
@@ -783,7 +797,7 @@
         {selectedEmoji}
         {subscriberText}
         {textColor}
-        {backgroundColor}
+        backgroundColor={pieBackground}
         {highlightColor}
         on:sizeMode={(event) => {
           sizeMode = event.detail;
