@@ -1,4 +1,3 @@
-
 <script>
   import NetworkGraph from "$lib/NetworkGraph.svelte";
   let { data } = $props();
@@ -19,6 +18,7 @@
   <NetworkGraph
     {data}
     backgroundColor={theme.backgroundColor}
+    pieFill={theme.pieFill}
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}

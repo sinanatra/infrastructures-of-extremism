@@ -99,6 +99,16 @@ export const load = async ({ fetch, params }) => {
 				}
 			}
 
+			let topics = [];
+			const topicsRaw = row.topics?.trim();
+			if (topicsRaw) {
+				try {
+					topics = JSON.parse(topicsRaw.replace(/'/g, '"'));
+				} catch (err) {
+					topics = [];
+				}
+			}
+
 			return {
 				id,
 				label,
@@ -110,7 +120,8 @@ export const load = async ({ fetch, params }) => {
 				views: parseNumber(row.views),
 				reactions: parseNumber(row.reaction_count),
 				url: row.url?.trim(),
-				reactionBreakdown
+				reactionBreakdown,
+				topics
 			};
 		})
 		.filter(

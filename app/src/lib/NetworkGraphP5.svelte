@@ -10,6 +10,7 @@
   let {
     data,
     backgroundColor = "#000000",
+    pieFill = "#ffffff",
     circleColor = "#ffffff",
     textColor = "#ffffff",
     highlightColor: highlightColorProp = "yellow",
@@ -17,6 +18,8 @@
   } = $props();
 
   const { posts, links } = data;
+  const extrudeOffsetX = 0;
+  const extrudeOffsetY = 950;
 
   const prepared = prepareNetwork(data, { circleColor });
   const {
@@ -738,12 +741,119 @@
         return false;
       };
 
+      const getArcPoints = (
+        centerX,
+        centerY,
+        radius,
+        start,
+        end,
+        steps = 48
+      ) => {
+        if (!Number.isFinite(radius)) return [];
+        const points = [];
+        const span = end - start;
+        for (let i = 0; i <= steps; i += 1) {
+          const angle = start + (span * i) / Math.max(1, steps);
+          points.push({
+            x: centerX + radius * Math.cos(angle),
+            y: centerY + radius * Math.sin(angle),
+          });
+        }
+        return points;
+      };
+
+      const drawExtrudedSides = () => {
+        if (!Number.isFinite(outerRingRadius)) return;
+        p.push();
+        if (extrudeOffsetY) {
+          p.noStroke();
+          const shadowBase = p.color(backgroundColor);
+          shadowBase.setAlpha(0.2);
+          p.fill(shadowBase);
+          p.ellipse(
+            cx + extrudeOffsetX,
+            cy + extrudeOffsetY,
+            outerRingRadius * 2,
+            outerRingRadius * 2
+          );
+        }
+        p.stroke(highlightColor);
+        p.strokeWeight(0.8 / view.scale);
+        for (const slice of slicePaths) {
+          if (
+            !Number.isFinite(slice.start) ||
+            !Number.isFinite(slice.end) ||
+            (trailerVisibleGroups && !trailerVisibleGroups.has(slice.id))
+          ) {
+            continue;
+          }
+          const topArc = getArcPoints(
+            cx,
+            cy,
+            outerRingRadius,
+            slice.start,
+            slice.end,
+            40
+          );
+          if (!topArc.length) continue;
+          const bottomArc = topArc.map((pt) => ({
+            x: pt.x + extrudeOffsetX,
+            y: pt.y + extrudeOffsetY,
+          }));
+          const segments = bottomSegments(topArc, bottomArc);
+
+          const topFill = p.color(backgroundColor);
+          topFill.setAlpha(1);
+          p.noStroke();
+          p.fill(topFill);
+          p.beginShape();
+          topArc.forEach((pt) => p.vertex(pt.x, pt.y));
+          p.endShape(p.CLOSE);
+
+          const shadow = p.color(backgroundColor);
+          shadow.setAlpha(0.35);
+          p.fill(shadow);
+          p.beginShape();
+          topArc.forEach((pt) => p.vertex(pt.x, pt.y));
+          for (let i = bottomArc.length - 1; i >= 0; i -= 1) {
+            p.vertex(bottomArc[i].x, bottomArc[i].y);
+          }
+          p.endShape(p.CLOSE);
+
+          p.noFill();
+          for (const segment of segments) {
+            for (const { top, bottom } of segment) {
+              p.line(top.x, top.y, bottom.x, bottom.y);
+            }
+            if (segment.length >= 2) {
+              p.beginShape();
+              segment.forEach(({ bottom }) => p.vertex(bottom.x, bottom.y));
+              p.endShape();
+            }
+          }
+
+          p.beginShape();
+          bottomArc.forEach((pt) => p.vertex(pt.x, pt.y));
+          p.endShape();
+        }
+        p.pop();
+      };
+
       const drawSlices = () => {
+        drawExtrudedSides();
+        p.push();
+        p.noStroke();
+        p.noFill();
+
+        // p.fill(backgroundColor);
+        p.ellipse(cx, cy, outerRingRadius * 2, outerRingRadius * 2);
+        p.pop();
         p.push();
         p.noFill();
         p.stroke(highlightColor);
         p.strokeWeight(0.9 / view.scale);
         for (const slice of slicePaths) {
+          
           if (
             !Number.isFinite(slice.start) ||
             !Number.isFinite(slice.end) ||
@@ -870,16 +980,96 @@
 
       const baseStart = -Math.PI / 2;
 
+      const drawPolygonVertices = (radius) => {
+        if (!polygonSides || polygonSides < 3) return [];
+        const positions = [];
+        for (let k = 0; k < polygonSides; k++) {
+          const a = baseStart + (Math.PI * 2 * k) / polygonSides;
+          positions.push({
+            x: cx + radius * Math.cos(a),
+            y: cy + radius * Math.sin(a),
+          });
+        }
+        return positions;
+      };
+
+      const isBottomPoint = (pt) => pt && pt.y >= cy;
+
+      const bottomSegments = (topPoints, bottomPoints) => {
+        const segments = [];
+        let current = [];
+        for (let i = 0; i < topPoints.length; i += 1) {
+          if (isBottomPoint(topPoints[i])) {
+            current.push({
+              top: topPoints[i],
+              bottom: bottomPoints[i],
+            });
+          } else if (current.length) {
+            segments.push(current);
+            current = [];
+          }
+        }
+        if (current.length) segments.push(current);
+        if (
+          segments.length > 1 &&
+          segments[0].length &&
+          segments[segments.length - 1].length
+        ) {
+          const first = segments.shift();
+          const last = segments.pop();
+          segments.unshift([...last, ...first]);
+        }
+        return segments;
+      };
+
+      const drawExtrudedPolygon = (radius) => {
+        if (!Number.isFinite(radius)) return;
+        const topPoly = drawPolygonVertices(radius);
+        if (!topPoly.length) return;
+        const bottomPoly = topPoly.map((pt) => ({
+          x: pt.x + extrudeOffsetX,
+          y: pt.y + extrudeOffsetY,
+        }));
+        const segments = bottomSegments(topPoly, bottomPoly);
+        const topFill = p.color(backgroundColor);
+        topFill.setAlpha(1);
+        p.fill(topFill);
+        p.noStroke();
+        p.beginShape();
+        topPoly.forEach((pt) => p.vertex(pt.x, pt.y));
+        p.endShape(p.CLOSE);
+        const shadow = p.color(backgroundColor);
+        shadow.setAlpha(0.35);
+        p.fill(shadow);
+        p.beginShape();
+        for (let i = bottomPoly.length - 1; i >= 0; i -= 1) {
+          p.vertex(bottomPoly[i].x, bottomPoly[i].y);
+        }
+        p.endShape(p.CLOSE);
+
+        p.stroke(highlightColor);
+        p.strokeWeight(0.8 / view.scale);
+        for (const segment of segments) {
+          for (const { top, bottom } of segment) {
+            p.line(top.x, top.y, bottom.x, bottom.y);
+          }
+          if (segment.length >= 2) {
+            p.beginShape();
+            segment.forEach(({ bottom }) => p.vertex(bottom.x, bottom.y));
+            p.endShape();
+          }
+        }
+      };
+
       const drawRings = () => {
+        const ctx = p.drawingContext;
         p.push();
         p.noFill();
-        const ctx = p.drawingContext;
         if (ctx?.setLineDash) {
           ctx.setLineDash([8 / view.scale, 10 / view.scale]);
         }
         p.stroke(highlightColor);
         p.strokeWeight(0.9 / view.scale);
-        p.noFill();
 
         for (const tick of innerTicks) {
           if (polygonSides && polygonSides >= 3) {
@@ -895,6 +1085,10 @@
           } else {
             p.circle(cx, cy, tick.radius * 2);
           }
+        }
+        p.pop();
+
+        for (const tick of innerTicks) {
           p.push();
           p.noStroke();
           p.fill(highlightColor);
@@ -907,8 +1101,12 @@
           );
           p.pop();
         }
+
         if (outerTick) {
+          drawExtrudedPolygon(outerRingRadius);
           if (polygonSides && polygonSides >= 3) {
+            // p.fill(backgroundColor);
+
             p.beginShape();
             for (let k = 0; k < polygonSides; k++) {
               const a = baseStart + (Math.PI * 2 * k) / polygonSides;
@@ -924,6 +1122,7 @@
           p.push();
           p.noStroke();
           p.fill(highlightColor);
+
           p.textAlign(p.CENTER, p.BOTTOM);
           p.textSize(textSizeFor(14));
           p.text(
@@ -947,8 +1146,8 @@
         drawSlices();
         drawLinks();
         drawNodes();
-        drawRings();
 
+        drawRings();
         p.pop();
       };
     };
