@@ -25,16 +25,16 @@
 </script>
 
 <header
-  class="controls fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-2 rounded p-2 px-6"
+  class="controls fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-1 rounded p-2 px-2"
   style={`--controls-bg:${backgroundColor}; --controls-text:${textColor}; --controls-highlight:${highlightColor};`}
 >
-  <div class="flex flex-wrap items-center gap-3 text-sm">
+  <div class="flex flex-wrap items-center gap-1 text-xs">
     <span>{counts.posts} posts</span>
     <span>{counts.groups} groups</span>
     <span>{counts.links} links</span>
     {#if selectedGroup}
       <span
-        class="group-pill flex items-center gap-3 px-3 py-1 rounded-full text-sm"
+        class="group-pill flex items-center gap-1 px-2 py-1 rounded-full text-xs"
       >
         <span>{selectedGroup.label}</span>
         {#if subscriberText(selectedGroup.subscribers)}

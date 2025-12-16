@@ -204,6 +204,12 @@ export const prepareNetwork = (
   if (!Number.isFinite(sizeStats.links.min)) sizeStats.links.min = 0;
   if (!Number.isFinite(sizeStats.reactions.min)) sizeStats.reactions.min = 0;
 
+  const maxNodeRadius = nodes.reduce(
+    (max, node) =>
+      Math.max(max, node.radiusLinks, node.radiusReactions),
+    0
+  );
+
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const edges = links
     .map((link) => {
@@ -302,7 +308,7 @@ export const prepareNetwork = (
     dateMs: n.post.dateMs,
   }));
   const outerRingRadius =
-    Math.max(outerTick?.radius ?? 0, maxNodeRadial + 12) ||
+    Math.max(outerTick?.radius ?? 0, maxNodeRadial + maxNodeRadius + 12) ||
     Math.min(width, height) / 2 - 50;
 
   const ticksByRadius = [...ringTicks].sort((a, b) => a.radius - b.radius);

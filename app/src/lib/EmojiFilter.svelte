@@ -17,7 +17,7 @@
 
 {#if topEmojis.length}
   <div
-    class="emoji-filter flex w-full items-center gap-1 text-xs pt-2"
+    class="emoji-filter flex w-full items-center gap-1 text-xs pt-1"
     style={`--filter-text:${textColor}; --filter-highlight:${highlightColor}; --filter-bg:${backgroundColor};`}
   >
     <span class="label uppercase">Filter by emoji</span>
@@ -62,7 +62,7 @@
     color: var(--filter-text);
     background: transparent;
     border-radius: 9999px;
-    padding: 0.25rem 0.4rem;
+    padding: 0.1rem 0.2rem;
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;

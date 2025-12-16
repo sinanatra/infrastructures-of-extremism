@@ -538,7 +538,7 @@ const computeLayout = ({ posts, links, groups }) => {
     (m, v) => Math.max(m, v),
     0
   );
-  const minNodeRadius = 2;
+  const minNodeRadius = 4;
   const maxNodeRadiusDesired = 32;
 
   const radiusForReactions = (value) => {
