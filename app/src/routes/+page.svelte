@@ -285,8 +285,7 @@
       <h2 class="text-2xl p-0 m-0 text-white">Analyse the topics</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
-        Several groups have been examined. <br />
-        Click on each one to explore its network.
+        Explore the material by dominant topic.
       </p>
       {#if datasets.length}
         <div
@@ -323,8 +322,7 @@
       <h2 class="text-2xl p-0 m-0 text-white">Analyse the Network</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
-        Several groups have been examined. <br />
-        Click on each one to explore its network.
+        Follow the underlying graph of connections.
       </p>
       {#if datasets.length}
         <div
