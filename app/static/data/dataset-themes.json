@@ -5,9 +5,9 @@
       "backgroundColor": "#111",
       "pieBackground": "gainsboro",
       "pieFill": "white",
-      "circleColor": "#fff8bc",
-      "textColor": "#fff8bc",
-      "highlightColor": "#7B68EE"
+      "circleColor": "#7B68EE",
+      "textColor": "#7B68EE",
+      "highlightColor": "red"
     }
   },
   {

@@ -12,7 +12,7 @@
     highlightColor = "yellow",
     dotSize = 15,
     extrudeOffsetX = 0,
-    extrudeOffsetY = 150,
+    extrudeOffsetY = 250,
     pieFill = "#ffffff",
     pieBackground = "gainsboro",
   } = $props();
@@ -58,14 +58,9 @@
       topEmoji: n.topEmoji ?? null,
       color: n.color ?? circleColor,
       post: n.post ?? null,
+      degreeCentrality: n.degreeCentrality ?? n.degree_centrality ?? 0,
     };
   });
-
-  const pieCounts = {
-    posts: posts.length,
-    topics: new Set(graphNodes.map((n) => n.type)).size,
-    links: links.length,
-  };
 
   const graphLinks = (links ?? []).map((l) => ({
     source: typeof l.source === "object" ? l.source.id : l.source,
@@ -158,6 +153,9 @@
     selectedEmoji;
     selectedGroupId;
     pieFill;
+    extrudeOffsetX;
+    extrudeOffsetY;
+    dotSize;
     requestRedraw();
   });
 
@@ -168,23 +166,38 @@
     let wedgeData = {};
     let outerRadius = 0;
     const innerRadius = 0;
+
     let zoom = 1.8;
     let panX = 0;
     let panY = 0;
+
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
     let dragStartScreenX = 0;
     let dragStartScreenY = 0;
     let hasDragged = false;
+
     let hoverNode = null;
+
     const nodeMargin = dotSize;
     let nodesById = {};
     let groupMaxLinks = {};
     let groupMaxReactions = {};
+
     const hoverCellSize = 220;
     let hoverGrid = new Map();
     let localRedrawPending = false;
+
+    let renderer = null;
+
+    let staticLayer = null;
+    let nodesLayer = null;
+    let linksLayer = null;
+
+    let staticKey = null;
+    let nodesKey = null;
+    let linksKey = null;
 
     const scheduleRedraw = () => {
       if (localRedrawPending) return;
@@ -195,14 +208,19 @@
       });
     };
 
+    const getLayoutCenter = () => ({
+      cx: p.width / 2 - extrudeOffsetX / 2,
+      cy: p.height / 2 - extrudeOffsetY / 2,
+    });
+
     const rebuildHoverGrid = () => {
       hoverGrid = new Map();
       const key = (x, y) =>
         `${Math.floor(x / hoverCellSize)},${Math.floor(y / hoverCellSize)}`;
-      for (const node of nodes) {
-        const k = key(node.x, node.y);
+      for (const n of nodes) {
+        const k = key(n.x, n.y);
         const bucket = hoverGrid.get(k) ?? [];
-        bucket.push(node);
+        bucket.push(n);
         hoverGrid.set(k, bucket);
       }
     };
@@ -211,7 +229,10 @@
       nodes = graphNodes.map((n) => ({ ...n }));
       linksLocal = graphLinks.map((l) => ({ ...l }));
       types = buildTypeOrder(nodes);
-      types.forEach((t) => {
+
+      groupMaxLinks = {};
+      groupMaxReactions = {};
+      for (const t of types) {
         const nodesInType = nodes.filter((n) => n.type === t);
         const maxLinks = Math.max(
           ...nodesInType.map((n) => n.radiusLinks || 0),
@@ -223,11 +244,10 @@
         );
         groupMaxLinks[t] = maxLinks > 0 ? maxLinks : 1;
         groupMaxReactions[t] = maxReactions > 0 ? maxReactions : 1;
-      });
+      }
+
       nodesById = {};
-      nodes.forEach((node) => {
-        nodesById[node.id] = node;
-      });
+      for (const n of nodes) nodesById[n.id] = n;
     };
 
     const capacityForWedge = (theta, radius) => {
@@ -260,24 +280,22 @@
 
     const totalThetaForRadius = (radius, groups) => {
       let total = 0;
-      types.forEach((t) => {
+      for (const t of types) {
         const count = groups[t].length;
-        const theta = findMinimalThetaForWedge(count, radius);
-        total += theta;
-      });
+        total += findMinimalThetaForWedge(count, radius);
+      }
       return total;
     };
 
     const findOuterRadius = (groups) => {
       let low = dotSize * 2;
-      let high = dotSize * 500;
+      let high = dotSize * 600;
       let best = high;
-      for (let i = 0; i < 20; i += 1) {
+      for (let i = 0; i < 22; i += 1) {
         const mid = (low + high) / 2;
         const total = totalThetaForRadius(mid, groups);
-        if (total > 2 * Math.PI) {
-          low = mid;
-        } else {
+        if (total > 2 * Math.PI) low = mid;
+        else {
           best = mid;
           high = mid;
         }
@@ -288,37 +306,35 @@
     const computeWedgeData = (groups, radius) => {
       let sumTheta = 0;
       const temp = {};
-      types.forEach((t) => {
+      for (const t of types) {
         const count = groups[t].length;
         const theta = findMinimalThetaForWedge(count, radius);
         temp[t] = { angle: theta };
         sumTheta += theta;
-      });
-      const scale = (2 * Math.PI) / sumTheta;
+      }
+      const scale = (2 * Math.PI) / Math.max(sumTheta, 1e-6);
       let start = 0;
       const result = {};
-      types.forEach((t) => {
+      for (const t of types) {
         const adjusted = temp[t].angle * scale;
-        result[t] = {
-          angle: adjusted,
-          start,
-          mid: start + adjusted / 2,
-        };
+        result[t] = { angle: adjusted, start, mid: start + adjusted / 2 };
         start += adjusted;
-      });
+      }
       return result;
     };
 
     const assignNodePositions = (groups, radius, wedges) => {
-      const cx = p.width / 2;
-      const cy = p.height / 2;
-      types.forEach((t) => {
+      const { cx, cy } = getLayoutCenter();
+
+      for (const t of types) {
         const nodesOfType = groups[t];
         const theta = wedges[t].angle;
         const startAngle = wedges[t].start;
+
         let remaining = nodesOfType.length;
         const assigned = [];
         let r = radius - nodeMargin;
+
         while (remaining > 0 && r >= innerRadius) {
           const ringCap = Math.floor((theta * r) / dotSize);
           if (ringCap < 1) {
@@ -329,29 +345,29 @@
           const stepA = theta / countInRing;
           for (let i = 0; i < countInRing; i += 1) {
             const a = startAngle + stepA * (i + 0.5);
-            assigned.push({
-              x: cx + r * Math.cos(a),
-              y: cy + r * Math.sin(a),
-            });
+            assigned.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
           }
           remaining -= countInRing;
           r -= dotSize;
         }
-        nodesOfType.forEach((node, i) => {
-          if (assigned[i]) {
-            node.x = assigned[i].x;
-            node.y = assigned[i].y;
+
+        for (let i = 0; i < nodesOfType.length; i += 1) {
+          const n = nodesOfType[i];
+          const pt = assigned[i];
+          if (pt) {
+            n.x = pt.x;
+            n.y = pt.y;
           } else {
-            node.x = cx;
-            node.y = cy;
+            n.x = cx;
+            n.y = cy;
           }
-        });
-      });
+        }
+      }
     };
 
     const computeLayout = () => {
       const groups = {};
-      types.forEach((t) => {
+      for (const t of types) {
         groups[t] = nodes
           .filter((n) => n.type === t)
           .sort(
@@ -359,12 +375,15 @@
               (a.degreeCentrality || 0) - (b.degreeCentrality || 0) ||
               (b.timestamp || 0) - (a.timestamp || 0)
           );
-      });
+      }
       outerRadius = findOuterRadius(groups);
       wedgeData = computeWedgeData(groups, outerRadius);
       assignNodePositions(groups, outerRadius, wedgeData);
       rebuildHoverGrid();
+      invalidateLayers();
       rebuildStaticLayer();
+      rebuildNodesLayer();
+      rebuildLinksLayer();
     };
 
     const screenToWorld = (sx, sy) => {
@@ -381,24 +400,47 @@
       const m = screenToWorld(sx, sy);
       const cxCell = Math.floor(m.x / hoverCellSize);
       const cyCell = Math.floor(m.y / hoverCellSize);
+
       let best = null;
       let bestDist = Infinity;
       const hitRadius = dotSize;
+
       for (let dx = -1; dx <= 1; dx += 1) {
         for (let dy = -1; dy <= 1; dy += 1) {
           const bucket = hoverGrid.get(`${cxCell + dx},${cyCell + dy}`);
           if (!bucket) continue;
-          for (const node of bucket) {
-            if (!visibleNodeIds.has(node.id)) continue;
-            const d = p.dist(m.x, m.y, node.x, node.y);
+          for (const n of bucket) {
+            if (!visibleNodeIds.has(n.id)) continue;
+            const d = p.dist(m.x, m.y, n.x, n.y);
             if (d < hitRadius && d < bestDist) {
-              best = node;
+              best = n;
               bestDist = d;
             }
           }
         }
       }
       return best;
+    };
+
+    const shortenText = (str, maxLen = 30) => {
+      if (!str) return "";
+      return str.length <= maxLen ? str : str.substring(0, maxLen - 3) + "...";
+    };
+
+    const nodeMetric = (n) => {
+      if (sizeMode === "reactions") return n.radiusReactions || 0;
+      return n.radiusLinks || 0;
+    };
+
+    const nodeInnerSize = (n) => {
+      const metric = nodeMetric(n);
+      const groupId = n.type;
+      const maxMetric =
+        sizeMode === "reactions"
+          ? groupMaxReactions[groupId] || 1
+          : groupMaxLinks[groupId] || 1;
+      const clamped = Math.max(0, Math.min(metric, maxMetric));
+      return p.map(clamped, 0, maxMetric, dotSize * 0.2, dotSize);
     };
 
     const getArcPoints = (cx, cy, r, startAng, endAng, steps = 32) => {
@@ -411,71 +453,141 @@
     };
 
     const drawArcText = (ctx, txt, cx, cy, r, startAngle, endAngle) => {
-      const textSize = ctx.textSize();
-      const measuredSpaceWidth = ctx.textWidth(" ");
-      const fallbackSpaceWidth = Math.max(Math.round(textSize * 0.2), 2);
-      const spaceWidth =
-        measuredSpaceWidth > 0 ? measuredSpaceWidth : fallbackSpaceWidth;
-      const fallbackCharWidth = Math.max(Math.round(textSize * 0.5), 1);
-      const charWidths = [];
-      let totalWidth = 0;
-      for (const ch of txt) {
-        const measured = ctx.textWidth(ch);
-        const width =
-          measured > 0
-            ? measured
-            : /\s/.test(ch)
-              ? spaceWidth
-              : fallbackCharWidth;
-        charWidths.push(width);
-        totalWidth += width;
-      }
-      const spacingFactor = 1.26;
-      const gap = spaceWidth * 0.35;
-      const totalAngle = totalWidth / Math.max(r, 1);
-      const midAngle = (startAngle + endAngle) / 2;
-      const reverse = midAngle < Math.PI;
-      let currentAngle = reverse
-        ? midAngle + totalAngle / 2
-        : midAngle - totalAngle / 2;
-      for (let i = 0; i < txt.length; i += 1) {
-        const charWidth = charWidths[i];
-        let theta;
-        const adjust = (charWidth * spacingFactor + gap) / 2;
-        if (reverse) {
-          theta = currentAngle - adjust / r;
-        } else {
-          theta = currentAngle + adjust / r;
+      if (!txt || r <= 1) return;
+
+      const baseSize = ctx.textSize();
+      const padAngle = 0.03;
+      const a0 = startAngle + padAngle;
+      const a1 = endAngle - padAngle;
+      if (a1 <= a0) return;
+
+      const availableAngle = a1 - a0;
+      const halfPi = Math.PI / 2;
+      const minSize = Math.max(7, baseSize * 0.6);
+
+      // const buildChars = (s) =>
+      //   [...s].map((ch, i) => (i === 0 ? ch.toUpperCase() : ch));
+      const buildChars = (s) => [...s];
+
+      const measureRun = (chars) => {
+        const textSize = ctx.textSize();
+        const minAdvancePx = Math.max(1, textSize * 0.2);
+        const minSpacePx = Math.max(1, textSize * 0.28);
+
+        const s = chars.join("");
+        const prefixWidths = new Array(s.length + 1);
+        prefixWidths[0] = 0;
+
+        for (let i = 0; i < s.length; i += 1) {
+          const w = ctx.textWidth(s.slice(0, i + 1));
+          prefixWidths[i + 1] = Number.isFinite(w) ? w : prefixWidths[i];
         }
+
+        for (let i = 0; i < s.length; i += 1) {
+          let a = prefixWidths[i + 1] - prefixWidths[i];
+          if (!Number.isFinite(a) || a <= 0) a = minAdvancePx;
+          if (s[i] === " ") a = Math.max(a, minSpacePx);
+          prefixWidths[i + 1] = prefixWidths[i] + Math.max(a, minAdvancePx);
+        }
+
+        const totalPx = prefixWidths[s.length];
+        const totalAngle = totalPx / r;
+
+        return { prefixWidths, totalPx, totalAngle, text: s };
+      };
+
+      const fitChars = (chars) => {
+        const ell = buildChars("…");
+
+        const m0 = measureRun(chars);
+        if (m0.totalAngle <= availableAngle) return { chars, m: m0 };
+
+        const mell = measureRun(ell);
+        if (mell.totalAngle > availableAngle) return { chars: ell, m: mell };
+
+        let lo = 0;
+        let hi = chars.length;
+        let best = 0;
+
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1;
+          const sliced = chars.slice(0, mid);
+          const test = mid < chars.length ? sliced.concat(ell) : sliced;
+          const tm = measureRun(test);
+          if (tm.totalAngle <= availableAngle) {
+            best = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+
+        const sliced = chars.slice(0, best);
+        const finalChars = best < chars.length ? sliced.concat(ell) : sliced;
+        return { chars: finalChars, m: measureRun(finalChars) };
+      };
+
+      let chars = buildChars(txt);
+      let fitted = fitChars(chars);
+
+      while (fitted.m.totalAngle > availableAngle && ctx.textSize() > minSize) {
+        ctx.textSize(ctx.textSize() * 0.9);
+        fitted = fitChars(chars);
+      }
+
+      if (fitted.m.totalAngle > availableAngle) {
+        ctx.textSize(baseSize);
+        return;
+      }
+
+      chars = fitted.chars;
+
+      const { prefixWidths, totalPx } = fitted.m;
+
+      const midAngle = (a0 + a1) / 2;
+      const reverse = midAngle < Math.PI;
+
+      const startTheta = reverse
+        ? midAngle + totalPx / r / 2
+        : midAngle - totalPx / r / 2;
+
+      for (let i = 0; i < chars.length; i += 1) {
+        const ch = chars[i];
+        const posPx = prefixWidths[i];
+        const theta = reverse ? startTheta - posPx / r : startTheta + posPx / r;
+
         const x = cx + r * Math.cos(theta);
         const y = cy + r * Math.sin(theta);
+
+        if (ch === " ") continue;
+
         ctx.push();
         ctx.translate(x, y);
-        let rotation = theta + ctx.HALF_PI;
-        if (reverse) rotation += ctx.PI;
+        let rotation = theta + halfPi;
+        if (reverse) rotation += Math.PI;
         ctx.rotate(rotation);
-        ctx.textAlign(ctx.CENTER, ctx.CENTER);
-        ctx.text(i === 0 ? txt[i].toUpperCase() : txt[i], 0, 0);
+        ctx.textAlign(ctx.LEFT, ctx.CENTER);
+        ctx.text(ch, 0, 0);
         ctx.pop();
-        if (reverse) {
-          currentAngle -= (charWidth * spacingFactor + gap) / r;
-        } else {
-          currentAngle += (charWidth * spacingFactor + gap) / r;
-        }
       }
+
+      ctx.textSize(baseSize);
     };
 
     const drawWedgeLayer = (ctx) => {
+      const cx = p.width / 2 - extrudeOffsetX / 2;
+      const cy = p.height / 2 - extrudeOffsetY / 2;
+
       ctx.push();
       ctx.fill(pieFill);
       ctx.noStroke();
-      const cx = ctx.width / 2;
-      const cy = ctx.height / 2;
       ctx.ellipse(cx, cy, outerRadius * 2, outerRadius * 2);
       ctx.pop();
+
       ctx.push();
-      Object.keys(wedgeData).forEach((t) => {
+      for (const t of Object.keys(wedgeData)) {
         const w = wedgeData[t];
+
         ctx.stroke(circleColor);
         ctx.strokeWeight(1);
         ctx.noFill();
@@ -487,6 +599,7 @@
           w.start,
           w.start + w.angle
         );
+
         ctx.line(
           cx,
           cy,
@@ -499,81 +612,60 @@
           cx + outerRadius * Math.cos(w.start + w.angle),
           cy + outerRadius * Math.sin(w.start + w.angle)
         );
-        const label = shortenText(t, 24);
-        const baseMargin = dotSize;
-        const labelRadius = outerRadius + baseMargin + dotSize * 0.2;
-        const angleAvailable = Math.max(w.angle - 0.02, 0.01);
-        let currentSize = dotSize;
-        while (currentSize > 5) {
-          ctx.textSize(currentSize);
-          const totalWidth = ctx.textWidth(label);
-          const totalAngle = totalWidth / Math.max(labelRadius, 1);
-          if (totalAngle <= angleAvailable) break;
-          currentSize *= 0.85;
-        }
+
+        const labelRaw = shortenText(t, 64).toLowerCase();
+        const labelRadius = outerRadius + dotSize * 1.45;
+
+        ctx.push();
+        ctx.noStroke();
         ctx.fill(highlightColor);
-        ctx.stroke(255);
+        ctx.textSize(dotSize * 1.5);
         drawArcText(
           ctx,
-          label,
+          labelRaw,
           cx,
           cy,
           labelRadius,
           w.start,
           w.start + w.angle
         );
-      });
+        ctx.pop();
+      }
       ctx.pop();
     };
 
-    const shortenText = (str, maxLen = 30) => {
-      if (!str) return "";
-      return str.length <= maxLen ? str : str.substring(0, maxLen - 3) + "...";
-    };
+    const drawBaseGeometry = (ctx) => {
+      const cx = p.width / 2 - extrudeOffsetX / 2;
+      const cy = p.height / 2 - extrudeOffsetY / 2;
 
-    const nodeMetric = (node) => {
-      if (sizeMode === "reactions") return node.radiusReactions || 0;
-      return node.radiusLinks || 0;
-    };
+      ctx.fill(pieFill);
+      ctx.stroke(circleColor);
+      ctx.strokeWeight(1);
 
-    const nodeInnerSize = (node) => {
-      const metric = nodeMetric(node);
-      const groupId = node.type;
-      const maxMetric =
-        sizeMode === "reactions"
-          ? groupMaxReactions[groupId] || 1
-          : groupMaxLinks[groupId] || 1;
-      const clamped = Math.max(0, Math.min(metric, maxMetric));
-      return p.map(clamped, 0, maxMetric, dotSize * 0.2, dotSize);
-    };
-
-    const drawBaseGeometry = () => {
-      const cx = p.width / 2;
-      const cy = p.height / 2;
-      p.fill(pieFill);
-      p.stroke(circleColor);
-      p.ellipse(
+      ctx.ellipse(
         cx + extrudeOffsetX,
         cy + extrudeOffsetY,
         outerRadius * 2,
         outerRadius * 2
       );
+
       const extrusionMargin = dotSize * 0.1;
-      p.noStroke();
-      p.fill(pieFill);
-      p.beginShape();
-      p.vertex(cx - outerRadius + extrusionMargin, cy);
-      p.vertex(cx + outerRadius - extrusionMargin, cy);
-      p.vertex(
+      ctx.noStroke();
+      ctx.fill(pieFill);
+      ctx.beginShape();
+      ctx.vertex(cx - outerRadius + extrusionMargin, cy);
+      ctx.vertex(cx + outerRadius - extrusionMargin, cy);
+      ctx.vertex(
         cx + extrudeOffsetX + outerRadius - extrusionMargin,
         cy + extrudeOffsetY
       );
-      p.vertex(
+      ctx.vertex(
         cx + extrudeOffsetX - outerRadius + extrusionMargin,
         cy + extrudeOffsetY
       );
-      p.endShape(p.CLOSE);
-      Object.keys(wedgeData).forEach((t) => {
+      ctx.endShape(ctx.CLOSE);
+
+      for (const t of Object.keys(wedgeData)) {
         const w = wedgeData[t];
         const topArcPoints = getArcPoints(
           cx,
@@ -586,87 +678,178 @@
           x: pt.x + extrudeOffsetX,
           y: pt.y + extrudeOffsetY,
         }));
-        p.stroke(circleColor);
-        p.noFill();
-        p.strokeWeight(1);
-        p.line(
+
+        ctx.stroke(circleColor);
+        ctx.noFill();
+        ctx.strokeWeight(1);
+
+        ctx.line(
           topArcPoints[0].x,
           topArcPoints[0].y,
           bottomArcPoints[0].x,
           bottomArcPoints[0].y
         );
-        p.line(
+        ctx.line(
           topArcPoints[topArcPoints.length - 1].x,
           topArcPoints[topArcPoints.length - 1].y,
           bottomArcPoints[bottomArcPoints.length - 1].x,
           bottomArcPoints[bottomArcPoints.length - 1].y
         );
-      });
-      drawWedgeLayer(p);
+      }
+
+      drawWedgeLayer(ctx);
     };
 
-    let staticLayer = null;
-    let renderer = null;
+    const getStaticKey = () =>
+      [
+        p.width,
+        p.height,
+        outerRadius,
+        pieFill,
+        pieBackground,
+        circleColor,
+        highlightColor,
+        dotSize,
+        extrudeOffsetX,
+        extrudeOffsetY,
+        types.join("|"),
+      ].join("::");
+
+    const getNodesKey = () =>
+      [
+        p.width,
+        p.height,
+        outerRadius,
+        dotSize,
+        sizeMode,
+        selectedEmoji ?? "all",
+        visibleNodeIds.size,
+      ].join("::");
+
+    const getLinksKey = () =>
+      [
+        p.width,
+        p.height,
+        outerRadius,
+        showLinks ? "on" : "off",
+        selectedEmoji ?? "all",
+      ].join("::");
+
+    const invalidateLayers = () => {
+      staticLayer = null;
+      nodesLayer = null;
+      linksLayer = null;
+      staticKey = null;
+      nodesKey = null;
+      linksKey = null;
+    };
+
+    const ensureStaticFresh = () => {
+      const k = getStaticKey();
+      if (staticLayer && staticKey === k) return;
+      rebuildStaticLayer();
+    };
+
+    const ensureNodesFresh = () => {
+      const k = getNodesKey();
+      if (nodesLayer && nodesKey === k) return;
+      rebuildNodesLayer();
+    };
+
+    const ensureLinksFresh = () => {
+      const k = getLinksKey();
+      if (linksLayer && linksKey === k) return;
+      rebuildLinksLayer();
+    };
+
+    const setLayerQuality = (g) => {
+      if (!g) return;
+      if (typeof g.pixelDensity === "function") g.pixelDensity(5);
+      if (typeof g.smooth === "function") g.smooth();
+    };
 
     const rebuildStaticLayer = () => {
       if (!renderer) return;
-      if (
-        !staticLayer ||
-        staticLayer.width !== renderer.width ||
-        staticLayer.height !== renderer.height
-      ) {
-        staticLayer = renderer.createGraphics(renderer.width, renderer.height);
-      }
+      staticLayer = renderer.createGraphics(p.width, p.height);
+      setLayerQuality(staticLayer);
       staticLayer.clear();
-      drawWedgeLayer(staticLayer);
+      drawBaseGeometry(staticLayer);
+      staticKey = getStaticKey();
     };
 
-    const drawAllLinks = () => {
-      if (!showLinks) return;
-      p.stroke(highlightColor);
-      p.strokeWeight(1);
-      p.noFill();
+    const rebuildNodesLayer = () => {
+      if (!renderer) return;
+      nodesLayer = renderer.createGraphics(p.width, p.height);
+      setLayerQuality(nodesLayer);
+      nodesLayer.clear();
+
+      for (const n of nodes) {
+        if (visibleNodeIds.has(n.id)) {
+          const innerSize = nodeInnerSize(n);
+          const c = nodesLayer.color(n.color);
+          c.setAlpha(160);
+          nodesLayer.noStroke();
+          nodesLayer.fill(c);
+          nodesLayer.ellipse(n.x, n.y, innerSize, innerSize);
+        }
+
+        nodesLayer.noFill();
+        nodesLayer.stroke(0);
+        nodesLayer.strokeWeight(0.1);
+        nodesLayer.ellipse(n.x, n.y, dotSize, dotSize);
+      }
+
+      nodesKey = getNodesKey();
+    };
+
+    const rebuildLinksLayer = () => {
+      if (!renderer) return;
+      linksLayer = renderer.createGraphics(p.width, p.height);
+      setLayerQuality(linksLayer);
+      linksLayer.clear();
+
+      if (!showLinks) {
+        linksKey = getLinksKey();
+        return;
+      }
+
+      linksLayer.stroke(highlightColor);
+      linksLayer.strokeWeight(1);
+      linksLayer.noFill();
+
       for (const l of linksLocal) {
         const a = nodesById[l.source];
         const b = nodesById[l.target];
         if (!a || !b) continue;
         if (!visibleNodeIds.has(a.id) || !visibleNodeIds.has(b.id)) continue;
-        p.line(a.x, a.y, b.x, b.y);
+        linksLayer.line(a.x, a.y, b.x, b.y);
       }
-    };
 
-    const drawNodes = () => {
-      nodes.forEach((node) => {
-        p.stroke(0);
-        p.strokeWeight(0.1);
-        p.noFill();
-        p.ellipse(node.x, node.y, dotSize, dotSize);
-        if (!visibleNodeIds.has(node.id)) return;
-        const innerSize = nodeInnerSize(node);
-        p.noStroke();
-        const innerColor = p.color(node.color);
-        innerColor.setAlpha(160);
-        p.fill(innerColor);
-        p.ellipse(node.x, node.y, innerSize, innerSize);
-      });
+      linksKey = getLinksKey();
     };
 
     const drawHover = () => {
       if (!hoverNode) return;
+
       const innerSize = nodeInnerSize(hoverNode);
-      p.stroke(0);
+
+      // p.stroke(0);
+      // p.strokeWeight(.5);
+      p.noStroke();
       p.fill(highlightColor);
       p.ellipse(hoverNode.x, hoverNode.y, dotSize, dotSize);
+
       p.noStroke();
       p.fill(highlightColor);
       p.ellipse(hoverNode.x, hoverNode.y, innerSize, innerSize);
+
       p.push();
-      p.noFill();
       p.textSize(8);
       p.stroke(255);
       p.strokeWeight(1);
       p.fill(highlightColor);
-      p.text(shortenText(hoverNode.id), hoverNode.x, hoverNode.y - 10);
+      p.text(shortenText(hoverNode.id), hoverNode.x, hoverNode.y - 8);
+
       p.pop();
     };
 
@@ -674,15 +857,14 @@
       renderer = p;
       p.createCanvas(p.windowWidth, p.windowHeight);
       p.textAlign(p.CENTER, p.CENTER);
+      p.noLoop();
       parseGraphData();
       computeLayout();
-      p.noLoop();
     };
 
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth, p.windowHeight);
       computeLayout();
-      rebuildStaticLayer();
       scheduleRedraw();
     };
 
@@ -690,11 +872,13 @@
       const step = 0.001;
       let nextZoom = zoom - event.deltaY * step;
       nextZoom = p.constrain(nextZoom, 0.5, 5);
+
       const scale = nextZoom / zoom;
       const dx = p.mouseX - (p.width / 2 + panX);
       const dy = p.mouseY - (p.height / 2 + panY);
       panX -= dx * (scale - 1);
       panY -= dy * (scale - 1);
+
       zoom = nextZoom;
       scheduleRedraw();
       return false;
@@ -713,9 +897,8 @@
       if (!isDragging) return;
       panX = p.mouseX - dragStartX;
       panY = p.mouseY - dragStartY;
-      if (p.dist(p.mouseX, p.mouseY, dragStartScreenX, dragStartScreenY) > 5) {
+      if (p.dist(p.mouseX, p.mouseY, dragStartScreenX, dragStartScreenY) > 5)
         hasDragged = true;
-      }
       scheduleRedraw();
     };
 
@@ -729,15 +912,15 @@
         (!hoverNode && next) ||
         (hoverNode && !next) ||
         (hoverNode && next && hoverNode.id !== next.id);
+
       hoverNode = next;
       hoveredNode = hoverNode
         ? { id: hoverNode.id, post: hoverNode.post }
         : null;
       hoveredText = hoverNode ? tooltipForPost(hoverNode) : "";
+
       if (changed) {
-        if (p.canvas) {
-          p.canvas.style.cursor = hoverNode ? "pointer" : "default";
-        }
+        if (p.canvas) p.canvas.style.cursor = hoverNode ? "pointer" : "default";
         scheduleRedraw();
       }
     };
@@ -749,17 +932,28 @@
       }
     };
 
+    const syncLayersForState = () => {
+      ensureStaticFresh();
+      ensureNodesFresh();
+      ensureLinksFresh();
+    };
+
     p.draw = () => {
       p.background(pieBackground);
       p.textSize(8);
       p.strokeJoin(p.ROUND);
+
+      syncLayersForState();
+
       p.push();
       p.translate(p.width / 2 + panX, p.height / 2 + panY);
       p.scale(zoom);
       p.translate(-p.width / 2, -p.height / 2);
-      drawBaseGeometry();
-      drawNodes();
-      drawAllLinks();
+
+      if (staticLayer) p.image(staticLayer, 0, 0);
+      if (nodesLayer) p.image(nodesLayer, 0, 0);
+      if (linksLayer && showLinks) p.image(linksLayer, 0, 0);
+
       drawHover();
       p.pop();
     };

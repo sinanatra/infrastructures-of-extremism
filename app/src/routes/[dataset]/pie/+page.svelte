@@ -29,9 +29,8 @@
   <Pie
     {data}
     dotSize={5}
-    eThreshold={0.07}
     extrudeOffsetX={0}
-    extrudeOffsetY={150}
+    extrudeOffsetY={100}
     backgroundColor={theme.backgroundColor}
     pieBackground={theme.pieBackground}
     pieFill={theme.pieFill}
