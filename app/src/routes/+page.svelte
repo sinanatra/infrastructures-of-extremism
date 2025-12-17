@@ -63,11 +63,11 @@
           style={`opacity:${coverIndex === i ? 1 : 0};transition:opacity ${fadeDuration}ms ease-in-out;`}
         >
           {#each set.items as item (item.src)}
-            <div class="coverPane">
+            <div class="coverPane {item.key}">
               <img
                 src={item.src}
                 alt={item.alt}
-                class="coverImg"
+                class="coverImg {item.key}"
                 loading="lazy"
                 decoding="async"
               />
@@ -395,6 +395,14 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .coverImg.pie {
+    background-color: gainsboro;
+  }
+
+  img.pie {
+    object-fit: contain;
+    transform: scale(1.8);
   }
 
   .custom-shadow {
