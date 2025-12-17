@@ -2,6 +2,7 @@
   import P5 from "p5-svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import Tooltip from "$lib/Tooltip.svelte";
+  import Trailer from "$lib/Trailer.svelte";
   import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
   import { captureCanvasAsPng } from "$lib/captureCanvas.js";
@@ -37,6 +38,13 @@
   const { posts, links } = data;
   const prepared = prepareNetwork(data, { circleColor });
   const preparedNodes = prepared.nodes;
+  const trailerGroups = (prepared.slicePaths ?? []).map((slice) => ({
+    id: slice.id ?? slice.group?.id ?? slice.label ?? "group",
+    label: slice.label ?? slice.group?.label ?? slice.id ?? "group",
+  }));
+  const trailerAvailable = trailerGroups.length > 0;
+  let trailerState = $state(trailerAvailable ? "idle" : "done");
+  let trailerBlocking = $state(trailerAvailable);
 
   const canonicalTopic = (raw) => {
     const candidate = ((Array.isArray(raw) ? raw[0] : raw) ?? "")
@@ -885,6 +893,7 @@
     };
 
     p.mouseWheel = (event) => {
+      if (trailerBlocking) return false;
       const step = 0.001;
       let nextZoom = zoom - event.deltaY * step;
       nextZoom = p.constrain(nextZoom, 0.5, 5);
@@ -901,6 +910,7 @@
     };
 
     p.mousePressed = () => {
+      if (trailerBlocking) return;
       isDragging = true;
       dragStartScreenX = p.mouseX;
       dragStartScreenY = p.mouseY;
@@ -910,6 +920,7 @@
     };
 
     p.mouseDragged = () => {
+      if (trailerBlocking) return;
       if (!isDragging) return;
       panX = p.mouseX - dragStartX;
       panY = p.mouseY - dragStartY;
@@ -919,10 +930,12 @@
     };
 
     p.mouseReleased = () => {
+      if (trailerBlocking) return;
       isDragging = false;
     };
 
     p.mouseMoved = () => {
+      if (trailerBlocking) return;
       const next = getNodeUnderPoint(p.mouseX, p.mouseY);
       const changed =
         (!hoverNode && next) ||
@@ -942,6 +955,7 @@
     };
 
     p.mouseClicked = () => {
+      if (trailerBlocking) return;
       if (hasDragged) return;
       if (hoverNode && hoverNode.post && hoverNode.post.url) {
         window.open(hoverNode.post.url, "_blank", "noreferrer");
@@ -985,7 +999,10 @@
   class="relative h-screen overflow-hidden"
   style={`background:${pieBackground}; color:${textColor};`}
 >
-  <div class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none">
+  <div
+    class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
+    hidden={trailerState !== "done"}
+  >
     <div
       class="pointer-events-auto max-w-5xl mx-auto flex flex-col gap-2"
       on:pointerdown|stopPropagation
@@ -1025,9 +1042,12 @@
     </div>
   </div>
 
-  <!-- <div class="absolute top-4 right-4 z-20 pointer-events-auto">
+  <div
+    class="absolute top-4 right-4 z-20 pointer-events-auto"
+    hidden={trailerState !== "done"}
+  >
     <ExportControl label="Export PNG" on:export={exportPng} />
-  </div> -->
+  </div>
 
   <P5
     class="h-full w-full"
@@ -1039,6 +1059,29 @@
 
   {#if hoveredNode}
     <Tooltip text={hoveredText} />
+  {/if}
+
+  {#if trailerAvailable}
+    <Trailer
+      groups={trailerGroups}
+      highlightColor={highlightColor}
+      backgroundColor={pieBackground}
+      textColor={textColor}
+      introMode={true}
+      introHeading=""
+      introSummary="this visualization groups posts by dominant topics."
+      introBody=""
+      enterLabel="Enter"
+      seedLabel={data?.dataset?.label ?? data?.dataset?.slug}
+      on:update={(event) => {
+        trailerState = event.detail?.state ?? trailerState;
+        trailerBlocking = event.detail?.state === "idle";
+        requestRedraw();
+      }}
+      on:block={(event) => {
+        trailerBlocking = event.detail?.blocking ?? false;
+      }}
+    />
   {/if}
 </section>
 

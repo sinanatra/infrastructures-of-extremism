@@ -7,71 +7,31 @@
     .slice()
     .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
 
-  const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
-
-  const coverImages = [
-    "/cover/tricoloredelsangueitalico.png",
-    "/cover/tricoloredelsangueitalico_tree.png",
-    "/cover/tricoloredelsangueitalico_pie.png",
-
-    "/cover/afdjugendbw.png",
-    "/cover/afdjugendbw_tree.png",
-    "/cover/afdjugendbw_pie.png",
-
-    "/cover/jungenationalisten.png",
-    "/cover/jungenationalisten_tree.png",
-    "/cover/jungenationalisten_pie.png",
-
-    "/cover/generationidentitaire.png",
-    "/cover/generationidentitaire_tree.png",
-    "/cover/generationidentitaire_pie.png",
-  ].sort(() => Math.random() - 0.5);
-
-  let zipLib = null;
-  const loadZip = async () => {
-    if (zipLib) return zipLib;
-    const mod = await import("jszip");
-    zipLib = mod.default || mod;
-    return zipLib;
-  };
-
-  const downloadDataset = async (slug) => {
-    const JSZip = await loadZip();
-    const zip = new JSZip();
-    const files = ["message_nodes.csv", "message_edges.csv", "nodes.csv"];
-
-    for (const file of files) {
-      const url = `/data/${encodeURIComponent(slug)}/${file}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        console.warn(`Missing file: ${url}`);
-        continue;
-      }
-      zip.file(file, await res.blob());
-    }
-
-    const blob = await zip.generateAsync({ type: "blob" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${slug}.zip`;
-    link.rel = "noopener";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(link.href), 0);
-  };
+  const coverSets = datasets.map((d) => {
+    const slug = d.slug;
+    return {
+      slug,
+      label: d.label || slug,
+      items: [
+        { src: `/cover/${slug}.png`, key: "normal", alt: `${slug} map` },
+        { src: `/cover/${slug}_pie.png`, key: "pie", alt: `${slug} topics` },
+        { src: `/cover/${slug}_tree.png`, key: "tree", alt: `${slug} network` },
+      ],
+    };
+  });
 
   const fadeDuration = 1500;
   const cycleDelay = fadeDuration + 2000;
+  const coverOrientation = "vertical";
 
   let coverIndex = $state(0);
   let coverTimer = null;
 
   const startCoverCycle = () => {
     stopCoverCycle();
-    if (coverImages.length < 2) return;
+    if (coverSets.length < 2) return;
     coverTimer = setInterval(() => {
-      coverIndex = (coverIndex + 1) % coverImages.length;
+      coverIndex = (coverIndex + 1) % coverSets.length;
     }, cycleDelay);
   };
 
@@ -95,25 +55,32 @@
 </script>
 
 <section class="bg-[#111111] text-gray-400 min-h-screen">
-  {#if coverImages.length}
+  {#if coverSets.length}
     <div class="sticky top-0 w-screen h-screen overflow-hidden">
-      {#each coverImages as src, i (src)}
-        <img
-          {src}
-          alt="Dataset visualization cover"
-          class="absolute inset-0 h-[150vh] w-full object-cover"
+      {#each coverSets as set, i (set.slug)}
+        <div
+          class={`absolute inset-0 coverTriptych ${coverOrientation}`}
           style={`opacity:${coverIndex === i ? 1 : 0};transition:opacity ${fadeDuration}ms ease-in-out;`}
-          loading="lazy"
-          decoding="async"
-          aria-hidden={coverIndex !== i}
-        />
+        >
+          {#each set.items as item (item.src)}
+            <div class="coverPane">
+              <img
+                src={item.src}
+                alt={item.alt}
+                class="coverImg"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          {/each}
+        </div>
       {/each}
     </div>
   {/if}
 
-  <div class="relative flex justify-end">
+  <div class="relative flex justify-center">
     <article
-      class="relative z-10 w-full max-w-[640px] px-4 pt-20 pb-10 -mt-[60vh] bg-black"
+      class="relative z-10 w-full max-w-[640px] px-4 pt-10 pb-10 -mt-[30vh] bg-black"
     >
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
@@ -404,6 +371,32 @@
 </section>
 
 <style>
+  .coverTriptych {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    display: grid;
+  }
+
+  .coverTriptych.vertical {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .coverTriptych.horizontal {
+    grid-template-rows: repeat(3, 1fr);
+  }
+
+  .coverPane {
+    overflow: hidden;
+  }
+
+  .coverImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .custom-shadow {
     box-shadow:
       0 0 0 8px rgba(0, 0, 0, 0.9),

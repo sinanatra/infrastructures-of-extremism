@@ -1,6 +1,7 @@
 <script>
   import P5 from "p5-svelte";
   import ExportControl from "$lib/ExportControl.svelte";
+  import Trailer from "$lib/Trailer.svelte";
   import { captureCanvasAsPng } from "$lib/captureCanvas.js";
 
   let {
@@ -49,6 +50,34 @@
       ];
     })
   );
+
+  const trailerGroups = (() => {
+    const raw = data.groups ?? [];
+    const seen = new Set();
+    const result = [];
+    for (const group of raw) {
+      const id = strip(group.id ?? group.username ?? group.slug ?? group.label ?? "");
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      result.push({
+        id,
+        label: cleanLabel(group) || id,
+      });
+    }
+    if (!result.length) {
+      const fallbackId = strip(data?.dataset?.slug ?? "");
+      if (fallbackId) {
+        result.push({
+          id: fallbackId,
+          label: data?.dataset?.label ?? data?.dataset?.slug ?? fallbackId,
+        });
+      }
+    }
+    return result;
+  })();
+  const trailerAvailable = trailerGroups.length > 0;
+  let trailerState = $state(trailerAvailable ? "idle" : "done");
+  let trailerBlocking = $state(trailerAvailable);
 
   const edges = (data.links ?? [])
     .map((l) => ({
@@ -321,6 +350,7 @@
   };
 
   const handleClick = (sx, sy) => {
+    if (trailerBlocking) return;
     updateHover(sx, sy);
     if (!hoveredId) return;
     const url = `https://t.me/${hoveredId}`;
@@ -358,11 +388,13 @@
       };
 
       p.mouseMoved = () => {
+        if (trailerBlocking) return;
         if (isPanning) return;
         updateHover(p.mouseX, p.mouseY);
       };
 
       p.mousePressed = (evt) => {
+        if (trailerBlocking) return;
         if (evt.button !== 0) return;
         isPanning = true;
         panStart = {
@@ -376,6 +408,7 @@
       };
 
       p.mouseDragged = () => {
+        if (trailerBlocking) return;
         if (!isPanning || !panStart) return;
         const dx = p.mouseX - panStart.x;
         const dy = p.mouseY - panStart.y;
@@ -386,6 +419,7 @@
       };
 
       p.mouseReleased = () => {
+        if (trailerBlocking) return;
         if (!isPanning) return;
         isPanning = false;
         setCursor(hoveredId ? "pointer" : "grab");
@@ -397,11 +431,13 @@
       };
 
       p.mouseWheel = (event) => {
+        if (trailerBlocking) return false;
         zoomAt(event.deltaY, event.offsetX, event.offsetY);
         return false;
       };
 
       p.touchStarted = (evt) => {
+        if (trailerBlocking) return false;
         const touches = evt.touches ?? [];
         if (touches.length === 1) {
           const t = touches[0];
@@ -417,6 +453,7 @@
       };
 
       p.touchMoved = (evt) => {
+        if (trailerBlocking) return false;
         const touches = evt.touches ?? [];
         if (!isPanning || !panStart || !touches.length) return false;
         const t = touches[0];
@@ -433,6 +470,7 @@
       };
 
       p.touchEnded = (evt) => {
+        if (trailerBlocking) return false;
         const touches = evt.touches ?? [];
         if (!isPanning) return false;
         isPanning = false;
@@ -594,9 +632,12 @@
   class="relative h-screen overflow-hidden"
   style={`background:${theme.backgroundColor}; color:${theme.textColor};`}
 >
-  <!-- <div class="absolute top-4 right-4 z-20 pointer-events-auto">
+  <div
+    class="absolute top-4 right-4 z-20 pointer-events-auto"
+    hidden={trailerState !== "done"}
+  >
     <ExportControl label="Export PNG" on:export={exportPng} />
-  </div> -->
+  </div>
   <P5
     className="w-full h-full"
     {sketch}
@@ -604,6 +645,27 @@
     role="img"
     on:instance={handleInstance}
   />
+  {#if trailerAvailable}
+    <Trailer
+      groups={trailerGroups}
+      highlightColor={theme.highlightColor}
+      backgroundColor={theme.backgroundColor}
+      textColor={theme.textColor}
+      introMode={true}
+      introHeading=""
+      introSummary="this visualization reveals how mentions and forwarded posts connect groups."
+      introBody=""
+      enterLabel="Enter"
+      on:update={(event) => {
+        trailerState = event.detail?.state ?? trailerState;
+        trailerBlocking = event.detail?.state === "idle";
+        requestRedraw();
+      }}
+      on:block={(event) => {
+        trailerBlocking = event.detail?.blocking ?? false;
+      }}
+    />
+  {/if}
 </section>
 
 <style>

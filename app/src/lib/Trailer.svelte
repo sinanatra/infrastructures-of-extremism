@@ -1,13 +1,22 @@
 
 
 <script>
-  import { createEventDispatcher, onDestroy } from "svelte";
+  import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
   let {
     groups = [],
     highlightColor = "yellow",
     backgroundColor = "#000",
     textColor = "#fff",
+    autoPlay = false,
+    allowSkip = true,
+    allowStart = true,
+    introMode = false,
+    introHeading = "",
+    introSummary = "",
+    introBody = "",
+    seedLabel = null,
+    enterLabel = "Enter",
   } = $props();
 
   const dispatch = createEventDispatcher();
@@ -18,6 +27,8 @@
   let visible = $state(new Set());
   let visitedOrder = $state([]);
   const perGroupMs = 250;
+  const defaultIntroSummary =
+    "this visualization shows the network of related channels: the ones they talk about and the ones resharing their posts.";
 
   const reset = () => {
     clearTimer();
@@ -85,12 +96,20 @@
   };
 
   const skip = () => {
-    if (state === "done") return;
+    if (state === "done" || !allowSkip) return;
     finish();
   };
 
   onDestroy(() => {
     clearTimer();
+  });
+
+  onMount(() => {
+    if (introMode && state !== "done") {
+      dispatch("block", { blocking: true });
+    } else if (autoPlay && !introMode && state === "idle") {
+      start();
+    }
   });
 </script>
 
@@ -109,82 +128,113 @@
       }`}
       style={`background:${backgroundColor}; border:1px solid ${highlightColor}; color:${textColor};`}
     >
-      {#if state === "playing"}
-        <div class="w-full text-sm opacity-80">
-          Showing all groups in order of appearance.
-        </div>
-      {/if}
-
-      {#if state === "idle"}
-        <div class="text-2xl">
-          Starting from the right-wing extremist Telegram group
-          <span class="italic" style="color: {highlightColor};">
-            {groups[0]?.label ?? "the seed"}
-          </span>
-          , this visualization shows the network of related channels: the ones they
-          talk about and the ones resharing their posts.
-        </div>
-      {/if}
-
-      <div
-        class={`flex ${
-          state === "idle"
-            ? "items-center justify-center gap-3"
-            : "items-center gap-3 w-full"
-        }`}
-      >
-        {#if state === "playing"}
-          <div class="flex-1 min-w-0">
-            <div class="text-sm opacity-80 truncate">
-              {groups[Math.min(idx, groups.length - 1)]?.label ?? ""}
-            </div>
-            <div class="text-[11px] opacity-60">
-              {Math.min(idx + 1, groups.length)} / {groups.length}
-            </div>
+      {#if introMode}
+        {#if introHeading}
+          <div class="text-lg uppercase tracking-wide">
+            {introHeading}
           </div>
         {/if}
-
-        {#if state === "paused"}
-          <div class="flex-1 min-w-0">
-            <div class="text-sm opacity-80 truncate">Paused</div>
-            <div class="text-[11px] opacity-60">
-              {Math.min(idx, groups.length)} / {groups.length}
-            </div>
+        <div class="text-2xl text-center">
+          Starting from the right-wing extremist Telegram group
+          <span class="italic" style={`color:${highlightColor};`}>
+            {seedLabel ?? groups[0]?.label ?? groups[0]?.id ?? "the seed"}
+          </span>
+          , {introSummary || defaultIntroSummary}
+        </div>
+        {#if introBody}
+          <div class="text-sm opacity-80">
+            {introBody}
+          </div>
+        {/if}
+        <div class="flex w-full justify-center">
+          <button
+            class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+            style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+            on:click={finish}
+          >
+            {enterLabel}
+          </button>
+        </div>
+      {:else}
+        {#if state === "playing"}
+          <div class="w-full text-sm opacity-80">
+            Showing all groups in order of appearance.
           </div>
         {/if}
 
         {#if state === "idle"}
-          <button
-            class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
-            style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
-            on:click={start}
-            disabled={state !== "idle"}
-            title="Play the group-by-group reveal"
-          >
-            Start
-          </button>
+          <div class="text-2xl">
+            Starting from the right-wing extremist Telegram group
+            <span class="italic" style="color: {highlightColor};">
+              {groups[0]?.label ?? "the seed"}
+            </span>
+            , this visualization shows the network of related channels: the ones they
+            talk about and the ones resharing their posts.
+          </div>
         {/if}
 
-        {#if state === "playing" || state === "paused"}
-          <button
-            class="px-3 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
-            style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
-            on:click={state === "playing" ? pause : resume}
-            title={state === "playing" ? "Pause trailer" : "Resume trailer"}
-          >
-            {state === "playing" ? "Pause" : "Resume"}
-          </button>
-        {/if}
-
-        <button
-          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
-          style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
-          on:click={skip}
-          title="Skip the trailer"
+        <div
+          class={`flex ${
+            state === "idle"
+              ? "items-center justify-center gap-3"
+              : "items-center gap-3 w-full"
+          }`}
         >
-          Skip
-        </button>
-      </div>
+          {#if state === "playing"}
+            <div class="flex-1 min-w-0">
+              <div class="text-sm opacity-80 truncate">
+                {groups[Math.min(idx, groups.length - 1)]?.label ?? ""}
+              </div>
+              <div class="text-[11px] opacity-60">
+                {Math.min(idx + 1, groups.length)} / {groups.length}
+              </div>
+            </div>
+          {/if}
+
+          {#if state === "paused"}
+            <div class="flex-1 min-w-0">
+              <div class="text-sm opacity-80 truncate">Paused</div>
+              <div class="text-[11px] opacity-60">
+                {Math.min(idx, groups.length)} / {groups.length}
+              </div>
+            </div>
+          {/if}
+
+          {#if state === "idle" && allowStart}
+            <button
+              class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+              style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+              on:click={start}
+              disabled={state !== "idle"}
+              title="Play the group-by-group reveal"
+            >
+              Start
+            </button>
+          {/if}
+
+          {#if state === "playing" || state === "paused"}
+            <button
+              class="px-3 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+              style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+              on:click={state === "playing" ? pause : resume}
+              title={state === "playing" ? "Pause trailer" : "Resume trailer"}
+            >
+              {state === "playing" ? "Pause" : "Resume"}
+            </button>
+          {/if}
+
+          {#if allowSkip}
+            <button
+              class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+              style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+              on:click={skip}
+              title="Skip the trailer"
+            >
+              Skip
+            </button>
+          {/if}
+        </div>
+      {/if}
     </div>
   </div>
 {/if}
