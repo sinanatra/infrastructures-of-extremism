@@ -212,15 +212,18 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 bg-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
+      <h1 class="text-3xl pb-10 m-0 text-white">
+        Several groups have been examined
+      </h1>
       <h2 class="text-2xl p-0 m-0 text-white">Open a map</h2>
 
       <p class="text-sm max-w-90 text-gray-600 pb-8">
-        Several groups have been examined. <br />
-        The activity of each group are shown over time, highlighting periods of growth,
-        decline, and inactivity.
+        Explore how groups evolve over time. <br />
+        Each timeline shows posting activity across the dataset, highlighting periods
+        of growth and decline.
       </p>
       {#if datasets.length}
         <div
@@ -257,7 +260,10 @@
       <h2 class="text-2xl p-0 m-0 text-white">Topic distribution</h2>
 
       <p class="text-sm max-w-90 text-gray-600 pb-8">
-        Posts are grouped by dominant topic and over time.
+        Compare what groups talk about, over time. <br />
+
+        Posts are grouped by their dominant topic, revealing shifts in focus and
+        recurring themes.
       </p>
       {#if datasets.length}
         <div
@@ -294,7 +300,9 @@
       <h2 class="text-2xl p-0 m-0 text-white">Analyse the Network</h2>
 
       <p class="text-sm max-w-90 text-gray-600 pb-8">
-        The graphs show the links between groups based on mentions and forwarded
+        Examine how groups are connected. <br />
+
+        The networks show links between groups based on mentions and forwarded
         posts.
       </p>
       {#if datasets.length}
