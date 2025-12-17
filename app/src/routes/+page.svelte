@@ -229,14 +229,14 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block"
+              class="flex-shrink-0 block hover:text-white"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
               <img
                 src={`/cover/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover hover:grayscale"
+                class="w-[450px] h-[450px] object-cover "
                 loading="lazy"
               />
               <div class="mt-2">
@@ -267,14 +267,14 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block"
+              class="flex-shrink-0 block hover:text-white"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/pie`}
             >
               <img
                 src={`/cover/${dataset.slug}_pie.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover hover:grayscale"
+                class="w-[450px] h-[450px] object-cover "
                 loading="lazy"
               />
               <div class="mt-2">
@@ -305,14 +305,14 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block"
+              class="flex-shrink-0 block hover:text-white"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/tree`}
             >
               <img
                 src={`/cover/${dataset.slug}_tree.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover hover:grayscale"
+                class="w-[450px] h-[450px] object-cover "
                 loading="lazy"
               />
               <div class="mt-2">
