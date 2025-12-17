@@ -193,12 +193,12 @@
           This approach shows how individual groups expand and contract, which
           channels serve as crucial hubs, and how various national factions are
           connected to one another. Although these maps cannot capture the
-          entire movement (e.g. some of these groups are private, some links we
-          tried to obtain were deleted, probably blocked), they expose part of
-          the infrastructure that allows today's far-right ideologies to
-          circulate uncensored. The lack of moderation on Telegram allows
-          extremists to spread their views, while making their content and
-          relational structures available for monitoring.
+          entire movement (e.g. some of these groups are private, some links
+          were deleted, probably blocked), they expose part of the
+          infrastructure that allows today's far-right ideologies to circulate
+          uncensored. The lack of moderation on Telegram allows extremists to
+          spread their views, while making their content and relational
+          structures available for monitoring.
         </p>
         <p>
           Finally, the investigation extends to a wider selection of Telegram
