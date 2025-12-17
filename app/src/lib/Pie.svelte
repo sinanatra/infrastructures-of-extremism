@@ -12,6 +12,7 @@
     backgroundColor = "gainsboro",
     circleColor = "#ffffff",
     textColor = "#ffffff",
+    labelFont = "monospace",
     highlightColor = "yellow",
     dotSize = 15,
     extrudeOffsetX = 0,
@@ -180,6 +181,7 @@
     selectedEmoji;
     selectedGroupId;
     pieFill;
+    labelFont;
     extrudeOffsetX;
     extrudeOffsetY;
     dotSize;
@@ -515,29 +517,27 @@
 
       const measureRun = (chars) => {
         const textSize = ctx.textSize();
-        const minAdvancePx = Math.max(1, textSize * 0.2);
-        const minSpacePx = Math.max(1, textSize * 0.28);
+        const minAdvancePx = Math.max(1, textSize * .6);
+        const minSpacePx = Math.max(1, textSize * .6);
 
         const s = chars.join("");
+        const advances = new Array(s.length);
         const prefixWidths = new Array(s.length + 1);
         prefixWidths[0] = 0;
 
         for (let i = 0; i < s.length; i += 1) {
-          const w = ctx.textWidth(s.slice(0, i + 1));
-          prefixWidths[i + 1] = Number.isFinite(w) ? w : prefixWidths[i];
-        }
-
-        for (let i = 0; i < s.length; i += 1) {
-          let a = prefixWidths[i + 1] - prefixWidths[i];
+          let a = ctx.textWidth(s[i]);
           if (!Number.isFinite(a) || a <= 0) a = minAdvancePx;
           if (s[i] === " ") a = Math.max(a, minSpacePx);
-          prefixWidths[i + 1] = prefixWidths[i] + Math.max(a, minAdvancePx);
+          a = Math.max(a, minAdvancePx);
+          advances[i] = a;
+          prefixWidths[i + 1] = prefixWidths[i] + a;
         }
 
         const totalPx = prefixWidths[s.length];
         const totalAngle = totalPx / r;
 
-        return { prefixWidths, totalPx, totalAngle, text: s };
+        return { prefixWidths, advances, totalPx, totalAngle, text: s };
       };
 
       const fitChars = (chars) => {
@@ -586,7 +586,7 @@
 
       chars = fitted.chars;
 
-      const { prefixWidths, totalPx } = fitted.m;
+      const { prefixWidths, advances, totalPx } = fitted.m;
 
       const midAngle = (a0 + a1) / 2;
       const reverse = midAngle < Math.PI;
@@ -597,7 +597,7 @@
 
       for (let i = 0; i < chars.length; i += 1) {
         const ch = chars[i];
-        const posPx = prefixWidths[i];
+        const posPx = prefixWidths[i] + (advances?.[i] ?? 0) / 2;
         const theta = reverse ? startTheta - posPx / r : startTheta + posPx / r;
 
         const x = cx + r * Math.cos(theta);
@@ -610,7 +610,7 @@
         let rotation = theta + halfPi;
         if (reverse) rotation += Math.PI;
         ctx.rotate(rotation);
-        ctx.textAlign(ctx.LEFT, ctx.CENTER);
+        ctx.textAlign(ctx.CENTER, ctx.CENTER);
         ctx.text(ch, 0, 0);
         ctx.pop();
       }
@@ -663,6 +663,7 @@
         ctx.push();
         ctx.noStroke();
         ctx.fill(highlightColor);
+        ctx.textFont(labelFont);
         ctx.textSize(dotSize * 1.5);
         drawArcText(
           ctx,
@@ -753,6 +754,7 @@
         pieBackground,
         circleColor,
         highlightColor,
+        labelFont,
         dotSize,
         extrudeOffsetX,
         extrudeOffsetY,
@@ -903,6 +905,7 @@
       p.ellipse(hoverNode.x, hoverNode.y, innerSize, innerSize);
 
       p.push();
+      p.textFont(labelFont);
       p.textSize(8);
       p.stroke(255);
       p.strokeWeight(1);
