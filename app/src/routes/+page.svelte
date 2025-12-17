@@ -214,10 +214,10 @@
   <div
     class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 bg-black"
   >
-    <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10 mt-20">
-      <!-- <h1 class="text-3xl pb-10 m-0 text-white">
+    <section id="datasets" class="max-w-8xl pb-10 overflow-auto mx-auto">
+      <h2 class="text-base pb-5 m-0 text-white">
         Several groups have been examined
-      </h1> -->
+      </h2>
       <h2 class="text-2xl p-0 m-0 text-white">Time</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
@@ -236,7 +236,7 @@
               <img
                 src={`/cover/${dataset.slug}.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover "
+                class="w-[450px] h-[450px] object-cover"
                 loading="lazy"
               />
               <div class="mt-2">
@@ -274,7 +274,7 @@
               <img
                 src={`/cover/${dataset.slug}_pie.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover "
+                class="w-[450px] h-[450px] object-cover"
                 loading="lazy"
               />
               <div class="mt-2">
@@ -297,7 +297,7 @@
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         The network reproduces the collection logic, linking channels through
-        recorded mentions and forwards.
+        mentions and forwards.
       </p>
       {#if datasets.length}
         <div
@@ -312,7 +312,7 @@
               <img
                 src={`/cover/${dataset.slug}_tree.png`}
                 alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover "
+                class="w-[450px] h-[450px] object-cover"
                 loading="lazy"
               />
               <div class="mt-2">
@@ -330,7 +330,7 @@
     class="custom-shadow justify-center flex relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
-      <h2 class="text-2xl p-0 m-0 text-white">Dataset snapshots</h2>
+      <h2 class="text-2xl p-0 m-0 text-white">Datasets</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         All the scraped material is publicly available.<br />
