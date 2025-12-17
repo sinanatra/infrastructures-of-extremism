@@ -214,16 +214,14 @@
   <div
     class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 bg-black"
   >
-    <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
-      <h1 class="text-3xl pb-10 m-0 text-white">
+    <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10 mt-20">
+      <!-- <h1 class="text-3xl pb-10 m-0 text-white">
         Several groups have been examined
-      </h1>
-      <h2 class="text-2xl p-0 m-0 text-white">Open a map</h2>
+      </h1> -->
+      <h2 class="text-2xl p-0 m-0 text-white">Time</h2>
 
-      <p class="text-sm max-w-90 text-gray-600 pb-8">
-        Explore how groups evolve over time. <br />
-        Each timeline shows posting activity across the dataset, highlighting periods
-        of growth and decline.
+      <p class="text-sm max-w-80 text-gray-600 pb-8">
+        Each timeline shows the entirety of the collected messages over time.
       </p>
       {#if datasets.length}
         <div
@@ -257,13 +255,11 @@
     class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
-      <h2 class="text-2xl p-0 m-0 text-white">Topic distribution</h2>
+      <h2 class="text-2xl p-0 m-0 text-white">Topics</h2>
 
-      <p class="text-sm max-w-90 text-gray-600 pb-8">
-        Compare what groups talk about, over time. <br />
-
-        Posts are grouped by their dominant topic, revealing shifts in focus and
-        recurring themes.
+      <p class="text-sm max-w-80 text-gray-600 pb-8">
+        Each chart shows the overall share of scraped messages by dominant
+        topic.
       </p>
       {#if datasets.length}
         <div
@@ -297,13 +293,11 @@
     class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
-      <h2 class="text-2xl p-0 m-0 text-white">Analyse the Network</h2>
+      <h2 class="text-2xl p-0 m-0 text-white">Network</h2>
 
-      <p class="text-sm max-w-90 text-gray-600 pb-8">
-        Examine how groups are connected. <br />
-
-        The networks show links between groups based on mentions and forwarded
-        posts.
+      <p class="text-sm max-w-80 text-gray-600 pb-8">
+        The network reproduces the collection logic, linking channels through
+        recorded mentions and forwards.
       </p>
       {#if datasets.length}
         <div
@@ -336,7 +330,7 @@
     class="custom-shadow justify-center flex relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
-      <h2 class="text-2xl p-0 m-0 text-white">Download the datasets</h2>
+      <h2 class="text-2xl p-0 m-0 text-white">Dataset snapshots</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         All the scraped material is publicly available.<br />
@@ -404,7 +398,7 @@
     height: 100%;
     object-fit: cover;
   }
-  
+
   .coverImg.pie {
     background-color: gainsboro;
   }
