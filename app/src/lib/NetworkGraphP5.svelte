@@ -459,8 +459,7 @@
     try {
       pInstance.redraw();
       await new Promise((resolve) => requestAnimationFrame(resolve));
-      const downloadName = datasetSlug ??
-        data?.dataset?.slug ?? "network";
+      const downloadName = datasetSlug ?? data?.dataset?.slug ?? "network";
       await captureCanvasAsPng(pInstance.canvas, downloadName);
     } catch (err) {
       console.error("Export failed", err);
@@ -783,7 +782,7 @@
           }));
           const segments = bottomSegments(topArc, bottomArc);
 
-          const topFill = p.color(backgroundColor);
+          // const topFill = p.color(backgroundColor);
           topFill.setAlpha(1);
           p.noStroke();
           p.fill(topFill);
@@ -791,7 +790,7 @@
           topArc.forEach((pt) => p.vertex(pt.x, pt.y));
           p.endShape(p.CLOSE);
 
-          const shadow = p.color(backgroundColor);
+          // const shadow = p.color(backgroundColor);
           shadow.setAlpha(0.35);
           p.fill(shadow);
           p.beginShape();
@@ -826,7 +825,7 @@
         p.noStroke();
         p.noFill();
 
-        // p.fill(backgroundColor);
+        p.fill(backgroundColor);
         p.ellipse(cx, cy, outerRingRadius * 2, outerRingRadius * 2);
         p.pop();
         p.push();
@@ -834,7 +833,6 @@
         p.stroke(highlightColor);
         p.strokeWeight(0.9 / view.scale);
         for (const slice of slicePaths) {
-          
           if (
             !Number.isFinite(slice.start) ||
             !Number.isFinite(slice.end) ||
@@ -1147,9 +1145,9 @@
   class="relative h-screen overflow-hidden"
   style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
-  <!-- <div class="absolute top-4 right-4 z-30 pointer-events-auto"> -->
-    <!-- <ExportControl label="Export PNG" on:export={exportPng} /> -->
-  <!-- </div> -->
+  <div class="absolute top-4 right-4 z-30 pointer-events-auto">
+    <ExportControl label="Export PNG" on:export={exportPng} />
+  </div>
 
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"

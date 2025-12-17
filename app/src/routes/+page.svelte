@@ -409,12 +409,12 @@
     background-color: gainsboro;
   }
 
-  @media (min-width: 1024px) {
+  /* @media (min-width: 1024px) {
     img.pie {
       object-fit: contain;
       transform: scale(1.8);
     }
-  }
+  } */
 
   .custom-shadow {
     box-shadow:
