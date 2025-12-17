@@ -17,13 +17,14 @@ export const load = async ({ fetch, params }) => {
 	const datasetSlug = params.dataset;
 	const basePath = `/data/${encodeURIComponent(datasetSlug)}`;
 
-	const [postsRes, linksRes, groupsRes, layoutRes, datasetsRes, themesRes] = await Promise.all([
+	const [postsRes, linksRes, groupsRes, layoutRes, datasetsRes, themesRes, groupEdgesRes] = await Promise.all([
 		fetch(`${basePath}/message_nodes.csv`),
 		fetch(`${basePath}/message_edges.csv`),
 		fetch(`${basePath}/nodes.csv`),
 		fetch(`${basePath}/layout.json`),
 		fetch(`/data/datasets.json`),
-		fetch(`/data/dataset-themes.json`)
+		fetch(`/data/dataset-themes.json`),
+		fetch(`${basePath}/edges.csv`)
 	]);
 
 	if ([postsRes, linksRes, groupsRes, layoutRes].some((res) => res.status === 404)) {
@@ -34,13 +35,14 @@ export const load = async ({ fetch, params }) => {
 		throw error(500, `Failed to load dataset files for "${datasetSlug}".`);
 	}
 
-	const [postsCsv, linksCsv, groupsCsv, layoutJson, datasetsJson, themesJson] = await Promise.all([
+	const [postsCsv, linksCsv, groupsCsv, layoutJson, datasetsJson, themesJson, groupEdgesCsv] = await Promise.all([
 		postsRes.text(),
 		linksRes.text(),
 		groupsRes.text(),
 		layoutRes.text(),
 		datasetsRes.ok ? datasetsRes.text() : Promise.resolve('[]'),
-		themesRes.ok ? themesRes.text() : Promise.resolve('[]')
+		themesRes.ok ? themesRes.text() : Promise.resolve('[]'),
+		groupEdgesRes.ok ? groupEdgesRes.text() : Promise.resolve('')
 	]);
 
 	const excludedGroupIds = new Set(['boost']);
@@ -135,13 +137,50 @@ export const load = async ({ fetch, params }) => {
 
 	const postIds = new Set(posts.map((p) => p.id));
 
-	const links = csvParse(linksCsv)
+	const groupLinksFromCsv = groupEdgesCsv
+		? csvParse(groupEdgesCsv)
+				.map((row) => {
+					const source = normalizeGroupId(row.from ?? row.source ?? row.from_id);
+					const target = normalizeGroupId(row.to ?? row.target ?? row.to_id);
+					return {
+						source,
+						target,
+						messageId: row.message_id?.trim?.() ?? '',
+					};
+				})
+				.filter((link) => link.source && link.target && link.source !== link.target)
+		: [];
+
+	const messageEdgeRows = csvParse(linksCsv);
+
+	const links = messageEdgeRows
 		.map((row) => ({
 			source: row.source?.trim?.() ?? row.from?.trim?.() ?? '',
 			target: row.target?.trim?.() ?? row.to?.trim?.() ?? '',
 			type: row.type?.trim() || 'link'
 		}))
 		.filter((link) => link.source && link.target && postIds.has(link.source) && postIds.has(link.target));
+
+	const postsByMessageId = new Map(posts.map((post) => [post.id, post]));
+
+	const groupLinksFromMessages = messageEdgeRows
+		.map((row) => {
+			const sourceId = row.source?.trim?.() ?? row.from?.trim?.() ?? '';
+			const targetId = row.target?.trim?.() ?? row.to?.trim?.() ?? '';
+			const sourcePost = postsByMessageId.get(sourceId);
+			const targetPost = postsByMessageId.get(targetId);
+			const source = normalizeGroupId(sourcePost?.chat ?? '');
+			const target = normalizeGroupId(targetPost?.chat ?? '');
+			if (!source || !target || source === target) return null;
+			return {
+				source,
+				target,
+				messageId: row.message_id?.trim?.() ?? '',
+			};
+		})
+		.filter(Boolean);
+
+	const groupLinks = groupLinksFromCsv.length ? groupLinksFromCsv : groupLinksFromMessages;
 
 	let layout = null;
 	try {
@@ -182,6 +221,7 @@ export const load = async ({ fetch, params }) => {
 		posts,
 		groups,
 		links,
+		groupLinks,
 		layout
 	};
 };

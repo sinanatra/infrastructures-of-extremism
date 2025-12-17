@@ -56,7 +56,9 @@
     const seen = new Set();
     const result = [];
     for (const group of raw) {
-      const id = strip(group.id ?? group.username ?? group.slug ?? group.label ?? "");
+      const id = strip(
+        group.id ?? group.username ?? group.slug ?? group.label ?? ""
+      );
       if (!id || seen.has(id)) continue;
       seen.add(id);
       result.push({
@@ -79,7 +81,12 @@
   let trailerState = $state(trailerAvailable ? "idle" : "done");
   let trailerBlocking = $state(trailerAvailable);
 
-  const edges = (data.links ?? [])
+  const rawLinks =
+    (data.groupLinks && data.groupLinks.length
+      ? data.groupLinks
+      : data.links) ?? [];
+
+  const edges = rawLinks
     .map((l) => ({
       source: strip(l.source),
       target: strip(l.target),
@@ -99,8 +106,12 @@
     allNodes.add(e.target);
   });
 
+  const firstEdgeSource = edges.length ? edges[0].source : null;
   let seed =
-    groupRoot || datasetRoot || (edges.length ? edges[0].source : null);
+    firstEdgeSource ||
+    groupRoot ||
+    datasetRoot ||
+    (edges.length ? edges[0].target : null);
 
   const children = new Map();
   for (const { source, target } of edges) {
@@ -109,8 +120,35 @@
     if (!arr.includes(target)) arr.push(target);
   }
 
-  const layers = [];
-  const discovered = new Set();
+  const buildPrimaryLayers = (rootId, depthLimit) => {
+    const layers = [];
+    const discovered = new Set();
+    if (!rootId) return { layers, discovered };
+    layers.push([rootId]);
+    discovered.add(rootId);
+    let currentLayer = [rootId];
+    for (let depth = 0; depth < depthLimit; depth++) {
+      const nextLayer = [];
+      for (const node of currentLayer) {
+        const targets = children.get(node) ?? [];
+        for (const target of targets) {
+          if (discovered.has(target)) continue;
+          discovered.add(target);
+          nextLayer.push(target);
+        }
+      }
+      if (!nextLayer.length) break;
+      layers.push(nextLayer);
+      currentLayer = nextLayer;
+    }
+    return { layers, discovered };
+  };
+
+  const maxDepth = 2;
+  const { layers: primaryLayers, discovered: primaryDiscovered } =
+    buildPrimaryLayers(seed, maxDepth);
+  const layers = [...primaryLayers];
+  const discovered = new Set(primaryDiscovered);
 
   const enqueueRoot = (root) => {
     if (!root || discovered.has(root)) return;
@@ -137,7 +175,6 @@
     }
   };
 
-  enqueueRoot(seed);
   for (const id of allNodes) {
     if (!discovered.has(id)) enqueueRoot(id);
   }
@@ -518,7 +555,7 @@
           c.setAlpha(90);
           p.noFill();
           p.stroke(c);
-          p.strokeWeight(0.1);
+          // p.strokeWeight(0.1);
           p.beginShape();
           for (let k = 0; k < polygonSides; k++) {
             const a = -Math.PI / 2 + (Math.PI * 2 * k) / polygonSides;
@@ -536,7 +573,7 @@
           c.setAlpha(60 * alphaFactor(ringIndex));
           p.noFill();
           p.stroke(c);
-          p.strokeWeight(0.9);
+          // p.strokeWeight(0.9);
           p.beginShape();
           for (let k = 0; k < polygonSides; k++) {
             const a = -Math.PI / 2 + (Math.PI * 2 * k) / polygonSides;
@@ -570,7 +607,7 @@
           const b = link.target;
           const c = p.color(theme.highlightColor);
           p.stroke(c);
-          p.strokeWeight(0.5);
+          // p.strokeWeight(0.5);
           p.line(a.x, a.y, b.x, b.y);
         });
 
@@ -584,25 +621,36 @@
             node.layerIndex === 0 ? 0 : (node.visualRing ?? node.layerIndex);
           const aFactor = node.layerIndex === 0 ? 1 : alphaFactor(ringIndex);
           p.fill(baseColor);
-          p.strokeWeight(3);
+          // p.strokeWeight(3);
           p.stroke(backgroundColor);
           p.circle(node.x, node.y, r * 2);
         });
 
         nodes.forEach((node) => {
           if (!nodeVisible(node)) return;
+
           const r = nodeRadiusFor(node.subscribers);
-          const labelColor = p.color(theme.textColor);
-          const ringIndex =
-            node.layerIndex === 0 ? 0 : (node.visualRing ?? node.layerIndex);
-          const aFactor = node.layerIndex === 0 ? 1 : alphaFactor(ringIndex);
-          p.fill(labelColor);
-          p.textAlign(p.CENTER, p.TOP);
+
+          p.fill(p.color(theme.textColor));
           p.textSize(node.layerIndex === 0 ? 16 : 13);
-          const offset = node.layerIndex === 0 ? 22 : r + 4;
+
+          const labelDist = node.layerIndex === 0 ? 22 : r + 10;
+
+          const isLeftSide =
+            node.angle > Math.PI / 2 && node.angle < (3 * Math.PI) / 2;
+
+          const textAngle = isLeftSide ? node.angle + Math.PI : node.angle;
+          const xOffset = isLeftSide ? -labelDist : labelDist;
+
           p.strokeWeight(2);
           p.stroke(backgroundColor);
-          p.text(node.label, node.x, node.y + offset);
+
+          p.push();
+          p.translate(node.x, node.y);
+          p.rotate(textAngle);
+          p.textAlign(isLeftSide ? p.RIGHT : p.LEFT, p.CENTER);
+          p.text(node.label, xOffset, 0);
+          p.pop();
         });
 
         if (centerNode && nodeVisible(centerNode)) {

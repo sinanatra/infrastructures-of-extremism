@@ -21,12 +21,15 @@
   } = $props();
 
   const TOPIC_LABELS = [
-    "national identity",
-    "identity & exclusion",
-    "conspiracy narratives",
-    "street action",
-    "doctrine",
+    "national symbols",
+    "out-groups & boundaries",
+    "elites & power",
+    "street actions",
+    "ideological texts",
     "electoral politics",
+    "media & information",
+    "security & violence",
+    "territory & space",
   ];
 
   const OTHER_LABEL = "other topics";
@@ -1064,9 +1067,9 @@
   {#if trailerAvailable}
     <Trailer
       groups={trailerGroups}
-      highlightColor={highlightColor}
+      {highlightColor}
       backgroundColor={pieBackground}
-      textColor={textColor}
+      {textColor}
       introMode={true}
       introHeading=""
       introSummary="this visualization groups posts by dominant topics."
