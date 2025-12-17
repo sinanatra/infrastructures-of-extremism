@@ -219,7 +219,7 @@
 
       <p class="text-sm max-w-90 text-gray-600 pb-8">
         Several groups have been examined. <br />
-        Shows the activity of each group over time, highlighting periods of growth,
+        The activity of each group are shown over time, highlighting periods of growth,
         decline, and inactivity.
       </p>
       {#if datasets.length}
