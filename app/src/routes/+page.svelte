@@ -216,7 +216,7 @@
   >
     <section id="datasets" class="max-w-8xl pb-10 overflow-auto mx-auto">
       <h2 class="text-base pb-5 m-0 text-white">
-        Several groups have been examined
+        Several Telegram groups have been examined
       </h2>
       <h2 class="text-2xl p-0 m-0 text-white">Time</h2>
 
