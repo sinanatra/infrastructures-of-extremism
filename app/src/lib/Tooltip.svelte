@@ -5,7 +5,7 @@
 
 <div
   class="tooltip pointer-events-auto fixed z-20 max-w-xs text-xs p-2"
-  style="right: 16px; bottom: 16px; background: var(--graph-bg, black); color: var(--graph-text, var(--graph-circle, white)); border: 0.75px solid var(--highlite-color, yellow);"
+  style="right: 16px; bottom: 16px; background: var(--graph-bg, black); color: var(--graph-text, var(--graph-circle, white)); border: 0.75px solid var(--graph-text, yellow);"
   on:click|stopPropagation
   on:pointerdown|stopPropagation
 >
@@ -23,7 +23,7 @@
 
 <style>
   .tooltip {
-    border-radius: 6px;
+    border-radius: 3px;
   }
 
   .divider {

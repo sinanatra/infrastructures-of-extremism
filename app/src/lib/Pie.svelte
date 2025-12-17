@@ -225,6 +225,7 @@
     let staticKey = null;
     let nodesKey = null;
     let linksKey = null;
+    let linksByNode = new Map();
 
     const scheduleRedraw = () => {
       if (localRedrawPending) return;
@@ -252,9 +253,25 @@
       }
     };
 
+    const rebuildLinkIndex = () => {
+      linksByNode = new Map();
+      const add = (id, peer) => {
+        if (!id || !peer) return;
+        const set = linksByNode.get(id) ?? new Set();
+        set.add(peer);
+        linksByNode.set(id, set);
+      };
+
+      for (const link of linksLocal) {
+        add(link.source, link.target);
+        add(link.target, link.source);
+      }
+    };
+
     const parseGraphData = () => {
       nodes = graphNodes.map((n) => ({ ...n }));
       linksLocal = graphLinks.map((l) => ({ ...l }));
+      rebuildLinkIndex();
       types = buildTypeOrder(nodes);
 
       groupMaxLinks = {};
@@ -616,7 +633,7 @@
         const w = wedgeData[t];
 
         ctx.stroke(circleColor);
-        ctx.strokeWeight(1);
+        ctx.strokeWeight(0.5);
         ctx.noFill();
         ctx.arc(
           cx,
@@ -627,12 +644,12 @@
           w.start + w.angle
         );
 
-        ctx.line(
-          cx,
-          cy,
-          cx + outerRadius * Math.cos(w.start),
-          cy + outerRadius * Math.sin(w.start)
-        );
+        // ctx.line(
+        //   cx,
+        //   cy,
+        //   cx + outerRadius * Math.cos(w.start),
+        //   cy + outerRadius * Math.sin(w.start)
+        // );
         ctx.line(
           cx,
           cy,
@@ -667,7 +684,7 @@
 
       ctx.fill(pieFill);
       ctx.stroke(circleColor);
-      ctx.strokeWeight(1);
+      ctx.strokeWeight(0.5);
 
       ctx.ellipse(
         cx + extrudeOffsetX,
@@ -708,7 +725,7 @@
 
         ctx.stroke(circleColor);
         ctx.noFill();
-        ctx.strokeWeight(1);
+        ctx.strokeWeight(0.5);
 
         ctx.line(
           topArcPoints[0].x,
@@ -841,7 +858,7 @@
       }
 
       linksLayer.stroke(highlightColor);
-      linksLayer.strokeWeight(1);
+      linksLayer.strokeWeight(.5);
       linksLayer.noFill();
 
       for (const l of linksLocal) {
@@ -857,6 +874,21 @@
 
     const drawHover = () => {
       if (!hoverNode) return;
+
+      const neighborIds = linksByNode.get(hoverNode.id);
+      if (neighborIds && neighborIds.size) {
+        p.push();
+        p.stroke(highlightColor);
+        p.strokeWeight(.5);
+        p.noFill();
+        for (const neighborId of neighborIds) {
+          if (!visibleNodeIds.has(neighborId)) continue;
+          const neighbor = nodesById[neighborId];
+          if (!neighbor) continue;
+          p.line(hoverNode.x, hoverNode.y, neighbor.x, neighbor.y);
+        }
+        p.pop();
+      }
 
       const innerSize = nodeInnerSize(hoverNode);
 
@@ -1000,7 +1032,7 @@
 
 <section
   class="relative h-screen overflow-hidden"
-  style={`background:${pieBackground}; color:${textColor};`}
+  style={`background:${pieBackground}; color:${textColor}; --graph-bg:${pieBackground}; --graph-text:${textColor}`}
 >
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"

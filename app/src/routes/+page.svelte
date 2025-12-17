@@ -404,13 +404,16 @@
     height: 100%;
     object-fit: cover;
   }
+  
   .coverImg.pie {
     background-color: gainsboro;
   }
 
-  img.pie {
-    object-fit: contain;
-    transform: scale(1.8);
+  @media (min-width: 1024px) {
+    img.pie {
+      object-fit: contain;
+      transform: scale(1.8);
+    }
   }
 
   .custom-shadow {
