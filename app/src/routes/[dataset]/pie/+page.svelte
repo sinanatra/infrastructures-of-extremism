@@ -30,7 +30,7 @@
     {data}
     dotSize={5}
     extrudeOffsetX={0}
-    extrudeOffsetY={100}
+    extrudeOffsetY={80}
     backgroundColor={theme.backgroundColor}
     pieBackground={theme.pieBackground}
     pieFill={theme.pieFill}

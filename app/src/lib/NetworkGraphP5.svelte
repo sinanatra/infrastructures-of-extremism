@@ -4,6 +4,7 @@
   import NetworkControls from "$lib/NetworkControls.svelte";
   import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
+  import { captureCanvasAsPng } from "$lib/captureCanvas.js";
   import Tooltip from "$lib/Tooltip.svelte";
   import Trailer from "$lib/Trailer.svelte";
 
@@ -454,36 +455,16 @@
   };
 
   const exportPng = async () => {
-    if (!pInstance) return;
-    const p = pInstance;
-    const canvas = p.canvas;
-    const prevDensity = p.pixelDensity();
-
-    const capture = () =>
-      new Promise((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (!blob) return reject(new Error("Failed to create blob"));
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = `${datasetSlug || "network"}.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-          resolve();
-        }, "image/png");
-      });
-
+    if (!pInstance?.canvas) return;
     try {
-      // p.pixelDensity(3);
-      p.redraw();
-      await new Promise((r) => requestAnimationFrame(r));
-      await capture();
+      pInstance.redraw();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      const downloadName = datasetSlug ??
+        data?.dataset?.slug ?? "network";
+      await captureCanvasAsPng(pInstance.canvas, downloadName);
     } catch (err) {
       console.error("Export failed", err);
     } finally {
-      // p.pixelDensity(prevDensity);
       requestRedraw();
     }
   };
@@ -1166,9 +1147,10 @@
   class="relative h-screen overflow-hidden"
   style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
-  <!-- <div class="flex justify-end mb-2">
-    <ExportControl label="Export PNG" on:export={exportPng} />
-  </div> -->
+  <!-- <div class="absolute top-4 right-4 z-30 pointer-events-auto"> -->
+    <!-- <ExportControl label="Export PNG" on:export={exportPng} /> -->
+  <!-- </div> -->
+
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
     hidden={trailerState !== "done"}

@@ -1,5 +1,7 @@
 <script>
   import P5 from "p5-svelte";
+  import ExportControl from "$lib/ExportControl.svelte";
+  import { captureCanvasAsPng } from "$lib/captureCanvas.js";
 
   let {
     data,
@@ -271,6 +273,20 @@
       redrawPending = false;
       if (pInstance) pInstance.redraw();
     });
+  };
+
+  const exportPng = async () => {
+    if (!pInstance?.canvas) return;
+    try {
+      pInstance.redraw();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      const downloadName = data?.dataset?.slug ?? "tree";
+      await captureCanvasAsPng(pInstance.canvas, downloadName);
+    } catch (err) {
+      console.error("Export failed", err);
+    } finally {
+      requestRedraw();
+    }
   };
 
   const setupCanvasSize = (p) => {
@@ -578,6 +594,9 @@
   class="relative h-screen overflow-hidden"
   style={`background:${theme.backgroundColor}; color:${theme.textColor};`}
 >
+  <!-- <div class="absolute top-4 right-4 z-20 pointer-events-auto">
+    <ExportControl label="Export PNG" on:export={exportPng} />
+  </div> -->
   <P5
     className="w-full h-full"
     {sketch}

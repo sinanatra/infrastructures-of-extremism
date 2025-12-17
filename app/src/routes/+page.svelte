@@ -12,15 +12,19 @@
   const coverImages = [
     "/cover/tricoloredelsangueitalico.png",
     "/cover/tricoloredelsangueitalico_tree.png",
+    "/cover/tricoloredelsangueitalico_pie.png",
 
     "/cover/afdjugendbw.png",
     "/cover/afdjugendbw_tree.png",
+    "/cover/afdjugendbw_pie.png",
 
     "/cover/jungenationalisten.png",
     "/cover/jungenationalisten_tree.png",
+    "/cover/jungenationalisten_pie.png",
 
     "/cover/generationidentitaire.png",
     "/cover/generationidentitaire_tree.png",
+    "/cover/generationidentitaire_pie.png",
   ].sort(() => Math.random() - 0.5);
 
   let zipLib = null;
@@ -109,7 +113,7 @@
 
   <div class="relative flex justify-end">
     <article
-      class="relative z-10 w-full max-w-xl px-4 pt-20 pb-10 -mt-[60vh] bg-black"
+      class="relative z-10 w-full max-w-[640px] px-4 pt-20 pb-10 -mt-[60vh] bg-black"
     >
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
@@ -246,9 +250,10 @@
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-white">Open a map</h2>
 
-      <p class="text-sm max-w-80 text-gray-600 pb-8">
+      <p class="text-sm max-w-90 text-gray-600 pb-8">
         Several groups have been examined. <br />
-        Click on each one to explore its network.
+        Shows the activity of each group over time, highlighting periods of growth,
+        decline, and inactivity.
       </p>
       {#if datasets.length}
         <div
@@ -282,10 +287,10 @@
     class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
-      <h2 class="text-2xl p-0 m-0 text-white">Analyse the topics</h2>
+      <h2 class="text-2xl p-0 m-0 text-white">Topic distribution</h2>
 
-      <p class="text-sm max-w-80 text-gray-600 pb-8">
-        Explore the material by dominant topic.
+      <p class="text-sm max-w-90 text-gray-600 pb-8">
+        Posts are grouped by dominant topic and over time.
       </p>
       {#if datasets.length}
         <div
@@ -321,8 +326,9 @@
     <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-white">Analyse the Network</h2>
 
-      <p class="text-sm max-w-80 text-gray-600 pb-8">
-        Follow the underlying graph of connections.
+      <p class="text-sm max-w-90 text-gray-600 pb-8">
+        The graphs show the links between groups based on mentions and forwarded
+        posts.
       </p>
       {#if datasets.length}
         <div

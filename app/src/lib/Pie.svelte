@@ -2,7 +2,9 @@
   import P5 from "p5-svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import Tooltip from "$lib/Tooltip.svelte";
+  import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
+  import { captureCanvasAsPng } from "$lib/captureCanvas.js";
 
   let {
     data,
@@ -145,6 +147,20 @@
       redrawPending = false;
       if (p5Instance) p5Instance.redraw();
     });
+  };
+
+  const exportPng = async () => {
+    if (!p5Instance?.canvas) return;
+    try {
+      p5Instance.redraw();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      const downloadName = data?.dataset?.slug ?? "pie";
+      await captureCanvasAsPng(p5Instance.canvas, downloadName);
+    } catch (err) {
+      console.error("Export failed", err);
+    } finally {
+      requestRedraw();
+    }
   };
 
   $effect(() => {
@@ -1008,6 +1024,10 @@
       />
     </div>
   </div>
+
+  <!-- <div class="absolute top-4 right-4 z-20 pointer-events-auto">
+    <ExportControl label="Export PNG" on:export={exportPng} />
+  </div> -->
 
   <P5
     class="h-full w-full"
