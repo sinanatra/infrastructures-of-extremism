@@ -284,9 +284,67 @@
     neighbors.get(l.target.id).add(l.source.id);
   });
 
+  const revealGroups = (() => {
+    const groups = [];
+    const revealed = new Set();
+    const queue = [];
+    const componentSeeds = new Set();
+
+    const enqueue = (id, forceSeed = false) => {
+      if (!id) return;
+      if (revealed.has(id)) {
+        if (forceSeed) componentSeeds.add(id);
+        return;
+      }
+      revealed.add(id);
+      queue.push(id);
+      if (forceSeed) componentSeeds.add(id);
+    };
+
+    const processQueue = () => {
+      while (queue.length) {
+        const current = queue.shift();
+        const currentNeighbors = neighbors.get(current) ?? new Set();
+        const group = new Set([current]);
+        let hasNew = false;
+        for (const nid of currentNeighbors) {
+          if (revealed.has(nid)) continue;
+          group.add(nid);
+          enqueue(nid);
+          hasNew = true;
+        }
+        const forceGroup = componentSeeds.delete(current);
+        if (hasNew || forceGroup || groups.length === 0) {
+          groups.push([...group]);
+        }
+      }
+    };
+
+    const candidates = [seed, groupRoot, datasetRoot, nodes[0]?.id].filter(Boolean);
+    if (!candidates.length && nodes.length) {
+      candidates.push(nodes[0].id);
+    }
+    for (const candidate of candidates) {
+      enqueue(candidate, true);
+    }
+    processQueue();
+
+    let pending = nodes.find((node) => !revealed.has(node.id));
+    while (pending) {
+      enqueue(pending.id, true);
+      processQueue();
+      pending = nodes.find((node) => !revealed.has(node.id));
+    }
+
+    return groups;
+  })();
+
   const polygonSides = 12;
-  const animationFramesPerRing = 40;
+  const animationFramesPerRing = 10;
+  const animationFramesPerGroup = 10;
   let animationFrame = 0;
+  let groupsVisible = 0;
+  const nodesVisible = new Set();
 
   let pInstance = null;
   let canvasParent = null;
@@ -534,11 +592,6 @@
           seed && nodeIndex.has(seed) ? nodeIndex.get(seed) : 0;
         const centerNode = nodes[centerNodeIndex] ?? null;
 
-        const hoveredNeighbors =
-          hoveredId && neighbors.get(hoveredId)
-            ? neighbors.get(hoveredId)
-            : null;
-
         animationFrame += 1;
         const ringCount = visualRings.length || 1;
         const totalFrames = animationFramesPerRing * ringCount;
@@ -548,6 +601,23 @@
         const maxRing = Math.max(1, maxRingFloat);
         const alphaFactor = (ringIndex) =>
           clamp(1 - Math.max(0, ringIndex - maxRingFloat), 0.15, 1);
+        const groupsTotal = revealGroups.length;
+        if (groupsTotal) {
+          const targetGroups = Math.min(
+            groupsTotal,
+            Math.floor(animationFrame / animationFramesPerGroup) + 1
+          );
+          if (targetGroups > groupsVisible) {
+            for (let gi = groupsVisible; gi < targetGroups; gi += 1) {
+              const group = revealGroups[gi] ?? [];
+              for (const id of group) {
+                nodesVisible.add(id);
+              }
+            }
+            groupsVisible = targetGroups;
+          }
+        }
+        const nodeVisible = (node) => Boolean(node && nodesVisible.has(node.id));
 
         const centerRadius = baseRadius - layerGap * 0.45;
         if (centerRadius > 0 && centerNode) {
@@ -581,16 +651,6 @@
           }
           p.endShape(p.CLOSE);
         });
-
-        const nodeVisible = (node) => {
-          if (node.layerIndex === 0) return true;
-          const ringIndex = node.visualRing ?? node.layerIndex;
-          if (ringIndex > maxRing + 0.001) return false;
-          if (!hoveredId) return true;
-          if (node.id === hoveredId) return true;
-          if (hoveredNeighbors && hoveredNeighbors.has(node.id)) return true;
-          return false;
-        };
 
         const linkVisible = (link) => {
           const a = link.source;
