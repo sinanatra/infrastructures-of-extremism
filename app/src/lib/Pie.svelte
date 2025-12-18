@@ -19,7 +19,10 @@
     extrudeOffsetY = 250,
     pieFill = "#ffffff",
     pieBackground = "gainsboro",
+    viewFill = 1.95,
   } = $props();
+
+  const increase = 2;
 
   const TOPIC_LABELS = [
     "national symbols",
@@ -34,7 +37,6 @@
   ];
 
   const OTHER_LABEL = "other topics";
-
   const topicMap = new Map(
     TOPIC_LABELS.map((label) => [label.toLowerCase(), label])
   );
@@ -199,6 +201,7 @@
     let zoom = 1.8;
     let panX = 0;
     let panY = 0;
+    let panEnabled = true;
 
     let isDragging = false;
     let dragStartX = 0;
@@ -233,7 +236,9 @@
     const teardownFns = [];
     const onWindow = (type, handler, options) => {
       window.addEventListener(type, handler, options);
-      teardownFns.push(() => window.removeEventListener(type, handler, options));
+      teardownFns.push(() =>
+        window.removeEventListener(type, handler, options)
+      );
     };
 
     let staticLayer = null;
@@ -245,6 +250,25 @@
     let linksKey = null;
     let linksByNode = new Map();
 
+    const getWorldSize = () => ({
+      w: p.width * increase,
+      h: p.height * increase,
+    });
+
+    const getWorldCenter = () => {
+      const { w, h } = getWorldSize();
+      return { x: w / 2, y: h / 2 };
+    };
+
+    const updatePanEnabled = () => {
+      const w = p.windowWidth ?? p.width ?? 0;
+      panEnabled = w >= 760;
+      if (!panEnabled) {
+        panX = 0;
+        panY = 0;
+      }
+    };
+
     const scheduleRedraw = () => {
       if (localRedrawPending) return;
       localRedrawPending = true;
@@ -255,8 +279,8 @@
     };
 
     const getLayoutCenter = () => ({
-      cx: p.width / 2 - extrudeOffsetX / 2,
-      cy: p.height / 2 - extrudeOffsetY / 2,
+      cx: getWorldCenter().x - extrudeOffsetX / 2,
+      cy: getWorldCenter().y - extrudeOffsetY / 2,
     });
 
     const rebuildHoverGrid = () => {
@@ -427,6 +451,29 @@
       }
     };
 
+    const fitZoomToView = () => {
+      if (!outerRadius || !Number.isFinite(outerRadius)) return;
+
+      const labelMargin = Math.max(dotSize * 4, 24);
+      const r = outerRadius + labelMargin;
+      const contentWidth = r * 2 + Math.abs(extrudeOffsetX);
+      const contentHeight = r * 2 + Math.abs(extrudeOffsetY);
+
+      const viewportPadding = Math.max(dotSize * 2, 18);
+      const safeWidth = Math.max(1, p.width - viewportPadding * 2);
+      const safeHeight = Math.max(1, p.height - viewportPadding * 2);
+
+      const fitZoom = Math.min(
+        safeWidth / Math.max(contentWidth, 1),
+        safeHeight / Math.max(contentHeight, 1)
+      );
+
+      const fill = Math.max(0.01, viewFill ?? 1);
+      zoom = p.constrain(fitZoom * fill, 0.001, 5);
+      panX = 0;
+      panY = 0;
+    };
+
     const computeLayout = () => {
       const groups = {};
       for (const t of types) {
@@ -446,15 +493,17 @@
       rebuildStaticLayer();
       rebuildNodesLayer();
       rebuildLinksLayer();
+      fitZoomToView();
     };
 
     const screenToWorld = (sx, sy) => {
+      const { x: worldCx, y: worldCy } = getWorldCenter();
       sx -= p.width / 2 + panX;
       sy -= p.height / 2 + panY;
       sx /= zoom;
       sy /= zoom;
-      sx += p.width / 2;
-      sy += p.height / 2;
+      sx += worldCx;
+      sy += worldCy;
       return { x: sx, y: sy };
     };
 
@@ -533,8 +582,8 @@
 
       const measureRun = (chars) => {
         const textSize = ctx.textSize();
-        const minAdvancePx = Math.max(1, textSize * .6);
-        const minSpacePx = Math.max(1, textSize * .6);
+        const minAdvancePx = Math.max(1, textSize * 0.6);
+        const minSpacePx = Math.max(1, textSize * 0.6);
 
         const s = chars.join("");
         const advances = new Array(s.length);
@@ -635,8 +684,8 @@
     };
 
     const drawWedgeLayer = (ctx) => {
-      const cx = p.width / 2 - extrudeOffsetX / 2;
-      const cy = p.height / 2 - extrudeOffsetY / 2;
+      const cx = (p.width * increase) / 2 - extrudeOffsetX / 2;
+      const cy = (p.height * increase) / 2 - extrudeOffsetY / 2;
 
       ctx.push();
       ctx.fill(pieFill);
@@ -696,8 +745,8 @@
     };
 
     const drawBaseGeometry = (ctx) => {
-      const cx = p.width / 2 - extrudeOffsetX / 2;
-      const cy = p.height / 2 - extrudeOffsetY / 2;
+      const cx = (p.width * increase) / 2 - extrudeOffsetX / 2;
+      const cy = (p.height * increase) / 2 - extrudeOffsetY / 2;
 
       ctx.fill(pieFill);
       ctx.stroke(circleColor);
@@ -832,7 +881,10 @@
 
     const rebuildStaticLayer = () => {
       if (!renderer) return;
-      staticLayer = renderer.createGraphics(p.width, p.height);
+      staticLayer = renderer.createGraphics(
+        p.width * increase,
+        p.height * increase
+      );
       setLayerQuality(staticLayer);
       staticLayer.clear();
       drawBaseGeometry(staticLayer);
@@ -841,7 +893,10 @@
 
     const rebuildNodesLayer = () => {
       if (!renderer) return;
-      nodesLayer = renderer.createGraphics(p.width, p.height);
+      nodesLayer = renderer.createGraphics(
+        p.width * increase,
+        p.height * increase
+      );
       setLayerQuality(nodesLayer);
       nodesLayer.clear();
 
@@ -866,7 +921,10 @@
 
     const rebuildLinksLayer = () => {
       if (!renderer) return;
-      linksLayer = renderer.createGraphics(p.width, p.height);
+      linksLayer = renderer.createGraphics(
+        p.width * increase,
+        p.height * increase
+      );
       setLayerQuality(linksLayer);
       linksLayer.clear();
 
@@ -876,7 +934,7 @@
       }
 
       linksLayer.stroke(highlightColor);
-      linksLayer.strokeWeight(.5);
+      linksLayer.strokeWeight(0.5);
       linksLayer.noFill();
 
       for (const l of linksLocal) {
@@ -897,7 +955,7 @@
       if (neighborIds && neighborIds.size) {
         p.push();
         p.stroke(highlightColor);
-        p.strokeWeight(.5);
+        p.strokeWeight(0.5);
         p.noFill();
         for (const neighborId of neighborIds) {
           if (!visibleNodeIds.has(neighborId)) continue;
@@ -936,6 +994,7 @@
       p.createCanvas(p.windowWidth, p.windowHeight);
       p.textAlign(p.CENTER, p.CENTER);
       p.noLoop();
+      updatePanEnabled();
       parseGraphData();
       computeLayout();
 
@@ -954,6 +1013,7 @@
 
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth, p.windowHeight);
+      updatePanEnabled();
       computeLayout();
       scheduleRedraw();
     };
@@ -962,7 +1022,7 @@
       if (trailerBlocking) return false;
       const step = 0.001;
       let nextZoom = zoom - event.deltaY * step;
-      nextZoom = p.constrain(nextZoom, 0.5, 5);
+      nextZoom = p.constrain(nextZoom, 0.001, 5);
 
       const scale = nextZoom / zoom;
       const dx = p.mouseX - (p.width / 2 + panX);
@@ -979,16 +1039,18 @@
       if (trailerBlocking) return;
       const pressed = getNodeUnderPoint(p.mouseX, p.mouseY);
       pressedNodeUrl = pressed?.post?.url?.trim?.() ?? null;
+      hasDragged = false;
+      if (!panEnabled) return;
       isDragging = true;
       dragStartScreenX = p.mouseX;
       dragStartScreenY = p.mouseY;
       dragStartX = p.mouseX - panX;
       dragStartY = p.mouseY - panY;
-      hasDragged = false;
     };
 
     p.mouseDragged = () => {
       if (trailerBlocking) return;
+      if (!panEnabled) return;
       if (isDragging && !p.mouseIsPressed) {
         endDrag();
         return;
@@ -1048,10 +1110,12 @@
 
       syncLayersForState();
 
+      const { x: worldCx, y: worldCy } = getWorldCenter();
+
       p.push();
       p.translate(p.width / 2 + panX, p.height / 2 + panY);
       p.scale(zoom);
-      p.translate(-p.width / 2, -p.height / 2);
+      p.translate(-worldCx, -worldCy);
 
       if (staticLayer) p.image(staticLayer, 0, 0);
       if (nodesLayer) p.image(nodesLayer, 0, 0);
