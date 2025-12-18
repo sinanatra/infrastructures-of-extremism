@@ -208,6 +208,7 @@
     let hasDragged = false;
 
     let hoverNode = null;
+    let pressedNodeUrl = null;
 
     const nodeMargin = dotSize;
     let nodesById = {};
@@ -949,6 +950,8 @@
 
     p.mousePressed = () => {
       if (trailerBlocking) return;
+      const pressed = getNodeUnderPoint(p.mouseX, p.mouseY);
+      pressedNodeUrl = pressed?.post?.url?.trim?.() ?? null;
       isDragging = true;
       dragStartScreenX = p.mouseX;
       dragStartScreenY = p.mouseY;
@@ -994,10 +997,10 @@
 
     p.mouseClicked = () => {
       if (trailerBlocking) return;
-      if (hasDragged) return;
-      if (hoverNode && hoverNode.post && hoverNode.post.url) {
-        window.open(hoverNode.post.url, "_blank", "noreferrer");
-      }
+      const url = hasDragged ? null : pressedNodeUrl;
+      pressedNodeUrl = null;
+      if (!url) return;
+      window.open(url, "_blank", "noopener,noreferrer");
     };
 
     const syncLayersForState = () => {
