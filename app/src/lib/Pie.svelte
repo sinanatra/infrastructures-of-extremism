@@ -221,6 +221,21 @@
 
     let renderer = null;
 
+    const endDrag = () => {
+      isDragging = false;
+    };
+
+    const cancelDrag = () => {
+      isDragging = false;
+      pressedNodeUrl = null;
+    };
+
+    const teardownFns = [];
+    const onWindow = (type, handler, options) => {
+      window.addEventListener(type, handler, options);
+      teardownFns.push(() => window.removeEventListener(type, handler, options));
+    };
+
     let staticLayer = null;
     let nodesLayer = null;
     let linksLayer = null;
@@ -923,6 +938,18 @@
       p.noLoop();
       parseGraphData();
       computeLayout();
+
+      onWindow("mouseup", endDrag, { passive: true });
+      onWindow("blur", cancelDrag, { passive: true });
+      onWindow("touchend", endDrag, { passive: true });
+      onWindow("touchcancel", cancelDrag, { passive: true });
+
+      const originalRemove = p.remove?.bind(p);
+      p.remove = (...args) => {
+        cancelDrag();
+        while (teardownFns.length) teardownFns.pop()();
+        return originalRemove?.(...args);
+      };
     };
 
     p.windowResized = () => {
@@ -962,6 +989,10 @@
 
     p.mouseDragged = () => {
       if (trailerBlocking) return;
+      if (isDragging && !p.mouseIsPressed) {
+        endDrag();
+        return;
+      }
       if (!isDragging) return;
       panX = p.mouseX - dragStartX;
       panY = p.mouseY - dragStartY;
@@ -972,11 +1003,12 @@
 
     p.mouseReleased = () => {
       if (trailerBlocking) return;
-      isDragging = false;
+      endDrag();
     };
 
     p.mouseMoved = () => {
       if (trailerBlocking) return;
+      if (isDragging && !p.mouseIsPressed) endDrag();
       const next = getNodeUnderPoint(p.mouseX, p.mouseY);
       const changed =
         (!hoverNode && next) ||
