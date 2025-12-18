@@ -201,7 +201,6 @@
     let zoom = 1.8;
     let panX = 0;
     let panY = 0;
-    let panEnabled = true;
 
     let isDragging = false;
     let dragStartX = 0;
@@ -260,14 +259,7 @@
       return { x: w / 2, y: h / 2 };
     };
 
-    const updatePanEnabled = () => {
-      const w = p.windowWidth ?? p.width ?? 0;
-      panEnabled = w >= 760;
-      if (!panEnabled) {
-        panX = 0;
-        panY = 0;
-      }
-    };
+   
 
     const scheduleRedraw = () => {
       if (localRedrawPending) return;
@@ -994,7 +986,6 @@
       p.createCanvas(p.windowWidth, p.windowHeight);
       p.textAlign(p.CENTER, p.CENTER);
       p.noLoop();
-      updatePanEnabled();
       parseGraphData();
       computeLayout();
 
@@ -1013,7 +1004,6 @@
 
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth, p.windowHeight);
-      updatePanEnabled();
       computeLayout();
       scheduleRedraw();
     };
@@ -1040,7 +1030,7 @@
       const pressed = getNodeUnderPoint(p.mouseX, p.mouseY);
       pressedNodeUrl = pressed?.post?.url?.trim?.() ?? null;
       hasDragged = false;
-      if (!panEnabled) return;
+
       isDragging = true;
       dragStartScreenX = p.mouseX;
       dragStartScreenY = p.mouseY;
@@ -1050,7 +1040,7 @@
 
     p.mouseDragged = () => {
       if (trailerBlocking) return;
-      if (!panEnabled) return;
+
       if (isDragging && !p.mouseIsPressed) {
         endDrag();
         return;
