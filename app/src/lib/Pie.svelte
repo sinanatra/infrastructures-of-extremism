@@ -6,6 +6,13 @@
   import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
   import { captureCanvasAsPng } from "$lib/captureCanvas.js";
+  import { createCamera } from "$lib/pie/camera.js";
+  import {
+    buildTypeOrder,
+    computeGroupMetricMaxes,
+    computePieLayout,
+  } from "$lib/pie/layout.js";
+  import { drawBaseGeometry, drawHoverOverlay, shortenText } from "$lib/pie/render.js";
 
   let {
     data,
@@ -108,13 +115,6 @@
     return `${value} subs`;
   };
 
-  const buildTypeOrder = (nodes) => {
-    const present = new Set(nodes.map((n) => n.type));
-    const ordered = TOPIC_LABELS.filter((label) => present.has(label));
-    if (present.has(OTHER_LABEL)) ordered.push(OTHER_LABEL);
-    return ordered.length ? ordered : [OTHER_LABEL];
-  };
-
   let sizeMode = $state("links");
   let showLinks = $state(false);
   let selectedEmoji = $state(null);
@@ -198,9 +198,15 @@
     let outerRadius = 0;
     const innerRadius = 0;
 
-    let zoom = 1.8;
-    let panX = 0;
-    let panY = 0;
+    const camera = createCamera({
+      getViewportSize: () => ({ width: p.width, height: p.height }),
+      getWorldSize: () => ({
+        width: p.width * increase,
+        height: p.height * increase,
+      }),
+      initialZoom: 1.8,
+    });
+    let panEnabled = true;
 
     let isDragging = false;
     let dragStartX = 0;
@@ -248,18 +254,13 @@
     let nodesKey = null;
     let linksKey = null;
     let linksByNode = new Map();
+    let layoutCenter = { cx: 0, cy: 0 };
 
-    const getWorldSize = () => ({
-      w: p.width * increase,
-      h: p.height * increase,
-    });
-
-    const getWorldCenter = () => {
-      const { w, h } = getWorldSize();
-      return { x: w / 2, y: h / 2 };
+    const updatePanEnabled = () => {
+      const w = p.windowWidth ?? p.width ?? 0;
+      panEnabled = w >= 760;
+      if (!panEnabled) camera.resetPan();
     };
-
-   
 
     const scheduleRedraw = () => {
       if (localRedrawPending) return;
@@ -270,10 +271,13 @@
       });
     };
 
-    const getLayoutCenter = () => ({
-      cx: getWorldCenter().x - extrudeOffsetX / 2,
-      cy: getWorldCenter().y - extrudeOffsetY / 2,
-    });
+    const getLayoutCenter = () => {
+      const world = camera.getWorldCenter();
+      return {
+        cx: world.x - extrudeOffsetX / 2,
+        cy: world.y - extrudeOffsetY / 2,
+      };
+    };
 
     const rebuildHoverGrid = () => {
       hoverGrid = new Map();
@@ -306,141 +310,14 @@
       nodes = graphNodes.map((n) => ({ ...n }));
       linksLocal = graphLinks.map((l) => ({ ...l }));
       rebuildLinkIndex();
-      types = buildTypeOrder(nodes);
-
-      groupMaxLinks = {};
-      groupMaxReactions = {};
-      for (const t of types) {
-        const nodesInType = nodes.filter((n) => n.type === t);
-        const maxLinks = Math.max(
-          ...nodesInType.map((n) => n.radiusLinks || 0),
-          0
-        );
-        const maxReactions = Math.max(
-          ...nodesInType.map((n) => n.radiusReactions || 0),
-          0
-        );
-        groupMaxLinks[t] = maxLinks > 0 ? maxLinks : 1;
-        groupMaxReactions[t] = maxReactions > 0 ? maxReactions : 1;
-      }
+      types = buildTypeOrder(nodes, TOPIC_LABELS, OTHER_LABEL);
+      ({ groupMaxLinks, groupMaxReactions } = computeGroupMetricMaxes(
+        nodes,
+        types
+      ));
 
       nodesById = {};
       for (const n of nodes) nodesById[n.id] = n;
-    };
-
-    const capacityForWedge = (theta, radius) => {
-      let cap = 0;
-      let r = radius - nodeMargin;
-      while (r >= innerRadius) {
-        const ringCap = Math.floor((theta * r) / dotSize);
-        if (ringCap < 1) break;
-        cap += ringCap;
-        r -= dotSize;
-      }
-      return cap;
-    };
-
-    const findMinimalThetaForWedge = (count, radius) => {
-      let low = 0;
-      let high = 2 * Math.PI;
-      let best = high;
-      for (let i = 0; i < 20; i += 1) {
-        const mid = (low + high) / 2;
-        if (capacityForWedge(mid, radius) >= count) {
-          best = mid;
-          high = mid;
-        } else {
-          low = mid;
-        }
-      }
-      return best;
-    };
-
-    const totalThetaForRadius = (radius, groups) => {
-      let total = 0;
-      for (const t of types) {
-        const count = groups[t].length;
-        total += findMinimalThetaForWedge(count, radius);
-      }
-      return total;
-    };
-
-    const findOuterRadius = (groups) => {
-      let low = dotSize * 2;
-      let high = dotSize * 600;
-      let best = high;
-      for (let i = 0; i < 22; i += 1) {
-        const mid = (low + high) / 2;
-        const total = totalThetaForRadius(mid, groups);
-        if (total > 2 * Math.PI) low = mid;
-        else {
-          best = mid;
-          high = mid;
-        }
-      }
-      return best;
-    };
-
-    const computeWedgeData = (groups, radius) => {
-      let sumTheta = 0;
-      const temp = {};
-      for (const t of types) {
-        const count = groups[t].length;
-        const theta = findMinimalThetaForWedge(count, radius);
-        temp[t] = { angle: theta };
-        sumTheta += theta;
-      }
-      const scale = (2 * Math.PI) / Math.max(sumTheta, 1e-6);
-      let start = 0;
-      const result = {};
-      for (const t of types) {
-        const adjusted = temp[t].angle * scale;
-        result[t] = { angle: adjusted, start, mid: start + adjusted / 2 };
-        start += adjusted;
-      }
-      return result;
-    };
-
-    const assignNodePositions = (groups, radius, wedges) => {
-      const { cx, cy } = getLayoutCenter();
-
-      for (const t of types) {
-        const nodesOfType = groups[t];
-        const theta = wedges[t].angle;
-        const startAngle = wedges[t].start;
-
-        let remaining = nodesOfType.length;
-        const assigned = [];
-        let r = radius - nodeMargin;
-
-        while (remaining > 0 && r >= innerRadius) {
-          const ringCap = Math.floor((theta * r) / dotSize);
-          if (ringCap < 1) {
-            r -= dotSize;
-            continue;
-          }
-          const countInRing = Math.min(remaining, ringCap);
-          const stepA = theta / countInRing;
-          for (let i = 0; i < countInRing; i += 1) {
-            const a = startAngle + stepA * (i + 0.5);
-            assigned.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
-          }
-          remaining -= countInRing;
-          r -= dotSize;
-        }
-
-        for (let i = 0; i < nodesOfType.length; i += 1) {
-          const n = nodesOfType[i];
-          const pt = assigned[i];
-          if (pt) {
-            n.x = pt.x;
-            n.y = pt.y;
-          } else {
-            n.x = cx;
-            n.y = cy;
-          }
-        }
-      }
     };
 
     const fitZoomToView = () => {
@@ -461,25 +338,21 @@
       );
 
       const fill = Math.max(0.01, viewFill ?? 1);
-      zoom = p.constrain(fitZoom * fill, 0.001, 5);
-      panX = 0;
-      panY = 0;
+      camera.zoom = p.constrain(fitZoom * fill, 0.001, 5);
+      camera.resetPan();
     };
 
     const computeLayout = () => {
-      const groups = {};
-      for (const t of types) {
-        groups[t] = nodes
-          .filter((n) => n.type === t)
-          .sort(
-            (a, b) =>
-              (a.degreeCentrality || 0) - (b.degreeCentrality || 0) ||
-              (b.timestamp || 0) - (a.timestamp || 0)
-          );
-      }
-      outerRadius = findOuterRadius(groups);
-      wedgeData = computeWedgeData(groups, outerRadius);
-      assignNodePositions(groups, outerRadius, wedgeData);
+      layoutCenter = getLayoutCenter();
+      ({ outerRadius, wedgeData } = computePieLayout({
+        nodes,
+        types,
+        cx: layoutCenter.cx,
+        cy: layoutCenter.cy,
+        dotSize,
+        nodeMargin,
+        innerRadius,
+      }));
       rebuildHoverGrid();
       invalidateLayers();
       rebuildStaticLayer();
@@ -489,14 +362,7 @@
     };
 
     const screenToWorld = (sx, sy) => {
-      const { x: worldCx, y: worldCy } = getWorldCenter();
-      sx -= p.width / 2 + panX;
-      sy -= p.height / 2 + panY;
-      sx /= zoom;
-      sy /= zoom;
-      sx += worldCx;
-      sy += worldCy;
-      return { x: sx, y: sy };
+      return camera.screenToWorld(sx, sy);
     };
 
     const getNodeUnderPoint = (sx, sy) => {
@@ -525,11 +391,6 @@
       return best;
     };
 
-    const shortenText = (str, maxLen = 30) => {
-      if (!str) return "";
-      return str.length <= maxLen ? str : str.substring(0, maxLen - 3) + "...";
-    };
-
     const nodeMetric = (n) => {
       if (sizeMode === "reactions") return n.radiusReactions || 0;
       return n.radiusLinks || 0;
@@ -546,261 +407,7 @@
       return p.map(clamped, 0, maxMetric, dotSize * 0.2, dotSize);
     };
 
-    const getArcPoints = (cx, cy, r, startAng, endAng, steps = 32) => {
-      const pts = [];
-      for (let i = 0; i <= steps; i += 1) {
-        const a = p.map(i, 0, steps, startAng, endAng);
-        pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
-      }
-      return pts;
-    };
-
-    const drawArcText = (ctx, txt, cx, cy, r, startAngle, endAngle) => {
-      if (!txt || r <= 1) return;
-
-      const baseSize = ctx.textSize();
-      const padAngle = 0.03;
-      const a0 = startAngle + padAngle;
-      const a1 = endAngle - padAngle;
-      if (a1 <= a0) return;
-
-      const availableAngle = a1 - a0;
-      const halfPi = Math.PI / 2;
-      const minSize = Math.max(7, baseSize * 0.6);
-
-      // const buildChars = (s) =>
-      //   [...s].map((ch, i) => (i === 0 ? ch.toUpperCase() : ch));
-      const buildChars = (s) => [...s];
-
-      const measureRun = (chars) => {
-        const textSize = ctx.textSize();
-        const minAdvancePx = Math.max(1, textSize * 0.6);
-        const minSpacePx = Math.max(1, textSize * 0.6);
-
-        const s = chars.join("");
-        const advances = new Array(s.length);
-        const prefixWidths = new Array(s.length + 1);
-        prefixWidths[0] = 0;
-
-        for (let i = 0; i < s.length; i += 1) {
-          let a = ctx.textWidth(s[i]);
-          if (!Number.isFinite(a) || a <= 0) a = minAdvancePx;
-          if (s[i] === " ") a = Math.max(a, minSpacePx);
-          a = Math.max(a, minAdvancePx);
-          advances[i] = a;
-          prefixWidths[i + 1] = prefixWidths[i] + a;
-        }
-
-        const totalPx = prefixWidths[s.length];
-        const totalAngle = totalPx / r;
-
-        return { prefixWidths, advances, totalPx, totalAngle, text: s };
-      };
-
-      const fitChars = (chars) => {
-        const ell = buildChars("…");
-
-        const m0 = measureRun(chars);
-        if (m0.totalAngle <= availableAngle) return { chars, m: m0 };
-
-        const mell = measureRun(ell);
-        if (mell.totalAngle > availableAngle) return { chars: ell, m: mell };
-
-        let lo = 0;
-        let hi = chars.length;
-        let best = 0;
-
-        while (lo <= hi) {
-          const mid = (lo + hi) >> 1;
-          const sliced = chars.slice(0, mid);
-          const test = mid < chars.length ? sliced.concat(ell) : sliced;
-          const tm = measureRun(test);
-          if (tm.totalAngle <= availableAngle) {
-            best = mid;
-            lo = mid + 1;
-          } else {
-            hi = mid - 1;
-          }
-        }
-
-        const sliced = chars.slice(0, best);
-        const finalChars = best < chars.length ? sliced.concat(ell) : sliced;
-        return { chars: finalChars, m: measureRun(finalChars) };
-      };
-
-      let chars = buildChars(txt);
-      let fitted = fitChars(chars);
-
-      while (fitted.m.totalAngle > availableAngle && ctx.textSize() > minSize) {
-        ctx.textSize(ctx.textSize() * 0.9);
-        fitted = fitChars(chars);
-      }
-
-      if (fitted.m.totalAngle > availableAngle) {
-        ctx.textSize(baseSize);
-        return;
-      }
-
-      chars = fitted.chars;
-
-      const { prefixWidths, advances, totalPx } = fitted.m;
-
-      const midAngle = (a0 + a1) / 2;
-      const reverse = midAngle < Math.PI;
-
-      const startTheta = reverse
-        ? midAngle + totalPx / r / 2
-        : midAngle - totalPx / r / 2;
-
-      for (let i = 0; i < chars.length; i += 1) {
-        const ch = chars[i];
-        const posPx = prefixWidths[i] + (advances?.[i] ?? 0) / 2;
-        const theta = reverse ? startTheta - posPx / r : startTheta + posPx / r;
-
-        const x = cx + r * Math.cos(theta);
-        const y = cy + r * Math.sin(theta);
-
-        if (ch === " ") continue;
-
-        ctx.push();
-        ctx.translate(x, y);
-        let rotation = theta + halfPi;
-        if (reverse) rotation += Math.PI;
-        ctx.rotate(rotation);
-        ctx.textAlign(ctx.CENTER, ctx.CENTER);
-        ctx.text(ch, 0, 0);
-        ctx.pop();
-      }
-
-      ctx.textSize(baseSize);
-    };
-
-    const drawWedgeLayer = (ctx) => {
-      const cx = (p.width * increase) / 2 - extrudeOffsetX / 2;
-      const cy = (p.height * increase) / 2 - extrudeOffsetY / 2;
-
-      ctx.push();
-      ctx.fill(pieFill);
-      ctx.noStroke();
-      ctx.ellipse(cx, cy, outerRadius * 2, outerRadius * 2);
-      ctx.pop();
-
-      ctx.push();
-      for (const t of Object.keys(wedgeData)) {
-        const w = wedgeData[t];
-
-        ctx.stroke(circleColor);
-        ctx.strokeWeight(0.5);
-        ctx.noFill();
-        ctx.arc(
-          cx,
-          cy,
-          outerRadius * 2,
-          outerRadius * 2,
-          w.start,
-          w.start + w.angle
-        );
-
-        // ctx.line(
-        //   cx,
-        //   cy,
-        //   cx + outerRadius * Math.cos(w.start),
-        //   cy + outerRadius * Math.sin(w.start)
-        // );
-        ctx.line(
-          cx,
-          cy,
-          cx + outerRadius * Math.cos(w.start + w.angle),
-          cy + outerRadius * Math.sin(w.start + w.angle)
-        );
-
-        const labelRaw = shortenText(t, 64).toLowerCase();
-        const labelRadius = outerRadius + dotSize * 1.45;
-
-        ctx.push();
-        ctx.noStroke();
-        ctx.fill(highlightColor);
-        ctx.textFont(labelFont);
-        ctx.textSize(dotSize * 1.5);
-        drawArcText(
-          ctx,
-          labelRaw,
-          cx,
-          cy,
-          labelRadius,
-          w.start,
-          w.start + w.angle
-        );
-        ctx.pop();
-      }
-      ctx.pop();
-    };
-
-    const drawBaseGeometry = (ctx) => {
-      const cx = (p.width * increase) / 2 - extrudeOffsetX / 2;
-      const cy = (p.height * increase) / 2 - extrudeOffsetY / 2;
-
-      ctx.fill(pieFill);
-      ctx.stroke(circleColor);
-      ctx.strokeWeight(0.5);
-
-      ctx.ellipse(
-        cx + extrudeOffsetX,
-        cy + extrudeOffsetY,
-        outerRadius * 2,
-        outerRadius * 2
-      );
-
-      const extrusionMargin = dotSize * 0.1;
-      ctx.noStroke();
-      ctx.fill(pieFill);
-      ctx.beginShape();
-      ctx.vertex(cx - outerRadius + extrusionMargin, cy);
-      ctx.vertex(cx + outerRadius - extrusionMargin, cy);
-      ctx.vertex(
-        cx + extrudeOffsetX + outerRadius - extrusionMargin,
-        cy + extrudeOffsetY
-      );
-      ctx.vertex(
-        cx + extrudeOffsetX - outerRadius + extrusionMargin,
-        cy + extrudeOffsetY
-      );
-      ctx.endShape(ctx.CLOSE);
-
-      for (const t of Object.keys(wedgeData)) {
-        const w = wedgeData[t];
-        const topArcPoints = getArcPoints(
-          cx,
-          cy,
-          outerRadius,
-          w.start,
-          w.start + w.angle
-        );
-        const bottomArcPoints = topArcPoints.map((pt) => ({
-          x: pt.x + extrudeOffsetX,
-          y: pt.y + extrudeOffsetY,
-        }));
-
-        ctx.stroke(circleColor);
-        ctx.noFill();
-        ctx.strokeWeight(0.5);
-
-        ctx.line(
-          topArcPoints[0].x,
-          topArcPoints[0].y,
-          bottomArcPoints[0].x,
-          bottomArcPoints[0].y
-        );
-        ctx.line(
-          topArcPoints[topArcPoints.length - 1].x,
-          topArcPoints[topArcPoints.length - 1].y,
-          bottomArcPoints[bottomArcPoints.length - 1].x,
-          bottomArcPoints[bottomArcPoints.length - 1].y
-        );
-      }
-
-      drawWedgeLayer(ctx);
-    };
+    // drawBaseGeometry / drawArcText moved to $lib/pie/render.js
 
     const getStaticKey = () =>
       [
@@ -879,7 +486,17 @@
       );
       setLayerQuality(staticLayer);
       staticLayer.clear();
-      drawBaseGeometry(staticLayer);
+      drawBaseGeometry(
+        staticLayer,
+        {
+          cx: layoutCenter.cx,
+          cy: layoutCenter.cy,
+          outerRadius,
+          wedgeData,
+        },
+        { pieFill, circleColor, highlightColor, labelFont, dotSize },
+        { extrudeOffsetX, extrudeOffsetY }
+      );
       staticKey = getStaticKey();
     };
 
@@ -940,52 +557,12 @@
       linksKey = getLinksKey();
     };
 
-    const drawHover = () => {
-      if (!hoverNode) return;
-
-      const neighborIds = linksByNode.get(hoverNode.id);
-      if (neighborIds && neighborIds.size) {
-        p.push();
-        p.stroke(highlightColor);
-        p.strokeWeight(0.5);
-        p.noFill();
-        for (const neighborId of neighborIds) {
-          if (!visibleNodeIds.has(neighborId)) continue;
-          const neighbor = nodesById[neighborId];
-          if (!neighbor) continue;
-          p.line(hoverNode.x, hoverNode.y, neighbor.x, neighbor.y);
-        }
-        p.pop();
-      }
-
-      const innerSize = nodeInnerSize(hoverNode);
-
-      // p.stroke(0);
-      // p.strokeWeight(.5);
-      p.noStroke();
-      p.fill(highlightColor);
-      p.ellipse(hoverNode.x, hoverNode.y, dotSize, dotSize);
-
-      p.noStroke();
-      p.fill(highlightColor);
-      p.ellipse(hoverNode.x, hoverNode.y, innerSize, innerSize);
-
-      p.push();
-      p.textFont(labelFont);
-      p.textSize(8);
-      p.stroke(255);
-      p.strokeWeight(1);
-      p.fill(highlightColor);
-      p.text(shortenText(hoverNode.id), hoverNode.x, hoverNode.y - 8);
-
-      p.pop();
-    };
-
     p.setup = () => {
       renderer = p;
       p.createCanvas(p.windowWidth, p.windowHeight);
       p.textAlign(p.CENTER, p.CENTER);
       p.noLoop();
+      updatePanEnabled();
       parseGraphData();
       computeLayout();
 
@@ -1004,23 +581,18 @@
 
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth, p.windowHeight);
+      updatePanEnabled();
       computeLayout();
       scheduleRedraw();
     };
 
     p.mouseWheel = (event) => {
       if (trailerBlocking) return false;
-      const step = 0.001;
-      let nextZoom = zoom - event.deltaY * step;
-      nextZoom = p.constrain(nextZoom, 0.001, 5);
-
-      const scale = nextZoom / zoom;
-      const dx = p.mouseX - (p.width / 2 + panX);
-      const dy = p.mouseY - (p.height / 2 + panY);
-      panX -= dx * (scale - 1);
-      panY -= dy * (scale - 1);
-
-      zoom = nextZoom;
+      camera.zoomAt(event.deltaY, p.mouseX, p.mouseY, {
+        step: 0.001,
+        minZoom: 0.001,
+        maxZoom: 5,
+      });
       scheduleRedraw();
       return false;
     };
@@ -1030,24 +602,25 @@
       const pressed = getNodeUnderPoint(p.mouseX, p.mouseY);
       pressedNodeUrl = pressed?.post?.url?.trim?.() ?? null;
       hasDragged = false;
-
+      if (!panEnabled) return;
       isDragging = true;
       dragStartScreenX = p.mouseX;
       dragStartScreenY = p.mouseY;
-      dragStartX = p.mouseX - panX;
-      dragStartY = p.mouseY - panY;
+      dragStartX = p.mouseX - camera.panX;
+      dragStartY = p.mouseY - camera.panY;
     };
 
     p.mouseDragged = () => {
       if (trailerBlocking) return;
+      if (!panEnabled) return;
 
       if (isDragging && !p.mouseIsPressed) {
         endDrag();
         return;
       }
       if (!isDragging) return;
-      panX = p.mouseX - dragStartX;
-      panY = p.mouseY - dragStartY;
+      camera.panX = p.mouseX - dragStartX;
+      camera.panY = p.mouseY - dragStartY;
       if (p.dist(p.mouseX, p.mouseY, dragStartScreenX, dragStartScreenY) > 5)
         hasDragged = true;
       scheduleRedraw();
@@ -1100,18 +673,25 @@
 
       syncLayersForState();
 
-      const { x: worldCx, y: worldCy } = getWorldCenter();
-
       p.push();
-      p.translate(p.width / 2 + panX, p.height / 2 + panY);
-      p.scale(zoom);
-      p.translate(-worldCx, -worldCy);
+      camera.applyTransform(p);
 
       if (staticLayer) p.image(staticLayer, 0, 0);
       if (nodesLayer) p.image(nodesLayer, 0, 0);
       if (linksLayer && showLinks) p.image(linksLayer, 0, 0);
 
-      drawHover();
+      drawHoverOverlay({
+        p,
+        hoverNode,
+        linksByNode,
+        nodesById,
+        visibleNodeIds,
+        nodeInnerSize,
+        dotSize,
+        highlightColor,
+        labelFont,
+        labelText: shortenText(hoverNode?.id),
+      });
       p.pop();
     };
   };
@@ -1196,7 +776,7 @@
       {textColor}
       introMode={true}
       introHeading=""
-      introSummary="this visualization groups posts by dominant topics."
+      introSummary="this visualization shows the dominant topics discussed across the channels."
       introBody=""
       enterLabel="Enter"
       seedLabel={data?.dataset?.label ?? data?.dataset?.slug}
