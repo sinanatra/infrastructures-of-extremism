@@ -40,6 +40,7 @@ export const createPieSketch = ({
     let dragStartScreenX = 0;
     let dragStartScreenY = 0;
     let hasDragged = false;
+    let lastPinchDistance = 0;
 
     let hoverNode = null;
     let pressedNodeUrl = null;
@@ -82,9 +83,7 @@ export const createPieSketch = ({
     let layoutCenter = { cx: 0, cy: 0 };
 
     const updatePanEnabled = () => {
-      const w = p.windowWidth ?? p.width ?? 0;
-      panEnabled = w >= 760;
-      if (!panEnabled) camera.resetPan();
+      panEnabled = true;
     };
 
     const scheduleRedraw = () => {
@@ -530,6 +529,69 @@ export const createPieSketch = ({
       pressedNodeUrl = null;
       if (!url) return;
       window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    p.touchStarted = () => {
+      const { trailerBlocking } = getState();
+      if (trailerBlocking) return;
+      const touch = p.touches?.[0];
+      if (!touch) return;
+      
+      // Handle pinch zoom with 2+ touches
+      if (p.touches.length >= 2) {
+        const t0 = p.touches[0];
+        const t1 = p.touches[1];
+        lastPinchDistance = p.dist(t0.clientX, t0.clientY, t1.clientX, t1.clientY);
+        return false;
+      }
+      
+      // Handle single touch drag
+      const pressed = getNodeUnderPoint(touch.clientX, touch.clientY);
+      pressedNodeUrl = pressed?.post?.url?.trim?.() ?? null;
+      hasDragged = false;
+      isDragging = true;
+      dragStartScreenX = touch.clientX;
+      dragStartScreenY = touch.clientY;
+      dragStartX = touch.clientX - camera.panX;
+      dragStartY = touch.clientY - camera.panY;
+      return false;
+    };
+
+    p.touchMoved = () => {
+      const { trailerBlocking } = getState();
+      if (trailerBlocking) return;
+      
+      // Handle pinch zoom with 2+ touches
+      if (p.touches.length >= 2) {
+        const t0 = p.touches[0];
+        const t1 = p.touches[1];
+        const currentDistance = p.dist(t0.clientX, t0.clientY, t1.clientX, t1.clientY);
+        
+        if (lastPinchDistance > 0) {
+          const deltaDistance = lastPinchDistance - currentDistance;
+          const centerX = (t0.clientX + t1.clientX) / 2;
+          const centerY = (t0.clientY + t1.clientY) / 2;
+          camera.zoomAt(deltaDistance * 0.5, centerX, centerY, {
+            step: 0.001,
+            minZoom: 0.001,
+            maxZoom: 5,
+          });
+          scheduleRedraw();
+        }
+        
+        lastPinchDistance = currentDistance;
+        return false;
+      }
+      
+      // Handle single touch drag
+      const touch = p.touches?.[0];
+      if (!touch || !isDragging) return;
+      camera.panX = touch.clientX - dragStartX;
+      camera.panY = touch.clientY - dragStartY;
+      if (p.dist(touch.clientX, touch.clientY, dragStartScreenX, dragStartScreenY) > 5)
+        hasDragged = true;
+      scheduleRedraw();
+      return false;
     };
 
     const syncLayersForState = () => {
