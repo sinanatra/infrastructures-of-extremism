@@ -1,0 +1,49 @@
+{
+  "topics": [
+    {
+      "label": "Symbols",
+      "description": "National symbols, flags, heraldry, monuments, cultural heritage, national pride, ethnic identity, ancestral legacy, territorial markers, historical memory, national monuments, cultural traditions, heritage preservation, national identity, patriotic symbols",
+      "keywords": []
+    },
+    {
+      "label": "Identity",
+      "description": "Demographic change, population composition, migration flows, immigration policy, demographic replacement, identity issues, ethnic composition, cultural assimilation, population statistics, birth rates, replacement theory, demographic trends, cultural diversity, ethnic demographics",
+      "keywords": []
+    },
+    {
+      "label": "Power Structures",
+      "description": "Government structures, state institutions, political power, executive authority, legislative bodies, bureaucracy, administrative systems, institutional reform, state power, political authority, governance systems, institutional corruption, political establishment, constitutional matters",
+      "keywords": []
+    },
+    {
+      "label": "Street Mobilization",
+      "description": "Grassroots organizing, street protests, demonstrations, community action, mass mobilization, public gatherings, marches, activism, protest movements, direct action, civil disobedience, street campaigns, popular resistance, grassroots movements",
+      "keywords": []
+    },
+    {
+      "label": "Ideology",
+      "description": "Ideological content, manifestos, political philosophy, worldview, doctrine, belief systems, ideological frameworks, theoretical texts, political theory, philosophical concepts, ideological positioning, value systems, political principles, ideological critique",
+      "keywords": []
+    },
+    {
+      "label": "Process",
+      "description": "Elections, voting, political campaigns, candidates, electoral processes, electoral strategy, campaign messaging, political parties, electoral support, voting behavior, electoral coalitions, political representation, ballot initiatives, political representation",
+      "keywords": []
+    },
+    {
+      "label": "Censorship narratives",
+      "description": "Media criticism, censorship claims, communication challenges, mainstream media, press freedom, content moderation, deplatforming, media control, propaganda accusations, journalistic integrity, media bias, free speech issues, information control, media manipulation",
+      "keywords": []
+    },
+    {
+      "label": "Conflict",
+      "description": "Military action, armed conflict, violent events, warfare, military operations, combat, geopolitical conflict, international tensions, security threats, military intervention, geopolitical struggles, territorial disputes, military aggression, armed struggle",
+      "keywords": []
+    },
+    {
+      "label": "Space",
+      "description": "Geographic regions, territory, borders, spatial organization, territorial sovereignty, border security, geographic divisions, regional politics, territorial claims, geographic identity, regional differences, border disputes, territorial integrity, geographic boundaries",
+      "keywords": []
+    }
+  ]
+}

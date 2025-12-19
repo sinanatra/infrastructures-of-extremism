@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import P5 from "p5-svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import Tooltip from "$lib/Tooltip.svelte";
@@ -34,20 +35,33 @@
 
   const increase = 2;
 
-  const TOPIC_LABELS = [
-    "national symbols",
-    "out-groups & boundaries",
-    "elites & power",
-    "street actions",
-    "ideological texts",
-    "electoral politics",
-    "media & information",
-    "security & violence",
-    "territory & space",
-  ];
+  let topicsData = $state(null);
+  let TOPIC_LABELS = $state([]);
+  let canonicalTopic = $state(null);
+  let loadingError = $state(null);
+
+  onMount(async () => {
+    try {
+      const response = await fetch('/topics.json');
+      if (!response.ok) {
+        loadingError = `Failed to fetch topics: ${response.status}`;
+        console.error(loadingError);
+        return;
+      }
+      const data = await response.json();
+      // console.log('Topics loaded successfully:', data);
+      topicsData = data;
+      TOPIC_LABELS = topicsData.topics.map(t => t.label);
+      // console.log('TOPIC_LABELS:', TOPIC_LABELS);
+      canonicalTopic = createCanonicalTopic(TOPIC_LABELS, "other topics");
+      // console.log('canonicalTopic created:', canonicalTopic);
+    } catch (err) {
+      loadingError = err.message;
+      console.error('Error loading topics:', err);
+    }
+  });
 
   const OTHER_LABEL = "other topics";
-  const canonicalTopic = createCanonicalTopic(TOPIC_LABELS, OTHER_LABEL);
 
   const { posts, links } = data;
   const prepared = prepareNetwork(data, { circleColor });
@@ -57,12 +71,17 @@
   let trailerState = $state(trailerAvailable ? "idle" : "done");
   let trailerBlocking = $state(trailerAvailable);
 
-  const graphNodes = buildGraphNodes(preparedNodes, { circleColor, canonicalTopic });
+  const graphNodes = $derived.by(() => {
+    if (!canonicalTopic) return [];
+    const nodes = buildGraphNodes(preparedNodes, { circleColor, canonicalTopic });
+    // console.log('graphNodes updated:', nodes.length, 'nodes');
+    return nodes;
+  });
   const graphLinks = normalizeGraphLinks(links);
   const linkCountByPost = buildLinkCountByPost(graphLinks);
 
   const topEmojis = $derived.by(() => {
-    return computeTopEmojis(graphNodes, 30);
+    return graphNodes.length ? computeTopEmojis(graphNodes, 30) : [];
   });
 
   const subscriberText = (value) => {
@@ -151,15 +170,24 @@
     hoveredText = text;
   };
 
-  const sketch = createPieSketch({
-    graphNodes,
-    graphLinks,
-    topicLabels: TOPIC_LABELS,
-    otherLabel: OTHER_LABEL,
-    increase,
-    getState,
-    tooltipForPost,
-    setHoverState,
+  const sketch = $derived.by(() => {
+    if (!canonicalTopic || TOPIC_LABELS.length === 0) {
+      // console.log('Sketch not ready:', { canonicalTopic: !!canonicalTopic, labels: TOPIC_LABELS.length });
+      return null;
+    }
+    // console.log('Creating sketch with graphNodes:', graphNodes.length, 'graphLinks:', graphLinks.length);
+    const s = createPieSketch({
+      graphNodes,
+      graphLinks,
+      topicLabels: TOPIC_LABELS,
+      otherLabel: OTHER_LABEL,
+      increase,
+      getState,
+      tooltipForPost,
+      setHoverState,
+    });
+    // console.log('Sketch created:', s);
+    return s;
   });
 
   const handleInstance = (event) => {
@@ -215,6 +243,7 @@
     </div>
   </div>
 
+  
   <div
     class="absolute top-4 right-4 z-20 pointer-events-auto"
     hidden={trailerState !== "done"}
@@ -222,13 +251,28 @@
     <ExportControl label="Export PNG" on:export={exportPng} />
   </div>
 
-  <P5
-    class="h-full w-full"
-    {sketch}
-    aria-label="Radial pie network canvas"
-    role="img"
-    on:instance={handleInstance}
-  />
+  {#if loadingError}
+    <div class="flex items-center justify-center h-full">
+      <div class="text-red-500 text-center">
+        <p>Error loading visualization:</p>
+        <p>{loadingError}</p>
+      </div>
+    </div>
+  {:else if sketch}
+    {#key sketch}
+      <P5
+        class="h-full w-full"
+        {sketch}
+        aria-label="Radial pie network canvas"
+        role="img"
+        on:instance={handleInstance}
+      />
+    {/key}
+  {:else}
+    <div class="flex items-center justify-center h-full">
+      <p class="text-gray-500">Loading topics...</p>
+    </div>
+  {/if}
 
   {#if hoveredNode}
     <Tooltip text={hoveredText} />

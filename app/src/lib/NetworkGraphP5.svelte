@@ -1,6 +1,5 @@
 <script>
   import P5 from "p5-svelte";
-  import { onMount } from "svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
@@ -57,7 +56,7 @@
   const tooltipForPost = createTooltipForPost({ linkCountByPost, formatDate });
 
   let highlightColorFallback = $state(null);
-  onMount(() => {
+  $effect.pre(() => {
     if (highlightColorProp) return;
     const cssColor = getComputedStyle(document.documentElement).getPropertyValue(
       "--highlite-color"
