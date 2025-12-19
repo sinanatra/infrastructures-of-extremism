@@ -320,7 +320,9 @@
       }
     };
 
-    const candidates = [seed, groupRoot, datasetRoot, nodes[0]?.id].filter(Boolean);
+    const candidates = [seed, groupRoot, datasetRoot, nodes[0]?.id].filter(
+      Boolean
+    );
     if (!candidates.length && nodes.length) {
       candidates.push(nodes[0].id);
     }
@@ -617,7 +619,8 @@
             groupsVisible = targetGroups;
           }
         }
-        const nodeVisible = (node) => Boolean(node && nodesVisible.has(node.id));
+        const nodeVisible = (node) =>
+          Boolean(node && nodesVisible.has(node.id));
 
         const centerRadius = baseRadius - layerGap * 0.45;
         if (centerRadius > 0 && centerNode) {
@@ -761,7 +764,7 @@
       textColor={theme.textColor}
       introMode={true}
       introHeading=""
-      introSummary="this visualization reveals how mentions and forwarded posts connect groups."
+      introSummary="the network shows how it is connected to other groups, through links, mentions, and forwards."
       introBody=""
       enterLabel="Enter"
       on:update={(event) => {
