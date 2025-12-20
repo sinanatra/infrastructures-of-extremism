@@ -18,6 +18,7 @@
     data,
     backgroundColor = "#000000",
     pieFill = "#ffffff",
+    hexaFill = "#ffffff",
     circleColor = "#ffffff",
     textColor = "#ffffff",
     highlightColor: highlightColorProp = "yellow",
@@ -176,6 +177,7 @@
     textColor;
     backgroundColor;
     circleColor;
+    hexaFill;
     hoveredNode;
     trailerBlocking;
     trailerVisibleGroups;
@@ -203,6 +205,7 @@
     textColor,
     backgroundColor,
     circleColor,
+    hexaFill,
   });
 
   const sketch = createNetworkGraphSketch({

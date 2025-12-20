@@ -9,6 +9,7 @@
     circleColor: "#fff8bc",
     textColor: "#fff8bc",
     highlightColor: "#7B68EE",
+    pieBackground: "gainsboro",
   };
 
   const theme = data?.dataset?.theme ?? defaultTheme;
@@ -19,6 +20,7 @@
     {data}
     backgroundColor={theme.backgroundColor}
     pieFill={theme.pieFill}
+    pieBackground={theme.pieBackground}
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}

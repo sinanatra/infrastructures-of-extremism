@@ -7,6 +7,7 @@
     backgroundColor = "#000000",
     circleColor = "#ffffff",
     pieFill = "#ffffff",
+    hexaFill = "gainsboro",
     textColor = "#ffffff",
     highlightColor = "yellow",
     datasetSlug = null,
@@ -17,6 +18,7 @@
   {data}
   {backgroundColor}
   {pieFill}
+  {hexaFill}
   {circleColor}
   {textColor}
   {highlightColor}

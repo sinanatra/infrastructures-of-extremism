@@ -2,9 +2,11 @@
   {
     "slug": "jungenationalisten",
     "theme": {
-      "backgroundColor": "#111",
+      "backgroundColor": "#0f1411",
       "pieBackground": "gainsboro",
       "pieFill": "white",
+      "hexaFill": "#111",
+
       "circleColor": "#7B68EE",
       "textColor": "#7B68EE",
       "highlightColor": "red"
@@ -13,9 +15,11 @@
   {
     "slug": "tricoloredelsangueitalico",
     "theme": {
-      "backgroundColor": "#111",
+      "backgroundColor": "#0f1411",
       "pieBackground": "gainsboro",
       "pieFill": "white",
+      "hexaFill": "#111",
+
       "circleColor": "#FF4701",
       "textColor": "#FF4701",
       "highlightColor": "steelblue"
@@ -24,25 +28,26 @@
   {
     "slug": "generationidentitaire",
     "theme": {
-      "backgroundColor": "#111",
+      "backgroundColor": "#0f1411",
       "pieBackground": "gainsboro",
       "pieFill": "white",
+      "hexaFill": "#111",
       "circleColor": "#76b68d",
       "textColor": "#76b68d",
       "highlightColor": "steelblue"
     }
-  }, {
+  },
+  {
     "slug": "afdjugendbw",
     "theme": {
-      "backgroundColor": "#111",
+      "backgroundColor": "#0f1411",
       "pieBackground": "gainsboro",
       "pieFill": "white",
+      "hexaFill": "#111",
+
       "circleColor": "#896F61",
       "textColor": "#896F61",
       "highlightColor": "#017BF7"
     }
   }
 ]
-
-
-

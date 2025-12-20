@@ -24,7 +24,7 @@ export const load = async ({ fetch, params }) => {
 		fetch(`${basePath}/layout.json`),
 		fetch(`/data/datasets.json`),
 		fetch(`/data/dataset-themes.json`),
-		fetch(`${basePath}/edges.csv`)
+		// fetch(`${basePath}/edges.csv`)
 	]);
 
 	if ([postsRes, linksRes, groupsRes, layoutRes].some((res) => res.status === 404)) {
@@ -42,7 +42,7 @@ export const load = async ({ fetch, params }) => {
 		layoutRes.text(),
 		datasetsRes.ok ? datasetsRes.text() : Promise.resolve('[]'),
 		themesRes.ok ? themesRes.text() : Promise.resolve('[]'),
-		groupEdgesRes.ok ? groupEdgesRes.text() : Promise.resolve('')
+		// groupEdgesRes.ok ? groupEdgesRes.text() : Promise.resolve('')
 	]);
 
 	const excludedGroupIds = new Set(['boost']);

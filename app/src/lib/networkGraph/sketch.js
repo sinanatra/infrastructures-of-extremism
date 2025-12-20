@@ -211,7 +211,9 @@ export const createNetworkGraphSketch = ({
     }
 
     const next = getState();
-    return prevId !== (next.hoveredNode?.id ?? null) || prevText !== next.hoveredText;
+    return (
+      prevId !== (next.hoveredNode?.id ?? null) || prevText !== next.hoveredText
+    );
   };
 
   const computeCanvasSize = () => {
@@ -251,7 +253,9 @@ export const createNetworkGraphSketch = ({
     const touch = evt.touches?.[0];
     const x = evt.clientX ?? touch?.clientX ?? 0;
     const y = evt.clientY ?? touch?.clientY ?? 0;
-    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+    return (
+      x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
+    );
   };
 
   const startPan = (x, y) => {
@@ -277,7 +281,8 @@ export const createNetworkGraphSketch = ({
     isPanning = false;
     const hoverChanged = updateHover(x, y);
     if (dragDistance < 6) handleClick(x, y);
-    const clickable = Boolean(getState().hoveredNode) || Boolean(hitSliceLabel(x, y));
+    const clickable =
+      Boolean(getState().hoveredNode) || Boolean(hitSliceLabel(x, y));
     const cursorChanged = setCursor(clickable ? "pointer" : "grab");
     if (hoverChanged || cursorChanged || dragDistance < 6) requestRedraw();
   };
@@ -309,7 +314,14 @@ export const createNetworkGraphSketch = ({
     }
   };
 
-  const getArcPoints = (centerX, centerY, radius, startAngle, endAngle, steps = 40) => {
+  const getArcPoints = (
+    centerX,
+    centerY,
+    radius,
+    startAngle,
+    endAngle,
+    steps = 40
+  ) => {
     const points = [];
     const angSpan = endAngle - startAngle;
     for (let i = 0; i <= steps; i += 1) {
@@ -364,7 +376,7 @@ export const createNetworkGraphSketch = ({
     return segments;
   };
 
-  const drawExtrudedPolygon = (p, radius, backgroundColor, highlightColor) => {
+  const drawExtrudedPolygonFill = (p, radius, pieBackground) => {
     if (!Number.isFinite(radius)) return;
     const topPoly = drawPolygonVertices(radius);
     if (!topPoly.length) return;
@@ -373,47 +385,77 @@ export const createNetworkGraphSketch = ({
       y: pt.y + extrudeOffsetY,
     }));
     const segments = bottomSegments(topPoly, bottomPoly);
-    const topFill = p.color(backgroundColor);
-    topFill.setAlpha(1);
+    
+    const topFill = p.color(pieBackground);
     p.fill(topFill);
     p.noStroke();
     p.beginShape();
     topPoly.forEach((pt) => p.vertex(pt.x, pt.y));
     p.endShape(p.CLOSE);
-    const shadow = p.color(backgroundColor);
-    shadow.setAlpha(0.35);
+    
+    const shadow = p.color(pieBackground);
     p.fill(shadow);
+    p.noStroke();
     p.beginShape();
-    for (let i = bottomPoly.length - 1; i >= 0; i -= 1) p.vertex(bottomPoly[i].x, bottomPoly[i].y);
+    for (let i = bottomPoly.length - 1; i >= 0; i -= 1)
+      p.vertex(bottomPoly[i].x, bottomPoly[i].y);
     p.endShape(p.CLOSE);
-
-    p.stroke(highlightColor);
-    p.strokeWeight(0.8 / view.scale);
+    
+    p.fill(shadow);
+    p.noStroke();
     for (const segment of segments) {
-      for (const { top, bottom } of segment) p.line(top.x, top.y, bottom.x, bottom.y);
-      if (segment.length >= 2) {
+      for (let i = 0; i < segment.length - 1; i++) {
+        const curr = segment[i];
+        const next = segment[i + 1];
         p.beginShape();
-        segment.forEach(({ bottom }) => p.vertex(bottom.x, bottom.y));
-        p.endShape();
+        p.vertex(curr.top.x, curr.top.y);
+        p.vertex(next.top.x, next.top.y);
+        p.vertex(next.bottom.x, next.bottom.y);
+        p.vertex(curr.bottom.x, curr.bottom.y);
+        p.endShape(p.CLOSE);
       }
     }
   };
 
-  const drawExtrudedSides = (p, backgroundColor, highlightColor, trailerVisibleGroups) => {
+  const drawExtrudedPolygonOutline = (p, radius, pieBackground, highlightColor) => {
+    if (!Number.isFinite(radius)) return;
+    const topPoly = drawPolygonVertices(radius);
+    if (!topPoly.length) return;
+    const bottomPoly = topPoly.map((pt) => ({
+      x: pt.x + extrudeOffsetX,
+      y: pt.y + extrudeOffsetY,
+    }));
+    const segments = bottomSegments(topPoly, bottomPoly);
+    
+    p.noFill();
+    p.stroke(highlightColor);
+    p.strokeWeight(0.8 / view.scale);
+    
+    p.beginShape();
+    topPoly.forEach((pt) => p.vertex(pt.x, pt.y));
+    p.endShape(p.CLOSE);
+    
+    p.strokeWeight(0.8 / view.scale);
+    for (const segment of segments) {
+      for (const { top, bottom } of segment)
+        p.line(top.x, top.y, bottom.x, bottom.y);
+    }
+    
+    for (let i = 0; i < 6; i++) {
+      const current = bottomPoly[(3 + i) % 12];
+      const next = bottomPoly[(3 + i + 1) % 12];
+      p.line(current.x, current.y, next.x, next.y);
+    }
+  };
+
+  const drawExtrudedSides = (
+    p,
+    pieBackground,
+    highlightColor,
+    trailerVisibleGroups
+  ) => {
     if (!Number.isFinite(outerRingRadius)) return;
     p.push();
-    if (extrudeOffsetY) {
-      p.noStroke();
-      const shadowBase = p.color(backgroundColor);
-      shadowBase.setAlpha(0.2);
-      p.fill(shadowBase);
-      p.ellipse(
-        cx + extrudeOffsetX,
-        cy + extrudeOffsetY,
-        outerRingRadius * 2,
-        outerRingRadius * 2
-      );
-    }
     p.stroke(highlightColor);
     p.strokeWeight(0.8 / view.scale);
     for (const slice of slicePaths ?? []) {
@@ -424,7 +466,14 @@ export const createNetworkGraphSketch = ({
       ) {
         continue;
       }
-      const topArc = getArcPoints(cx, cy, outerRingRadius, slice.start, slice.end, 40);
+      const topArc = getArcPoints(
+        cx,
+        cy,
+        outerRingRadius,
+        slice.start,
+        slice.end,
+        40
+      );
       if (!topArc.length) continue;
       const bottomArc = topArc.map((pt) => ({
         x: pt.x + extrudeOffsetX,
@@ -432,25 +481,25 @@ export const createNetworkGraphSketch = ({
       }));
       const segments = bottomSegments(topArc, bottomArc);
 
-      const topFill = p.color(backgroundColor);
-      topFill.setAlpha(1);
+      const topFill = p.color(pieBackground);
       p.noStroke();
       p.fill(topFill);
       p.beginShape();
       topArc.forEach((pt) => p.vertex(pt.x, pt.y));
       p.endShape(p.CLOSE);
 
-      const shadow = p.color(backgroundColor);
-      shadow.setAlpha(0.35);
+      const shadow = p.color(pieBackground);
       p.fill(shadow);
       p.beginShape();
       topArc.forEach((pt) => p.vertex(pt.x, pt.y));
-      for (let i = bottomArc.length - 1; i >= 0; i -= 1) p.vertex(bottomArc[i].x, bottomArc[i].y);
+      for (let i = bottomArc.length - 1; i >= 0; i -= 1)
+        p.vertex(bottomArc[i].x, bottomArc[i].y);
       p.endShape(p.CLOSE);
 
       p.noFill();
       for (const segment of segments) {
-        for (const { top, bottom } of segment) p.line(top.x, top.y, bottom.x, bottom.y);
+        for (const { top, bottom } of segment)
+          p.line(top.x, top.y, bottom.x, bottom.y);
         if (segment.length >= 2) {
           p.beginShape();
           segment.forEach(({ bottom }) => p.vertex(bottom.x, bottom.y));
@@ -468,33 +517,42 @@ export const createNetworkGraphSketch = ({
   const drawSlices = (p) => {
     const {
       backgroundColor,
+      pieBackground,
       highlightColor,
       textColor,
       selectedGroupId,
       trailerVisibleGroups,
     } = getState();
 
-    drawExtrudedSides(p, backgroundColor, highlightColor, trailerVisibleGroups);
-    p.push();
-    p.noStroke();
-    p.noFill();
-    p.fill(backgroundColor);
-    p.ellipse(cx, cy, outerRingRadius * 2, outerRingRadius * 2);
-    p.pop();
-    p.push();
-    p.noFill();
-    p.stroke(highlightColor);
-    p.strokeWeight(0.9 / view.scale);
-    for (const slice of slicePaths ?? []) {
-      if (
-        !Number.isFinite(slice.start) ||
-        !Number.isFinite(slice.end) ||
-        !Number.isFinite(outerRingRadius)
-      )
-        continue;
-      p.arc(cx, cy, outerRingRadius * 2, outerRingRadius * 2, slice.start, slice.end);
-    }
-    p.pop();
+    drawExtrudedSides(p, pieBackground, highlightColor, trailerVisibleGroups);
+    // p.push();
+    // p.noStroke();
+    // p.noFill();
+    // // p.fill(backgroundColor);
+    // // p.fill("red");
+    // // p.ellipse(cx, cy, outerRingRadius * 2, outerRingRadius * 2);
+    // p.pop();
+    // p.push();
+    // p.noFill();
+    // p.stroke("highlightColor");
+    // p.strokeWeight(0.9 / view.scale);
+    // for (const slice of slicePaths ?? []) {
+    //   if (
+    //     !Number.isFinite(slice.start) ||
+    //     !Number.isFinite(slice.end) ||
+    //     !Number.isFinite(outerRingRadius)
+    //   )
+    //     continue;
+    //   p.arc(
+    //     cx,
+    //     cy,
+    //     outerRingRadius * 2,
+    //     outerRingRadius * 2,
+    //     slice.start,
+    //     slice.end
+    //   );
+    // }
+    // p.pop();
 
     p.push();
     for (const slice of slicePaths ?? []) {
@@ -527,16 +585,18 @@ export const createNetworkGraphSketch = ({
       const s = worldToScreen(source.x, source.y);
       const t = worldToScreen(target.x, target.y);
       const outLeft = s.x < -margin && t.x < -margin;
-      const outRight = s.x > canvasSize.w + margin && t.x > canvasSize.w + margin;
+      const outRight =
+        s.x > canvasSize.w + margin && t.x > canvasSize.w + margin;
       const outTop = s.y < -margin && t.y < -margin;
-      const outBottom = s.y > canvasSize.h + margin && t.y > canvasSize.h + margin;
+      const outBottom =
+        s.y > canvasSize.h + margin && t.y > canvasSize.h + margin;
       if (outLeft || outRight || outTop || outBottom) continue;
 
       const stroke = p.color(highlightColor);
       const active =
         selectedGroupId === null ||
-        (selectedGroupId === source.groupId && selectedGroupId === target.groupId);
-      if (!active) stroke.setAlpha(30);
+        (selectedGroupId === source.groupId &&
+          selectedGroupId === target.groupId);
       p.stroke(stroke);
       p.strokeWeight((crossGroup ? 0.9 : 0.7) / view.scale);
       p.line(source.x, source.y, target.x, target.y);
@@ -545,8 +605,14 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawNodes = (p) => {
-    const { visibleNodes, sizeMode, selectedGroupId, backgroundColor, hoveredNode, highlightColor } =
-      getState();
+    const {
+      visibleNodes,
+      sizeMode,
+      selectedGroupId,
+      backgroundColor,
+      hoveredNode,
+      highlightColor,
+    } = getState();
 
     p.push();
     const margin = 120;
@@ -560,10 +626,10 @@ export const createNetworkGraphSketch = ({
       ) {
         continue;
       }
-      const inGroup = selectedGroupId === null || node.groupId === selectedGroupId;
+      const inGroup =
+        selectedGroupId === null || node.groupId === selectedGroupId;
       const r = sizeMode === "links" ? node.radiusLinks : node.radiusReactions;
       const baseColor = p.color(node.color);
-      if (!inGroup) baseColor.setAlpha(30);
       p.fill(baseColor);
       p.stroke(backgroundColor);
       p.circle(node.x, node.y, r * 2);
@@ -571,7 +637,10 @@ export const createNetworkGraphSketch = ({
     p.pop();
 
     if (hoveredNode) {
-      const r = sizeMode === "links" ? hoveredNode.radiusLinks : hoveredNode.radiusReactions;
+      const r =
+        sizeMode === "links"
+          ? hoveredNode.radiusLinks
+          : hoveredNode.radiusReactions;
       p.push();
       p.noFill();
       const halo = p.color(highlightColor);
@@ -583,8 +652,9 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawRings = (p) => {
-    const { highlightColor, backgroundColor } = getState();
+    const { highlightColor, backgroundColor, pieBackground } = getState();
     const ctx = p.drawingContext;
+
     p.push();
     p.noFill();
     if (ctx?.setLineDash) ctx.setLineDash([8 / view.scale, 10 / view.scale]);
@@ -596,7 +666,10 @@ export const createNetworkGraphSketch = ({
         p.beginShape();
         for (let k = 0; k < polygonSides; k += 1) {
           const a = baseStart + (Math.PI * 2 * k) / polygonSides;
-          p.vertex(cx + tick.radius * Math.cos(a), cy + tick.radius * Math.sin(a));
+          p.vertex(
+            cx + tick.radius * Math.cos(a),
+            cy + tick.radius * Math.sin(a)
+          );
         }
         p.endShape(p.CLOSE);
       } else {
@@ -611,32 +684,28 @@ export const createNetworkGraphSketch = ({
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
       p.textSize(textSizeFor(36));
-      p.text(formatTick.format(tick.time), cx, cy - tick.radius - 8 / view.scale);
+      p.text(
+        formatTick.format(tick.time),
+        cx,
+        cy - tick.radius - 8 / view.scale
+      );
       p.pop();
     }
 
     if (outerTick) {
-      drawExtrudedPolygon(p, outerRingRadius, backgroundColor, highlightColor);
-      if (polygonSides && polygonSides >= 3) {
-        p.beginShape();
-        for (let k = 0; k < polygonSides; k += 1) {
-          const a = baseStart + (Math.PI * 2 * k) / polygonSides;
-          p.vertex(cx + outerRingRadius * Math.cos(a), cy + outerRingRadius * Math.sin(a));
-        }
-        p.endShape(p.CLOSE);
-      } else {
-        p.circle(cx, cy, outerRingRadius * 2);
-      }
       p.push();
       p.noStroke();
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
       p.textSize(textSizeFor(14));
-      p.text(formatTick.format(outerTick.time), cx, cy - outerRingRadius - 10 / view.scale);
+      p.text(
+        formatTick.format(outerTick.time),
+        cx,
+        cy - outerRingRadius - 10 / view.scale
+      );
       p.pop();
     }
     if (ctx?.setLineDash) ctx.setLineDash([]);
-    p.pop();
   };
 
   return (p) => {
@@ -686,7 +755,8 @@ export const createNetworkGraphSketch = ({
       if (isPanning || overControls(evt)) return;
       const hoverChanged = updateHover(p.mouseX, p.mouseY);
       const clickable =
-        Boolean(getState().hoveredNode) || Boolean(hitSliceLabel(p.mouseX, p.mouseY));
+        Boolean(getState().hoveredNode) ||
+        Boolean(hitSliceLabel(p.mouseX, p.mouseY));
       const cursorChanged = setCursor(clickable ? "pointer" : "grab");
       if (hoverChanged || cursorChanged) requestRedraw();
     };
@@ -771,16 +841,30 @@ export const createNetworkGraphSketch = ({
     };
 
     p.draw = () => {
-      const { backgroundColor } = getState();
+      const { backgroundColor, pieBackground, highlightColor } = getState();
       p.background(backgroundColor);
+      
       p.push();
       p.translate(canvasSize.w / 2 + view.panX, canvasSize.h / 2 + view.panY);
       p.scale(view.scale);
       p.translate(-cx, -cy);
+      
+      
+      if (outerTick) {
+        drawExtrudedPolygonFill(p, outerRingRadius, pieBackground);
+      }
+      
+      
       drawSlices(p);
       drawLinks(p);
       drawNodes(p);
       drawRings(p);
+      
+      
+      if (outerTick) {
+        drawExtrudedPolygonOutline(p, outerRingRadius, pieBackground, highlightColor);
+      }
+      
       p.pop();
     };
   };
