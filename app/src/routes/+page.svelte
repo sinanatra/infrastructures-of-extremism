@@ -88,17 +88,22 @@
 
       <div class="text-base leading-relaxed">
         <p class="mb-3">
-          Right-wing organisations have gained greater visibility on European
-          streets. During demonstrations, banners often advertise Telegram
-          channels as gateways to extremist communities.
+          Right-wing extremist organisations have gained visibility on European
+          streets. During orchestrated demonstrations, in particular youth
+          groups show banners that advertise Telegram channels as
+          offline-to-online gateways into far right communities. This
+          investigation takes these banners as its starting point to surface how
+          they lead into a network of interconnected online communities as <em
+            >Infrastructures of Extremism.</em
+          >
         </p>
         <p>
           At a rally held in Berlin on 29 November 2025 against so-called
-          <em>“criminal foreigners”</em>, participants promoted channels used
-          for youth recruitment and for coordinating activities at the local
-          level. Understanding how these channels operate is essential to reveal
-          how street-level mobilisation connects to a broader digital ecosystem
-          that fuels the growth of extremism.
+          <em>“criminal foreigners”</em>, participants promoted Telegram
+          channels used for youth recruitment and for coordinating activities at
+          the local level. Such events reveal how street-level mobilisation is
+          tightly interwoven with a broader digital ecosystem that fuels the
+          expansion of far right extremism.
         </p>
 
         <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
@@ -113,28 +118,28 @@
         </figure>
 
         <p class="mb-2">
-          These types of Telegram channels collectively form a digital
-          infrastructure that supports the mobilisation of ultranationalist
-          ideologies, enabling the spread of ideology among younger supporters.
-          Across Germany, numerous members of these networks maintain ties to
-          various far-right ultranationalist parties: <em>Die Heimat</em>, which
-          has openly neo-Nazi roots, and
-
-          <em>Alternative für Deutschland</em> which holds seats in parliament and
-          campaigns strongly against immigration, are just two examples.
+          These Telegram channels collectively form a digital infrastructure
+          that sustains ultra-nationalist ideologies, enabling the circulation
+          of fascist worldviews among younger supporters. Across Germany,
+          numerous members of these networks maintain ties to far-right parties
+          such as <em>Die Heimat</em> and
+          <em>Alternative für Deutschland (AFD)</em>, whose presence in
+          parliamentary politics gives symbolic legitimacy within these online
+          spaces.
         </p>
         <p>
-          The former youth organisation of the latter party,
-          <em>Junge Alternative</em>, has been classified as extremist and
-          ousted from the public sphere, leading to the recent emergence (29
-          November 2025) of a successor movement called
-          <em>Generation Deutschland</em>. This new formation has taken on the
-          role of mobilising younger supporters, relying on platforms such as
-          Telegram. Although the national intelligence service has declared
-          <em>Junge Alternative</em>
-          anti-democratic, some local groups that once operated under that banner
-          seem to have simply changed their name to
-          <em>Generation Deutschland</em> and continued their activities as before.
+          The former youth organisation of AFD, <em>Junge Alternative</em>, was
+          banned after being classified as right-wing extremist and subsequently
+          ousted from the public sphere. Yet, recently a successor movement
+          called
+          <em>Generation Deutschland</em> emerged, taking on the role of
+          mobilising younger supporters through the same networks. While the
+          organisation was newly formed, some local groups that once operated
+          under the banner of <em>Junge Alternative</em> have simply renamed
+          their Telegram channels to <em>Generation Deutschland</em> and continued
+          their activities business as usual. Hence, it occurs that the platform
+          provided these groups with the means to absorb the ban rather than enforcing
+          its implementation.
         </p>
 
         <figure class="flex flex-col items-end mt-10 mb-6 gap-2 self-end">
@@ -151,23 +156,22 @@
         </figure>
 
         <p class="mb-2">
-          What is becoming increasingly clear is how interconnected these
-          organisations are. Groups such as <em> Generation Deutschland</em>,
-          which seek to present themselves with a more moderate facade,
-          regularly redirect their followers to more radical channels, which in
-          turn refer them to others, creating a continuous chain of racist and
-          ultra-nationalist messages. These links extend far beyond Germany,
-          reaching similar nationalist scenes in countries such as Italy,
-          France, Austria, the Netherlands and Ukraine, sometimes even across
-          the Globe.
+          These organisations operate within a strategically interconnected
+          system. Groups like <em>Generation Deutschland</em>, which present
+          themselves with a more moderate façade, regularly redirect their
+          subscribers toward more radical channels. These, in turn, refer onward
+          to others, forming a continuous chain of racist and ultra-nationalist
+          messages. Their networks extend far beyond Germany, reaching similar
+          nationalist scenes in countries such as Italy, France, Austria, the
+          Netherlands and Ukraine, and beyond.
         </p>
         <p>
-          Telegram plays a central role in sustaining this ecosystem. It is not
-          simply a place where supporters of a specific group gather, but a tool
-          that keeps these networks in constant communication. Forwarded posts
-          act as pathways from one channel to another, allowing groups to
-          preserve and expand their audience even in the face of bans or
-          restrictions.
+          Telegram plays a central role in maintaining this ecosystem. Its
+          platform design creates not simply a place for supporters of specific
+          groups to gather, but a tool to enable a constant stream of
+          communication. Forwarded posts act as ideological pathways, allowing
+          audiences to be funneled from one channel to another, enabling
+          persistent networks, even in the face of bans or restrictions.
         </p>
 
         <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
@@ -183,28 +187,29 @@
         </figure>
 
         <p class="mb-2">
-          This investigation takes as its input the banners mentioned in the
-          Berlin protest and follows their network as made visible on Telegram.
-          Mentions, forwards, and thematically related messages are collected
-          via automated data scraping and transformed into a series of navigable
-          maps.
+          This investigation takes as its input the banner documented at the
+          Berlin protest and follows its network as it becomes visible on
+          Telegram. Messages, mentions, reactions and forwarded posts are
+          collected through automated data scraping and translated into a series
+          of navigable maps, which allows the exploration of these entangled
+          groups and thematic clusters.
         </p>
         <p>
-          This approach shows how individual groups expand and contract, which
-          channels serve as crucial hubs, and how various national factions are
-          connected to one another. Although these maps cannot capture the
-          entire movement (e.g. some of these groups are private, some links
-          were deleted, probably blocked), they expose part of the
-          infrastructure that allows today's far-right ideologies to circulate
-          uncensored. The lack of moderation on Telegram allows extremists to
-          spread their views, while making their content and relational
+          This approach reveals how individual groups expand and contract, which
+          channels serve as key hubs, and how various national factions are
+          connected across borders. Although these maps cannot capture the
+          entire movement –due to private groups, deleted links, or blocked
+          content– they expose part of the infrastructure that allows today's
+          far-right ideologies to circulate uncensored. Extremists take
+          advantage of the lack of moderation on Telegram to spread their views
+          with minimal restriction, while making their content and relational
           structures available for monitoring.
         </p>
         <p>
           Finally, the investigation extends to a wider selection of Telegram
-          groups from different countries. Each, based on the most active
-          channels in that context. Particular importance is given to the most
-          shared content among groups, showing how far-right messages move and
+          groups from different national contexts, compiled on the basis of
+          activity and connectivity. Particular attention is given to the most
+          shared content among groups, showing how far-right narratives move and
           adapt across borders.
         </p>
       </div>
