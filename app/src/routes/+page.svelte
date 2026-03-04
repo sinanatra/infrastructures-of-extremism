@@ -27,6 +27,12 @@
   let coverIndex = $state(0);
   let coverTimer = null;
 
+  const formatDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+
   const startCoverCycle = () => {
     stopCoverCycle();
     if (coverSets.length < 2) return;
@@ -39,6 +45,27 @@
     if (!coverTimer) return;
     clearInterval(coverTimer);
     coverTimer = null;
+  };
+
+  const downloadDataset = async (slug) => {
+    try {
+      const response = await fetch(`/data/${slug}/graph.json`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch dataset: ${response.statusText}`);
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${slug}-data.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download dataset');
+    }
   };
 
   onMount(startCoverCycle);
