@@ -26,6 +26,7 @@
 
   let coverIndex = $state(0);
   let coverTimer = null;
+  let downloadingSlug = $state(null);
 
   const formatDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -48,6 +49,8 @@
   };
 
   const downloadDataset = async (slug) => {
+    if (!slug || downloadingSlug === slug) return;
+    downloadingSlug = slug;
     try {
       const response = await fetch(`/data/${slug}/graph.json`);
       if (!response.ok) {
@@ -65,6 +68,10 @@
     } catch (error) {
       console.error('Download failed:', error);
       alert('Failed to download dataset');
+    } finally {
+      if (downloadingSlug === slug) {
+        downloadingSlug = null;
+      }
     }
   };
 
@@ -372,17 +379,23 @@
         <div class="grid gap-2 max-h-[320px] overflow-auto pr-1">
           {#each datasets as dataset (dataset.slug)}
             <button
-              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-white/10 bg-black/60 text-left hover:bg-gray-400 hover:text-black transition text-sm"
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-white/10 bg-black/60 text-left hover:bg-gray-400 hover:text-black transition text-sm disabled:cursor-wait disabled:opacity-80 disabled:hover:bg-black/60 disabled:hover:text-current"
               on:click={() => downloadDataset(dataset.slug)}
+              disabled={downloadingSlug === dataset.slug}
+              aria-busy={downloadingSlug === dataset.slug}
             >
               <span class="truncate">
                 {dataset.label || dataset.slug}
               </span>
               <span class="text-xs whitespace-nowrap text-gray-700">
-                {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
-                  "—"} groups
-                {#if formatRange(dataset.startDate, dataset.endDate)}
-                  · {formatRange(dataset.startDate, dataset.endDate)}
+                {#if downloadingSlug === dataset.slug}
+                  Downloading...
+                {:else}
+                  {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
+                    "—"} groups
+                  {#if formatRange(dataset.startDate, dataset.endDate)}
+                    · {formatRange(dataset.startDate, dataset.endDate)}
+                  {/if}
                 {/if}
               </span>
             </button>
