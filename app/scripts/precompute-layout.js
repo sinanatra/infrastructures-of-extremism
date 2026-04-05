@@ -119,6 +119,16 @@ const readCsv = async (baseDir, filename) => {
   return csvParse(raw);
 };
 
+const readOptionalCsv = async (baseDir, filename) => {
+  const fullPath = path.join(baseDir, filename);
+  try {
+    const raw = await fs.readFile(fullPath, "utf8");
+    return csvParse(raw);
+  } catch {
+    return [];
+  }
+};
+
 const parseNumber = (value) => {
   const num = Number(value ?? "");
   return Number.isFinite(num) ? num : undefined;
@@ -175,10 +185,20 @@ const clampAngleToSlice = (angle, slice) => {
 };
 
 const loadData = async ({ slug, dir }) => {
-  const [postsRows, linksRows, groupsRows] = await Promise.all([
+  const [
+    postsRows,
+    linksRows,
+    groupsRows,
+    groupEdgesRows,
+    brokenGroupsRows,
+    brokenGroupLinksRows,
+  ] = await Promise.all([
     readCsv(dir, "message_nodes.csv"),
     readCsv(dir, "message_edges.csv"),
     readCsv(dir, "nodes.csv"),
+    readOptionalCsv(dir, "edges.csv"),
+    readOptionalCsv(dir, "broken_groups.csv"),
+    readOptionalCsv(dir, "broken_group_links.csv"),
   ]);
 
   const excludedGroupIds = new Set(["boost"]);
@@ -222,6 +242,22 @@ const loadData = async ({ slug, dir }) => {
 
   const seenPostIds = new Set();
   const sanitizedPosts = [];
+  const basePostColumns = [
+    "id",
+    "chat",
+    "message_id",
+    "date",
+    "url",
+    "views",
+    "reaction_count",
+    "reaction_breakdown",
+    "text",
+    "sender_id",
+    "label",
+  ];
+  const basePostColumnSet = new Set(basePostColumns);
+  const extraPostColumns = [];
+  const seenExtraPostColumns = new Set();
 
   const posts = postsRows
     .map((row) => {
@@ -274,7 +310,18 @@ const loadData = async ({ slug, dir }) => {
       }
 
       seenPostIds.add(id);
+      const passthrough = {};
+      for (const [rawKey, rawValue] of Object.entries(row)) {
+        const key = (rawKey ?? "").trim();
+        if (!key || basePostColumnSet.has(key)) continue;
+        passthrough[key] = rawValue ?? "";
+        if (!seenExtraPostColumns.has(key)) {
+          seenExtraPostColumns.add(key);
+          extraPostColumns.push(key);
+        }
+      }
       sanitizedPosts.push({
+        ...passthrough,
         id,
         chat: post.chat,
         message_id: post.messageId,
@@ -315,23 +362,205 @@ const loadData = async ({ slug, dir }) => {
     type: link.type,
   }));
 
+  const postsById = new Map(posts.map((post) => [post.id, post]));
+
+  const groupLinkMap = new Map();
+  const makeGroupLinkKey = (row) =>
+    [row.from, row.to, row.kind || "live", row.status || "", row.reason || ""]
+      .join("::")
+      .toLowerCase();
+  const addGroupLink = (row) => {
+    const source = normalizeGroupId(row.from);
+    const target = normalizeGroupId(row.to);
+    if (!source || !target || source === target) return;
+
+    const sourceLabel = canonicalGroups.get(source)?.label?.toLowerCase() ?? source;
+    const targetLabel = canonicalGroups.get(target)?.label?.toLowerCase() ?? target;
+    if (excludedGroupIds.has(source) || excludedGroupIds.has(target)) return;
+    if (excludedGroupLabels.has(sourceLabel) || excludedGroupLabels.has(targetLabel))
+      return;
+
+    const count = Math.max(1, parseNumber(row.count) ?? 1);
+    const normalized = {
+      from: source,
+      to: target,
+      count,
+      kind: row.kind || "live",
+      type: row.type || "link",
+      status: row.status || "",
+      reason: row.reason || "",
+    };
+    const key = makeGroupLinkKey(normalized);
+    const existing = groupLinkMap.get(key);
+    if (!existing) {
+      groupLinkMap.set(key, normalized);
+      return;
+    }
+    existing.count += count;
+    if (!existing.type && normalized.type) existing.type = normalized.type;
+    if (!existing.status && normalized.status) existing.status = normalized.status;
+    if (!existing.reason && normalized.reason) existing.reason = normalized.reason;
+  };
+
+  if (groupEdgesRows.length) {
+    for (const row of groupEdgesRows) {
+      addGroupLink({
+        from: row.from ?? row.source ?? row.from_id ?? "",
+        to: row.to ?? row.target ?? row.to_id ?? "",
+        count: row.count,
+        type: row.type?.trim?.() || "link",
+        kind: row.kind?.trim?.() || "live",
+        status: row.status?.trim?.() || "",
+        reason: row.reason?.trim?.() || "",
+      });
+    }
+  } else {
+    for (const link of links) {
+      const sourcePost = postsById.get(link.source);
+      const targetPost = postsById.get(link.target);
+      const source = normalizeGroupId(sourcePost?.chat ?? "");
+      const target = normalizeGroupId(targetPost?.chat ?? "");
+      if (!source || !target || source === target) continue;
+      addGroupLink({
+        from: source,
+        to: target,
+        count: 1,
+        kind: "live",
+        type: link.type || "link",
+      });
+    }
+  }
+
+  for (const row of brokenGroupLinksRows) {
+    addGroupLink({
+      from: row.from ?? row.source ?? row.from_id ?? "",
+      to: row.to ?? row.target ?? row.to_id ?? "",
+      count: row.count,
+      kind: "broken",
+      type: "broken",
+      status: row.status?.trim?.() || "resolve_failed",
+      reason: row.reason?.trim?.() || "",
+    });
+  }
+
+  const groupLinks = [...groupLinkMap.values()].sort((a, b) => {
+    if (a.kind !== b.kind) return a.kind.localeCompare(b.kind);
+    if (b.count !== a.count) return b.count - a.count;
+    if (a.from !== b.from) return a.from.localeCompare(b.from);
+    return a.to.localeCompare(b.to);
+  });
+
+  const brokenGroupMap = new Map();
+  for (const row of brokenGroupsRows) {
+    const id = normalizeGroupId(row.id ?? row.group_id ?? row.handle ?? "");
+    if (!id) continue;
+    const existing = brokenGroupMap.get(id) ?? {
+      id,
+      status: "resolve_failed",
+      reason: "",
+      total_mentions: 0,
+      source_group_count: 0,
+      source_groups: new Set(),
+    };
+    existing.status = row.status?.trim?.() || existing.status;
+    existing.reason = row.reason?.trim?.() || existing.reason;
+    existing.total_mentions += Math.max(0, parseNumber(row.total_mentions) ?? 0);
+    existing.source_group_count = Math.max(
+      existing.source_group_count,
+      Math.max(0, parseNumber(row.source_group_count) ?? 0)
+    );
+    const sourceGroups = String(row.source_groups ?? "")
+      .split("|")
+      .map((s) => normalizeGroupId(s))
+      .filter(Boolean);
+    sourceGroups.forEach((source) => existing.source_groups.add(source));
+    brokenGroupMap.set(id, existing);
+  }
+
+  for (const link of groupLinks) {
+    if (link.kind !== "broken") continue;
+    const target = normalizeGroupId(link.to);
+    if (!target) continue;
+    const existing = brokenGroupMap.get(target) ?? {
+      id: target,
+      status: link.status || "resolve_failed",
+      reason: link.reason || "",
+      total_mentions: 0,
+      source_group_count: 0,
+      source_groups: new Set(),
+    };
+    existing.total_mentions += Math.max(0, parseNumber(link.count) ?? 1);
+    if (link.from) existing.source_groups.add(normalizeGroupId(link.from));
+    if (!existing.status && link.status) existing.status = link.status;
+    if (!existing.reason && link.reason) existing.reason = link.reason;
+    existing.source_group_count = Math.max(
+      existing.source_group_count,
+      existing.source_groups.size
+    );
+    brokenGroupMap.set(target, existing);
+  }
+
+  const brokenGroups = [...brokenGroupMap.values()]
+    .map((row) => {
+      const sourceGroups = [...row.source_groups].filter(Boolean).sort();
+      return {
+        id: row.id,
+        status: row.status || "resolve_failed",
+        reason: row.reason || "",
+        total_mentions: Math.max(0, parseNumber(row.total_mentions) ?? 0),
+        source_group_count: Math.max(
+          parseNumber(row.source_group_count) ?? 0,
+          sourceGroups.length
+        ),
+        source_groups: sourceGroups.join("|"),
+      };
+    })
+    .sort((a, b) => {
+      if (b.total_mentions !== a.total_mentions)
+        return b.total_mentions - a.total_mentions;
+      return a.id.localeCompare(b.id);
+    });
+
+  const brokenSummary = brokenGroups.reduce(
+    (acc, row) => {
+      acc.total_targets += 1;
+      acc.total_mentions += Math.max(0, parseNumber(row.total_mentions) ?? 0);
+      const status = row.status || "resolve_failed";
+      acc.status_counts[status] = (acc.status_counts[status] ?? 0) + 1;
+      return acc;
+    },
+    { total_targets: 0, total_mentions: 0, status_counts: {} }
+  );
+
   const targetDir = path.join(dataRoot, slug);
   await fs.mkdir(targetDir, { recursive: true });
   const postsOut = csvFormat(sanitizedPosts, [
-    "id",
-    "chat",
-    "message_id",
-    "date",
-    "url",
-    "views",
-    "reaction_count",
-    "reaction_breakdown",
-    "text",
-    "sender_id",
-    "label",
+    ...basePostColumns,
+    ...extraPostColumns,
   ]);
   const linksOut = csvFormat(sanitizedLinks, ["from", "to", "type"]);
   const groupsOut = csvFormat(groups, ["id", "label", "subscribers"]);
+  const groupLinksOut = csvFormat(groupLinks, [
+    "from",
+    "to",
+    "count",
+    "kind",
+    "type",
+    "status",
+    "reason",
+  ]);
+  const brokenGroupsOut = csvFormat(brokenGroups, [
+    "id",
+    "status",
+    "reason",
+    "total_mentions",
+    "source_group_count",
+    "source_groups",
+  ]);
+  const brokenGroupLinksOut = csvFormat(
+    groupLinks.filter((row) => row.kind === "broken"),
+    ["from", "to", "count", "status", "reason"]
+  );
   await fs.writeFile(
     path.join(targetDir, "message_nodes.csv"),
     postsOut,
@@ -343,6 +572,17 @@ const loadData = async ({ slug, dir }) => {
     "utf8"
   );
   await fs.writeFile(path.join(targetDir, "nodes.csv"), groupsOut, "utf8");
+  await fs.writeFile(path.join(targetDir, "edges.csv"), groupLinksOut, "utf8");
+  await fs.writeFile(
+    path.join(targetDir, "broken_groups.csv"),
+    brokenGroupsOut,
+    "utf8"
+  );
+  await fs.writeFile(
+    path.join(targetDir, "broken_group_links.csv"),
+    brokenGroupLinksOut,
+    "utf8"
+  );
 
   const datasetLabel =
     groups.find((g) => normalizeGroupId(g.id) === normalizeGroupId(slug))
@@ -361,21 +601,73 @@ const loadData = async ({ slug, dir }) => {
       groupCount: groups.length,
       startDate: posts[0]?.dateIso ?? null,
       endDate: posts[posts.length - 1]?.dateIso ?? null,
+      brokenTargetCount: brokenSummary.total_targets,
+      brokenMentionCount: brokenSummary.total_mentions,
+      brokenStatusCounts: brokenSummary.status_counts,
     },
   };
 };
 
+const LAYOUT_WIDTH = 5000;
+const LAYOUT_HEIGHT = 5000;
+const POLYGON_SIDES = 12;
+const BASE_START = -Math.PI / 2;
+const MIN_NODE_RADIUS = 4;
+const MAX_NODE_RADIUS_DESIRED = 42;
+const BIG_GAP_THRESHOLD_DAYS = 30;
+const GAP_RADIUS_PX = 50;
+const LABEL_CHAR_PX = 9;
+const LABEL_PAD_PX = 80;
+
+/**
+ * Builds a spatial grid and resolves pairwise collision overlaps for all nodes.
+ * Directly mutates node.x / node.y.
+ */
+const applyCollisionPass = (nodes, cellSize, collisionPadding) => {
+  const grid = new Map();
+  for (const node of nodes) {
+    const key = `${Math.floor(node.x / cellSize)},${Math.floor(node.y / cellSize)}`;
+    const bucket = grid.get(key) ?? [];
+    bucket.push(node);
+    grid.set(key, bucket);
+  }
+  for (const node of nodes) {
+    const col = Math.floor(node.x / cellSize);
+    const row = Math.floor(node.y / cellSize);
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        const bucket = grid.get(`${col + dx},${row + dy}`);
+        if (!bucket) continue;
+        for (const other of bucket) {
+          if (other.index <= node.index) continue;
+          const ddx = node.x - other.x;
+          const ddy = node.y - other.y;
+          const dist = Math.hypot(ddx, ddy) || 1e-6;
+          const minDist = node.collisionRadius + other.collisionRadius + collisionPadding;
+          if (dist < minDist) {
+            const adjust = ((minDist - dist) / dist) * 0.9;
+            node.x += ddx * adjust;
+            node.y += ddy * adjust;
+            other.x -= ddx * adjust;
+            other.y -= ddy * adjust;
+          }
+        }
+      }
+    }
+  }
+};
+
 const computeLayout = ({ posts, links, groups }) => {
   const tau = Math.PI * 2;
-  const width = 5000;
-  const height = 5000;
+  const width = LAYOUT_WIDTH;
+  const height = LAYOUT_HEIGHT;
   const cx = width / 2;
   const cy = height / 2;
   const outerRadius = Math.max(width, height) / 1.2;
   const innerRadius = outerRadius * 0.01;
 
-  const polygonSides = 12;
-  const baseStart = -Math.PI / 2;
+  const polygonSides = POLYGON_SIDES;
+  const baseStart = BASE_START;
 
   const minTime = posts.length
     ? Math.min(...posts.map((p) => p.dateMs))
@@ -387,8 +679,7 @@ const computeLayout = ({ posts, links, groups }) => {
   const sortedTimes = [...posts.map((p) => p.dateMs)].sort((a, b) => a - b);
   const dayMs = 24 * 60 * 60 * 1000;
 
-  const bigGapThresholdDays = 30;
-  const bigGapThresholdMs = bigGapThresholdDays * dayMs;
+  const bigGapThresholdMs = BIG_GAP_THRESHOLD_DAYS * dayMs;
 
   const gapBreakTimes = [];
   if (sortedTimes.length > 1) {
@@ -401,8 +692,7 @@ const computeLayout = ({ posts, links, groups }) => {
   }
 
   const rawSpan = outerRadius - innerRadius;
-  const gapRadiusPx = 50;
-  const totalGapPx = gapRadiusPx * gapBreakTimes.length;
+  const totalGapPx = GAP_RADIUS_PX * gapBreakTimes.length;
   const baseSpan = Math.max(rawSpan - totalGapPx, rawSpan * 0.8);
 
   const radiusForTimeRaw = (ms) => {
@@ -424,7 +714,7 @@ const computeLayout = ({ posts, links, groups }) => {
     for (let i = 0; i < gapBreakTimes.length; i++) {
       if (ms >= gapBreakTimes[i]) gapsBefore++;
     }
-    if (gapsBefore > 0) r += gapsBefore * gapRadiusPx;
+    if (gapsBefore > 0) r += gapsBefore * GAP_RADIUS_PX;
 
     return r;
   };
@@ -538,21 +828,18 @@ const computeLayout = ({ posts, links, groups }) => {
     (m, v) => Math.max(m, v),
     0
   );
-  const minNodeRadius = 4;
-  const maxNodeRadiusDesired = 42;
-
   const radiusForReactions = (value) => {
     const v = Math.max(0, value ?? 0);
-    if (!maxReactions) return minNodeRadius;
-    const span = maxNodeRadiusDesired - minNodeRadius;
-    return minNodeRadius + Math.sqrt(v / maxReactions) * span * 0.8;
+    if (!maxReactions) return MIN_NODE_RADIUS;
+    const span = MAX_NODE_RADIUS_DESIRED - MIN_NODE_RADIUS;
+    return MIN_NODE_RADIUS + Math.sqrt(v / maxReactions) * span * 0.8;
   };
 
   const radiusForLinks = (value) => {
     const v = Math.max(0, value ?? 0);
-    if (!maxLinks) return minNodeRadius;
-    const span = maxNodeRadiusDesired - minNodeRadius;
-    return minNodeRadius + Math.sqrt(v / maxLinks) * span;
+    if (!maxLinks) return MIN_NODE_RADIUS;
+    const span = MAX_NODE_RADIUS_DESIRED - MIN_NODE_RADIUS;
+    return MIN_NODE_RADIUS + Math.sqrt(v / maxLinks) * span;
   };
 
   const postCountByGroup = new Map();
@@ -606,11 +893,9 @@ const computeLayout = ({ posts, links, groups }) => {
   const availableAngle = Math.max(tau - totalGap, tau * 0.7);
 
   const labelRadius = outerRadius + 64;
-  const labelCharPx = 9;
-  const labelPadPx = 80;
   const minAngles = orderedGroups.map((group) => {
     const label = group.label || group.id || "";
-    const px = label.length * labelCharPx + labelPadPx;
+    const px = label.length * LABEL_CHAR_PX + LABEL_PAD_PX;
     return clamp(px / labelRadius, 0.05, 0.8);
   });
 
@@ -811,51 +1096,7 @@ const computeLayout = ({ posts, links, groups }) => {
         }
       }
 
-      const grid = new Map();
-      for (const node of nodes) {
-        const col = Math.floor(node.x / cellSize);
-        const row = Math.floor(node.y / cellSize);
-        const key = `${col},${row}`;
-        let bucket = grid.get(key);
-        if (!bucket) {
-          bucket = [];
-          grid.set(key, bucket);
-        }
-        bucket.push(node);
-      }
-
-      const resolveCollisions = () => {
-        for (const node of nodes) {
-          const col = Math.floor(node.x / cellSize);
-          const row = Math.floor(node.y / cellSize);
-          for (let dx = -1; dx <= 1; dx++) {
-            for (let dy = -1; dy <= 1; dy++) {
-              const bucket = grid.get(`${col + dx},${row + dy}`);
-              if (!bucket) continue;
-              for (const other of bucket) {
-                if (other.index <= node.index) continue;
-                const ddx = node.x - other.x;
-                const ddy = node.y - other.y;
-                const dist = Math.hypot(ddx, ddy) || 1e-6;
-                const minDist =
-                  node.collisionRadius +
-                  other.collisionRadius +
-                  collisionPadding;
-                if (dist < minDist) {
-                  const overlap = (minDist - dist) / dist;
-                  const adjust = overlap * 0.9;
-                  node.x += ddx * adjust;
-                  node.y += ddy * adjust;
-                  other.x -= ddx * adjust;
-                  other.y -= ddy * adjust;
-                }
-              }
-            }
-          }
-        }
-      };
-
-      resolveCollisions();
+      applyCollisionPass(nodes, cellSize, collisionPadding);
 
       for (const node of nodes) {
         node.vx *= damping;
@@ -863,57 +1104,15 @@ const computeLayout = ({ posts, links, groups }) => {
         node.x += node.vx;
         node.y += node.vy;
 
-        const target = node.targetRadius;
         const angle = Math.atan2(node.y - cy, node.x - cx);
-        const snapped = polygonPointAtAngle(target, polygonSides, angle);
+        const snapped = polygonPointAtAngle(node.targetRadius, polygonSides, angle);
         node.x = snapped.x;
         node.y = snapped.y;
       }
     }
 
-    const resolvePass = () => {
-      const grid = new Map();
-      for (const node of nodes) {
-        const col = Math.floor(node.x / cellSize);
-        const row = Math.floor(node.y / cellSize);
-        const key = `${col},${row}`;
-        let bucket = grid.get(key);
-        if (!bucket) {
-          bucket = [];
-          grid.set(key, bucket);
-        }
-        bucket.push(node);
-      }
-
-      for (const node of nodes) {
-        const col = Math.floor(node.x / cellSize);
-        const row = Math.floor(node.y / cellSize);
-        for (let dx = -1; dx <= 1; dx++) {
-          for (let dy = -1; dy <= 1; dy++) {
-            const bucket = grid.get(`${col + dx},${row + dy}`);
-            if (!bucket) continue;
-            for (const other of bucket) {
-              if (other.index <= node.index) continue;
-              const ddx = node.x - other.x;
-              const ddy = node.y - other.y;
-              const dist = Math.hypot(ddx, ddy) || 1e-6;
-              const minDist =
-                node.collisionRadius + other.collisionRadius + collisionPadding;
-              if (dist < minDist) {
-                const overlap = (minDist - dist) / dist;
-                const adjust = overlap * 0.9;
-                node.x += ddx * adjust;
-                node.y += ddy * adjust;
-                other.x -= ddx * adjust;
-                other.y -= ddy * adjust;
-              }
-            }
-          }
-        }
-      }
-    };
-
-    resolvePass();
+    // Final pass: resolve any remaining overlaps after all iterations
+    applyCollisionPass(nodes, cellSize, collisionPadding);
 
     for (const node of nodes) {
       const angle = Math.atan2(node.y - cy, node.x - cx);
@@ -1065,6 +1264,9 @@ const main = async () => {
       groupCount: meta.groupCount,
       startDate: meta.startDate,
       endDate: meta.endDate,
+      brokenTargetCount: meta.brokenTargetCount ?? 0,
+      brokenMentionCount: meta.brokenMentionCount ?? 0,
+      brokenStatusCounts: meta.brokenStatusCounts ?? {},
     });
   }
 

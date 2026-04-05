@@ -525,34 +525,6 @@ export const createNetworkGraphSketch = ({
     } = getState();
 
     drawExtrudedSides(p, pieBackground, highlightColor, trailerVisibleGroups);
-    // p.push();
-    // p.noStroke();
-    // p.noFill();
-    // // p.fill(backgroundColor);
-    // // p.fill("red");
-    // // p.ellipse(cx, cy, outerRingRadius * 2, outerRingRadius * 2);
-    // p.pop();
-    // p.push();
-    // p.noFill();
-    // p.stroke("highlightColor");
-    // p.strokeWeight(0.9 / view.scale);
-    // for (const slice of slicePaths ?? []) {
-    //   if (
-    //     !Number.isFinite(slice.start) ||
-    //     !Number.isFinite(slice.end) ||
-    //     !Number.isFinite(outerRingRadius)
-    //   )
-    //     continue;
-    //   p.arc(
-    //     cx,
-    //     cy,
-    //     outerRingRadius * 2,
-    //     outerRingRadius * 2,
-    //     slice.start,
-    //     slice.end
-    //   );
-    // }
-    // p.pop();
 
     p.push();
     for (const slice of slicePaths ?? []) {

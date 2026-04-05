@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"eval\\\\|Function\\(\" /Users/giacomonanni/Documents/Development/infrastructures-of-extremism/app/src --include=*.js --include=*.svelte --include=*.ts)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
