@@ -843,8 +843,16 @@ async def run_crawl(config: CrawlConfig) -> Dict[str, Dict[str, Any]]:
     selected_session = config.session_name
     client: Optional[TelegramClient] = None
 
+    def make_client(session: str) -> TelegramClient:
+        return TelegramClient(
+            session,
+            int(config.api_id),
+            str(config.api_hash),
+            flood_sleep_threshold=3600,
+        )
+
     for session_name in session_candidates:
-        probe = TelegramClient(session_name, int(config.api_id), str(config.api_hash))
+        probe = make_client(session_name)
         await probe.connect()
         try:
             if await probe.is_user_authorized():
@@ -858,7 +866,7 @@ async def run_crawl(config: CrawlConfig) -> Dict[str, Dict[str, Any]]:
 
     if client is None:
         selected_session = session_candidates[0] if session_candidates else config.session_name
-        client = TelegramClient(selected_session, int(config.api_id), str(config.api_hash))
+        client = make_client(selected_session)
         print(
             "[auth] no authorized session found. "
             "Telethon will ask for your phone number (format like +491701234567)."
@@ -921,9 +929,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-depth", type=int, default=int(os.getenv("TG_MAX_DEPTH", "2")))
     parser.add_argument("--max-per-chat", type=int, default=int(os.getenv("TG_MAX_PER_CHAT", "300")))
     parser.add_argument(
-        "--handle-delay", type=float, default=float(os.getenv("TG_HANDLE_DELAY", "3.0"))
+        "--handle-delay", type=float, default=float(os.getenv("TG_HANDLE_DELAY", "8.0"))
     )
-    parser.add_argument("--max-wait", type=int, default=int(os.getenv("TG_MAX_WAIT", "600")))
+    parser.add_argument("--max-wait", type=int, default=int(os.getenv("TG_MAX_WAIT", "3600")))
     parser.add_argument(
         "--max-subs-for-messages",
         type=int,

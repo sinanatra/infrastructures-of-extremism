@@ -28,10 +28,10 @@
   let coverTimer = null;
   let downloadingSlug = $state(null);
 
-  const formatDate = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  const formatDate = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 
   const startCoverCycle = () => {
@@ -58,7 +58,7 @@
       }
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `${slug}-data.json`;
       document.body.appendChild(a);
@@ -66,8 +66,8 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download dataset');
+      console.error("Download failed:", error);
+      alert("Failed to download dataset");
     } finally {
       if (downloadingSlug === slug) {
         downloadingSlug = null;
@@ -114,7 +114,7 @@
 
   <div class="relative flex justify-center">
     <article
-      class="relative z-10 w-full max-w-[640px] px-4 pt-10 pb-10 -mt-[30vh] bg-black"
+      class="relative z-10 w-1/3 px-4 pt-10 pb-10 -mt-[30vh] bg-black"
     >
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
@@ -282,6 +282,11 @@
                 <div class="text-lg">
                   {dataset.label || dataset.slug}
                 </div>
+                {#if dataset.endDate}
+                  <div class="text-xs text-gray-600 mt-0.5">
+                    Updated {formatDate.format(new Date(dataset.endDate))}
+                  </div>
+                {/if}
               </div>
             </a>
           {/each}
@@ -320,6 +325,11 @@
                 <div class="text-lg">
                   {dataset.label || dataset.slug}
                 </div>
+                {#if dataset.endDate}
+                  <div class="text-xs text-gray-600 mt-0.5">
+                    Updated {formatDate.format(new Date(dataset.endDate))}
+                  </div>
+                {/if}
               </div>
             </a>
           {/each}
@@ -358,6 +368,11 @@
                 <div class="text-lg">
                   {dataset.label || dataset.slug}
                 </div>
+                {#if dataset.endDate}
+                  <div class="text-xs text-gray-600 mt-0.5">
+                    Updated {formatDate.format(new Date(dataset.endDate))}
+                  </div>
+                {/if}
               </div>
             </a>
           {/each}
@@ -408,10 +423,18 @@
   <div class="relative z-10 w-full px-5 pb-10 pt-20 bg-black">
     <section class="max-w-5xl text-xs text-gray-400 space-y-2 text-left">
       <p>
-        Infrastructures of Extremism is a project by Giacomo Nanni in
-        collaboration with metaLAB (at) Harvard & Berlin.
+        Infrastructures of Extremism is a project by
+
+        <a
+          class="underline"
+          href="https://giacomo.website/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Giacomo Nanni
+        </a>
+        in collaboration with metaLAB (at) Harvard & Berlin.
         <br />
-        For inquiries, please contact via email.
       </p>
     </section>
   </div>
