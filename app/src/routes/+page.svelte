@@ -112,141 +112,148 @@
     </div>
   {/if}
 
-  <div class="relative flex justify-center">
-    <article
-      class="relative z-10 w-1/3 px-4 pt-10 pb-10 -mt-[30vh] bg-black"
-    >
+  <!-- left column -->
+  <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 -mt-[30vh]">
+    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
       </h1>
+      <p class="mb-3">
+        Right-wing extremist organisations have gained visibility on European
+        streets. During orchestrated demonstrations, in particular youth
+        groups show banners that advertise Telegram channels as
+        offline-to-online gateways into far right communities. This
+        investigation takes these banners as its starting point to surface how
+        they lead into a network of interconnected online communities as <em
+          >Infrastructures of Extremism.</em
+        >
+      </p>
+      <p>
+        At a rally held in Berlin on 29 November 2025 against so-called
+        <em>"criminal foreigners"</em>, participants promoted Telegram
+        channels used for youth recruitment and for coordinating activities at
+        the local level. Such events reveal how street-level mobilisation is
+        tightly interwoven with a broader digital ecosystem that fuels the
+        expansion of far right extremism.
+      </p>
+      <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+        <img
+          src="/intro/berlin-demo.png"
+          alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
+          class="w-[150px] block grayscale hover:grayscale-0"
+        />
+        <figcaption class="text-sm max-w-60 text-gray-600">
+          A banner that promotes a link to a Telegram far-right youth group.
+        </figcaption>
+      </figure>
+    </article>
+    <div class="hidden md:block"></div>
+    <div class="hidden md:block"></div>
+  </div>
 
-      <div class="text-base leading-relaxed">
-        <p class="mb-3">
-          Right-wing extremist organisations have gained visibility on European
-          streets. During orchestrated demonstrations, in particular youth
-          groups show banners that advertise Telegram channels as
-          offline-to-online gateways into far right communities. This
-          investigation takes these banners as its starting point to surface how
-          they lead into a network of interconnected online communities as <em
-            >Infrastructures of Extremism.</em
-          >
-        </p>
-        <p>
-          At a rally held in Berlin on 29 November 2025 against so-called
-          <em>“criminal foreigners”</em>, participants promoted Telegram
-          channels used for youth recruitment and for coordinating activities at
-          the local level. Such events reveal how street-level mobilisation is
-          tightly interwoven with a broader digital ecosystem that fuels the
-          expansion of far right extremism.
-        </p>
+  <!-- center column -->
+  <div class="relative z-10 grid grid-cols-1 md:grid-cols-3">
+    <div class="hidden md:block"></div>
+    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
+      <p class="mb-3">
+        These Telegram channels collectively form a digital infrastructure
+        that sustains ultra-nationalist ideologies, enabling the circulation
+        of fascist worldviews among younger supporters. Across Germany,
+        numerous members of these networks maintain ties to far-right parties
+        such as <em>Die Heimat</em> and
+        <em>Alternative für Deutschland (AFD)</em>, whose presence in
+        parliamentary politics gives symbolic legitimacy within these online
+        spaces.
+      </p>
+      <p>
+        The former youth organisation of AFD, <em>Junge Alternative</em>, was
+        banned after being classified as right-wing extremist and subsequently
+        ousted from the public sphere. Yet, recently a successor movement
+        called <em>Generation Deutschland</em> emerged, taking on the role of
+        mobilising younger supporters through the same networks. While the
+        organisation was newly formed, some local groups that once operated
+        under the banner of <em>Junge Alternative</em> have simply renamed
+        their Telegram channels to <em>Generation Deutschland</em> and continued
+        their activities business as usual. Hence, it occurs that the platform
+        provided these groups with the means to absorb the ban rather than enforcing
+        its implementation.
+      </p>
+      <figure class="flex flex-col items-end mt-10 mb-6 gap-2">
+        <img
+          src="/intro/gd.png"
+          alt="Telegram profile of Generation Deutschland"
+          class="w-[220px] block grayscale hover:grayscale-0"
+        />
+        <figcaption class="text-sm max-w-80 text-gray-600 text-right">
+          The Telegram profile <em>@JungeAlternativeLSA</em> has been renamed
+          <em>Generation Deutschland LSA</em>, although the handle remains the
+          former.
+        </figcaption>
+      </figure>
+    </article>
+    <div class="hidden md:block"></div>
+  </div>
 
-        <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
-          <img
-            src="/intro/berlin-demo.png"
-            alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
-            class="w-[150px] block grayscale hover:grayscale-0"
-          />
-          <figcaption class="text-sm max-w-60 text-gray-600 pb-8">
-            A banner that promotes a link to a Telegram far-right youth group.
-          </figcaption>
-        </figure>
-
-        <p class="mb-2">
-          These Telegram channels collectively form a digital infrastructure
-          that sustains ultra-nationalist ideologies, enabling the circulation
-          of fascist worldviews among younger supporters. Across Germany,
-          numerous members of these networks maintain ties to far-right parties
-          such as <em>Die Heimat</em> and
-          <em>Alternative für Deutschland (AFD)</em>, whose presence in
-          parliamentary politics gives symbolic legitimacy within these online
-          spaces.
-        </p>
-        <p>
-          The former youth organisation of AFD, <em>Junge Alternative</em>, was
-          banned after being classified as right-wing extremist and subsequently
-          ousted from the public sphere. Yet, recently a successor movement
-          called
-          <em>Generation Deutschland</em> emerged, taking on the role of
-          mobilising younger supporters through the same networks. While the
-          organisation was newly formed, some local groups that once operated
-          under the banner of <em>Junge Alternative</em> have simply renamed
-          their Telegram channels to <em>Generation Deutschland</em> and continued
-          their activities business as usual. Hence, it occurs that the platform
-          provided these groups with the means to absorb the ban rather than enforcing
-          its implementation.
-        </p>
-
-        <figure class="flex flex-col items-end mt-10 mb-6 gap-2 self-end">
-          <img
-            src="/intro/gd.png"
-            alt="Telegram profile of Generation Deutschland"
-            class="w-[220px] block grayscale hover:grayscale-0"
-          />
-          <figcaption class="text-sm max-w-80 text-gray-600 pb-8 text-right">
-            The Telegram profile <em>@JungeAlternativeLSA</em> has been renamed
-            <em>Generation Deutschland LSA</em>, although the handle remains the
-            former.
-          </figcaption>
-        </figure>
-
-        <p class="mb-2">
-          These organisations operate within a strategically interconnected
-          system. Groups like <em>Generation Deutschland</em>, which present
-          themselves with a more moderate façade, regularly redirect their
-          subscribers toward more radical channels. These, in turn, refer onward
-          to others, forming a continuous chain of racist and ultra-nationalist
-          messages. Their networks extend far beyond Germany, reaching similar
-          nationalist scenes in countries such as Italy, France, Austria, the
-          Netherlands and Ukraine, and beyond.
-        </p>
-        <p>
-          Telegram plays a central role in maintaining this ecosystem. Its
-          platform design creates not simply a place for supporters of specific
-          groups to gather, but a tool to enable a constant stream of
-          communication. Forwarded posts act as ideological pathways, allowing
-          audiences to be funneled from one channel to another, enabling
-          persistent networks, even in the face of bans or restrictions.
-        </p>
-
-        <figure class="flex flex-col items-start mt-10 mb-6 gap-2 self-start">
-          <img
-            src="/intro/roma.jpg"
-            alt="Rome, Italy, 7 January 2025"
-            class="w-[350px] block grayscale hover:grayscale-0"
-          />
-          <figcaption class="text-sm max-w-80 text-gray-600 pb-8">
-            Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
-            and other far-right militants performed the fascist salute during a commemoration.
-          </figcaption>
-        </figure>
-
-        <p class="mb-2">
-          This investigation takes as its input the banner documented at the
-          Berlin protest and follows its network as it becomes visible on
-          Telegram. Messages, mentions, reactions and forwarded posts are
-          collected through automated data scraping and translated into a series
-          of navigable maps, which allows the exploration of these entangled
-          groups and thematic clusters.
-        </p>
-        <p>
-          This approach reveals how individual groups expand and contract, which
-          channels serve as key hubs, and how various national factions are
-          connected across borders. Although these maps cannot capture the
-          entire movement –due to private groups, deleted links, or blocked
-          content– they expose part of the infrastructure that allows today's
-          far-right ideologies to circulate uncensored. Extremists take
-          advantage of the lack of moderation on Telegram to spread their views
-          with minimal restriction, while making their content and relational
-          structures available for monitoring.
-        </p>
-        <p>
-          Finally, the investigation extends to a wider selection of Telegram
-          groups from different national contexts, compiled on the basis of
-          activity and connectivity. Particular attention is given to the most
-          shared content among groups, showing how far-right narratives move and
-          adapt across borders.
-        </p>
-      </div>
+  <!-- right column -->
+  <div class="relative z-10 grid grid-cols-1 md:grid-cols-3">
+    <div class="hidden md:block"></div>
+    <div class="hidden md:block"></div>
+    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
+      <p class="mb-3">
+        These organisations operate within a strategically interconnected
+        system. Groups like <em>Generation Deutschland</em>, which present
+        themselves with a more moderate façade, regularly redirect their
+        subscribers toward more radical channels. These, in turn, refer onward
+        to others, forming a continuous chain of racist and ultra-nationalist
+        messages. Their networks extend far beyond Germany, reaching similar
+        nationalist scenes in countries such as Italy, France, Austria, the
+        Netherlands and Ukraine, and beyond.
+      </p>
+      <p class="mb-3">
+        Telegram plays a central role in maintaining this ecosystem. Its
+        platform design creates not simply a place for supporters of specific
+        groups to gather, but a tool to enable a constant stream of
+        communication. Forwarded posts act as ideological pathways, allowing
+        audiences to be funneled from one channel to another, enabling
+        persistent networks, even in the face of bans or restrictions.
+      </p>
+      <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+        <img
+          src="/intro/roma.jpg"
+          alt="Rome, Italy, 7 January 2025"
+          class="w-full block grayscale hover:grayscale-0"
+        />
+        <figcaption class="text-sm max-w-80 text-gray-600">
+          Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters
+          and other far-right militants performed the fascist salute during a commemoration.
+        </figcaption>
+      </figure>
+      <p class="mb-3">
+        This investigation takes as its input the banner documented at the
+        Berlin protest and follows its network as it becomes visible on
+        Telegram. Messages, mentions, reactions and forwarded posts are
+        collected through automated data scraping and translated into a series
+        of navigable maps, which allows the exploration of these entangled
+        groups and thematic clusters.
+      </p>
+      <p class="mb-3">
+        This approach reveals how individual groups expand and contract, which
+        channels serve as key hubs, and how various national factions are
+        connected across borders. Although these maps cannot capture the
+        entire movement –due to private groups, deleted links, or blocked
+        content– they expose part of the infrastructure that allows today's
+        far-right ideologies to circulate uncensored. Extremists take
+        advantage of the lack of moderation on Telegram to spread their views
+        with minimal restriction, while making their content and relational
+        structures available for monitoring.
+      </p>
+      <p>
+        Finally, the investigation extends to a wider selection of Telegram
+        groups from different national contexts, compiled on the basis of
+        activity and connectivity. Particular attention is given to the most
+        shared content among groups, showing how far-right narratives move and
+        adapt across borders.
+      </p>
     </article>
   </div>
 
