@@ -1,3 +1,5 @@
 notebooks/data/*
 .DS_Store
-notebooks/session_name.session
+*.session
+notebooks/__pycache__/
+.claude
