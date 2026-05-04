@@ -1,4 +1,24 @@
 id,status,reason,total_mentions,source_group_count,source_groups
+unitynewsnetwork,flood_wait_exceeded,flood wait 84678s exceeds maxWait=3600s,218,8,englishnationalist1066|lauratowler|markacollett|realwelshnationalist|redicetv|rossmueller_dissident|saintharrison|traditionalbritaingroup
+vinniesullivan,flood_wait_exceeded,flood wait 84662s exceeds maxWait=3600s,18,2,englishnationalist1066|saintharrison
+warrenbalogh88,flood_wait_exceeded,flood wait 84638s exceeds maxWait=3600s,6,2,redicetv|saintharrison
+underwaterlair,flood_wait_exceeded,flood wait 84686s exceeds maxWait=3600s,4,1,saintharrison
+voxeuropaherald,flood_wait_exceeded,flood wait 84646s exceeds maxWait=3600s,4,2,martinsellner_english|traditionalbritaingroup
+zoomerhistorian,flood_wait_exceeded,flood wait 84542s exceeds maxWait=3600s,4,2,nativistconcern|traditionalbritaingroup
+viridogalia,flood_wait_exceeded,flood wait 84654s exceeds maxWait=3600s,2,1,korsernantes
+weltanschauungitaliaofficial,flood_wait_exceeded,flood wait 84622s exceeds maxWait=3600s,2,1,archiviononconforme
+gothorum1996,not_found,"No user has ""gothorum1996"" as username",0,0,
+mementoauderesempermas,not_found,"No user has ""mementoauderesempermas"" as username",0,0,
 ultrasnotreds2,not_found,"No user has ""ultrasnotreds2"" as username",0,0,
-vaultofsecrets88,not_found,"No user has ""vaultofsecrets88"" as username",0,0,
-whitegirls14,not_found,"No user has ""whitegirls14"" as username",0,0,
+vaultofsecrets88,flood_wait_exceeded,flood wait 84670s exceeds maxWait=3600s,0,0,
+wbsthlm,flood_wait_exceeded,flood wait 84630s exceeds maxWait=3600s,0,0,
+white_powder2020,flood_wait_exceeded,flood wait 84614s exceeds maxWait=3600s,0,0,
+whitegirls14,flood_wait_exceeded,flood wait 84606s exceeds maxWait=3600s,0,0,
+whitelaborstrikeww,flood_wait_exceeded,flood wait 84598s exceeds maxWait=3600s,0,0,
+whitelivesmatterofficial,flood_wait_exceeded,flood wait 84590s exceeds maxWait=3600s,0,0,
+whitensw,flood_wait_exceeded,flood wait 84582s exceeds maxWait=3600s,0,0,
+whitevanguard1,flood_wait_exceeded,flood wait 84574s exceeds maxWait=3600s,0,0,
+wlm_eu_italy,flood_wait_exceeded,flood wait 84566s exceeds maxWait=3600s,0,0,
+wlm_events,flood_wait_exceeded,flood wait 84558s exceeds maxWait=3600s,0,0,
+wlmofficial14,flood_wait_exceeded,flood wait 84550s exceeds maxWait=3600s,0,0,
+zoomerwaffen08,flood_wait_exceeded,flood wait 84534s exceeds maxWait=3600s,0,0,

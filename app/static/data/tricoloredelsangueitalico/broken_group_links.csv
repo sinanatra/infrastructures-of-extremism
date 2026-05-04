@@ -1,1 +1,24 @@
 from,to,count,status,reason
+markacollett,unitynewsnetwork,39,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+englishnationalist1066,unitynewsnetwork,27,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+saintharrison,unitynewsnetwork,10,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+englishnationalist1066,unitynewsnetwork,9,flood_wait_exceeded,flood wait 84678s exceeds maxWait=3600s
+englishnationalist1066,vinniesullivan,6,flood_wait_exceeded,flood wait 85597s exceeds maxWait=600s
+markacollett,unitynewsnetwork,6,flood_wait_exceeded,flood wait 84678s exceeds maxWait=3600s
+realwelshnationalist,unitynewsnetwork,6,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+rossmueller_dissident,unitynewsnetwork,4,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+saintharrison,vinniesullivan,3,flood_wait_exceeded,flood wait 85597s exceeds maxWait=600s
+lauratowler,unitynewsnetwork,2,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+redicetv,unitynewsnetwork,2,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+saintharrison,underwaterlair,2,flood_wait_exceeded,flood wait 85606s exceeds maxWait=600s
+saintharrison,warrenbalogh88,2,flood_wait_exceeded,flood wait 85588s exceeds maxWait=600s
+traditionalbritaingroup,unitynewsnetwork,2,flood_wait_exceeded,flood wait 84678s exceeds maxWait=3600s
+archiviononconforme,weltanschauungitaliaofficial,1,flood_wait_exceeded,flood wait 84622s exceeds maxWait=3600s
+korsernantes,viridogalia,1,flood_wait_exceeded,flood wait 85594s exceeds maxWait=600s
+martinsellner_english,voxeuropaherald,1,flood_wait_exceeded,flood wait 85591s exceeds maxWait=600s
+nativistconcern,zoomerhistorian,1,flood_wait_exceeded,flood wait 85552s exceeds maxWait=600s
+realwelshnationalist,unitynewsnetwork,1,flood_wait_exceeded,flood wait 84678s exceeds maxWait=3600s
+redicetv,warrenbalogh88,1,flood_wait_exceeded,flood wait 85588s exceeds maxWait=600s
+traditionalbritaingroup,unitynewsnetwork,1,flood_wait_exceeded,flood wait 85603s exceeds maxWait=600s
+traditionalbritaingroup,voxeuropaherald,1,flood_wait_exceeded,flood wait 85591s exceeds maxWait=600s
+traditionalbritaingroup,zoomerhistorian,1,flood_wait_exceeded,flood wait 85552s exceeds maxWait=600s

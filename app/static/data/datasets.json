@@ -6,17 +6,19 @@
     "groupCount": 124,
     "startDate": "2019-04-13T10:23:37.000Z",
     "endDate": "2025-12-06T17:28:21.000Z",
-    "brokenTargetCount": 0,
+    "brokenTargetCount": 124,
     "brokenMentionCount": 0,
-    "brokenStatusCounts": {}
+    "brokenStatusCounts": {
+      "flood_wait_exceeded": 124
+    }
   },
   {
     "slug": "generationidentitaire",
     "label": "Génération Identitaire",
-    "postCount": 14547,
+    "postCount": 21749,
     "groupCount": 74,
     "startDate": "2018-05-23T19:14:54.000Z",
-    "endDate": "2025-12-09T15:26:58.000Z",
+    "endDate": "2026-05-04T10:23:16.000Z",
     "brokenTargetCount": 0,
     "brokenMentionCount": 0,
     "brokenStatusCounts": {}
@@ -28,20 +30,23 @@
     "groupCount": 103,
     "startDate": "2019-11-13T18:15:52.000Z",
     "endDate": "2025-12-04T12:39:44.000Z",
-    "brokenTargetCount": 0,
+    "brokenTargetCount": 104,
     "brokenMentionCount": 0,
-    "brokenStatusCounts": {}
+    "brokenStatusCounts": {
+      "flood_wait_exceeded": 104
+    }
   },
   {
     "slug": "tricoloredelsangueitalico",
     "label": "Tricolore del Sangue Italico(canale)",
-    "postCount": 36065,
+    "postCount": 43825,
     "groupCount": 147,
     "startDate": "2020-06-26T23:45:44.000Z",
-    "endDate": "2026-03-01T14:35:49.000Z",
-    "brokenTargetCount": 3,
-    "brokenMentionCount": 0,
+    "endDate": "2026-05-04T10:50:09.000Z",
+    "brokenTargetCount": 23,
+    "brokenMentionCount": 258,
     "brokenStatusCounts": {
+      "flood_wait_exceeded": 20,
       "not_found": 3
     }
   }

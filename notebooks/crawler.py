@@ -929,7 +929,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-depth", type=int, default=int(os.getenv("TG_MAX_DEPTH", "2")))
     parser.add_argument("--max-per-chat", type=int, default=int(os.getenv("TG_MAX_PER_CHAT", "300")))
     parser.add_argument(
-        "--handle-delay", type=float, default=float(os.getenv("TG_HANDLE_DELAY", "8.0"))
+        "--handle-delay", type=float, default=float(os.getenv("TG_HANDLE_DELAY", "15.0"))
     )
     parser.add_argument("--max-wait", type=int, default=int(os.getenv("TG_MAX_WAIT", "3600")))
     parser.add_argument(
