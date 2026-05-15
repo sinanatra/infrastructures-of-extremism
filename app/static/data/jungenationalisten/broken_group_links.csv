@@ -1,1 +1,265 @@
 from,to,count,status,reason
+sturmzeichen,turmzeichen,51,not_found,"No user has ""turmzeichen"" as username"
+comitedu9mai,mitedu9mai,37,not_found,"No user has ""mitedu9mai"" as username"
+comitedu9mai,itedu9mai,32,not_found,"No user has ""itedu9mai"" as username"
+activeclubuncensored,whitelads,23,flood_wait_exceeded,flood wait 74319s exceeds maxWait=3600s
+comitedu9mai,omitedu9mai,23,not_found,"No user has ""omitedu9mai"" as username"
+clauscremernrw,lauscremernrw,19,not_found,"No user has ""lauscremernrw"" as username"
+dortmundsrechte,ortmundsrechte,18,not_found,"No user has ""ortmundsrechte"" as username"
+freiesth,afd_thl,11,flood_wait_exceeded,flood wait 73974s exceeds maxWait=3600s
+irmhild_bossdorf,lukreta,10,flood_wait_exceeded,flood wait 74460s exceeds maxWait=3600s
+mr_marcus_fuchs,arcus_fuchs,8,not_found,"No user has ""arcus_fuchs"" as username"
+frontmagazin,frontmusik,7,flood_wait_exceeded,flood wait 74566s exceeds maxWait=3600s
+inczebelalegionarius,legiohungaria,7,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+inczebelalegionarius,nzona3,7,flood_wait_exceeded,flood wait 73759s exceeds maxWait=3600s
+kdn2013,dn2013,7,invalid_username,username invalid
+rediceuncensored,middle_east_spectator,7,flood_wait_exceeded,flood wait 74354s exceeds maxWait=3600s
+gefangenenhilfe,turmzeichen,6,not_found,"No user has ""turmzeichen"" as username"
+miesenews,turmzeichen,6,not_found,"No user has ""turmzeichen"" as username"
+activeclubuncensored,legiohungaria,5,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+dortmundsrechte,mundsrechte,5,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+flakdieband,eimat2023,5,flood_wait_exceeded,flood wait 74245s exceeds maxWait=3600s
+natsquads,legiohungaria,5,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+qd351,arcus_fuchs,5,not_found,"No user has ""arcus_fuchs"" as username"
+stimme_der_wahrheit,frankrennicke,5,flood_wait_exceeded,flood wait 73955s exceeds maxWait=3600s
+wolfpmsoffiziell,ibsachsen,5,flood_wait_exceeded,flood wait 74047s exceeds maxWait=3600s
+flakdieband,frankrennicke,4,flood_wait_exceeded,flood wait 73955s exceeds maxWait=3600s
+flakdieband,imbolcslicht,4,flood_wait_exceeded,flood wait 73777s exceeds maxWait=3600s
+harzverteidigen,ortmundsrechte,4,not_found,"No user has ""ortmundsrechte"" as username"
+blklgnwear,dn2013,3,invalid_username,username invalid
+dortmundsrechte,ndsrechte,3,not_found,"No user has ""ndsrechte"" as username"
+flakdieband,imatnrw,3,not_found,"No user has ""imatnrw"" as username"
+jn_aktioneuropa,ungenationalisten,3,not_found,"No user has ""ungenationalisten"" as username"
+jn_westverband,ungenationalisten,3,not_found,"No user has ""ungenationalisten"" as username"
+jungeuropa,hydracomicsdd,3,flood_wait_exceeded,flood wait 74175s exceeds maxWait=3600s
+michaelbrueck90,ichaelbrueck90,3,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+miesenews,blutzeugen1894,3,flood_wait_exceeded,flood wait 74083s exceeds maxWait=3600s
+miesenews,mundsrechte,3,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+miesenews,oposrecords,3,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+natsquads,nzona3,3,flood_wait_exceeded,flood wait 73759s exceeds maxWait=3600s
+natsquads,whitelads,3,flood_wait_exceeded,flood wait 74319s exceeds maxWait=3600s
+clauscremernrw,legiohungaria,2,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+clauscremernrw,mundsrechte,2,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+clauscremernrw,ungenationalisten,2,not_found,"No user has ""ungenationalisten"" as username"
+dortmundsrechte,dn2013,2,invalid_username,username invalid
+dortmundsrechte,lauscremernrw,2,not_found,"No user has ""lauscremernrw"" as username"
+finleydresden,ichaelbrueck90,2,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+flakdieband,blutzeugen1894,2,flood_wait_exceeded,flood wait 74083s exceeds maxWait=3600s
+flakdieband,frontmusik,2,flood_wait_exceeded,flood wait 74566s exceeds maxWait=3600s
+flakdieband,ichaelbrueck90,2,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+flakdieband,infrarotmediensicht,2,flood_wait_exceeded,flood wait 74369s exceeds maxWait=3600s
+flakdieband,intelslava,2,flood_wait_exceeded,flood wait 74407s exceeds maxWait=3600s
+flakdieband,rebelrecordscb,2,flood_wait_exceeded,flood wait 74261s exceeds maxWait=3600s
+freiesachsen_dresden,snicklink3000,2,flood_wait_exceeded,flood wait 74065s exceeds maxWait=3600s
+frontmagazin,oposrecords,2,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+hartungstefan,ichaelbrueck90,2,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+harzverteidigen,dn2013,2,invalid_username,username invalid
+harzverteidigen,mundsrechte,2,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+heimat2023,ichaelbrueck90,2,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+heimatnrw,matnrw,2,not_found,"No user has ""matnrw"" as username"
+heimatnrw,ungenationalisten,2,not_found,"No user has ""ungenationalisten"" as username"
+heimatsachsenanhalt,turmzeichen,2,not_found,"No user has ""turmzeichen"" as username"
+homefrontsince2021,blutzeugen1894,2,flood_wait_exceeded,flood wait 74083s exceeds maxWait=3600s
+jn_aktioneuropa,n_aktioneuropa,2,not_found,"No user has ""n_aktioneuropa"" as username"
+jn_mup,turmzeichen,2,not_found,"No user has ""turmzeichen"" as username"
+jn_sachsen_anhalt,ungenationalisten,2,not_found,"No user has ""ungenationalisten"" as username"
+jn_westverband,genationalisten,2,not_found,"No user has ""genationalisten"" as username"
+jn_westverband,mundsrechte,2,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+jn_westverband,n_aktioneuropa,2,not_found,"No user has ""n_aktioneuropa"" as username"
+jungenationalisten,genationalisten,2,not_found,"No user has ""genationalisten"" as username"
+jungenationalisten,ungenationalisten,2,not_found,"No user has ""ungenationalisten"" as username"
+lukovmarch,lansquenetscontact_bot,2,flood_wait_exceeded,flood wait 73654s exceeds maxWait=3600s
+lukovmarch,les_lansquenets,2,flood_wait_exceeded,flood wait 73669s exceeds maxWait=3600s
+lukovmarch,mladezhi,2,flood_wait_exceeded,flood wait 74582s exceeds maxWait=3600s
+michaelbrueck90,chaelbrueck90,2,flood_wait_exceeded,flood wait 74422s exceeds maxWait=3600s
+miesenews,frontmusik,2,flood_wait_exceeded,flood wait 74566s exceeds maxWait=3600s
+miesenews,ortmundsrechte,2,not_found,"No user has ""ortmundsrechte"" as username"
+miesenews,swkanal,2,flood_wait_exceeded,flood wait 74439s exceeds maxWait=3600s
+oberelbe,infrarotmediensicht,2,flood_wait_exceeded,flood wait 74369s exceeds maxWait=3600s
+peterschreiber,ichaelbrueck90,2,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+realblaircottrell,middle_east_spectator,2,flood_wait_exceeded,flood wait 74354s exceeds maxWait=3600s
+rockhate,mundsrechte,2,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+rockhate,oposrecords,2,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+sturmzeichen,mundsrechte,2,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+wwbrex,blutzeugen1894,2,flood_wait_exceeded,flood wait 74083s exceeds maxWait=3600s
+appell_jn,appel_jn,1,not_found,"No user has ""appel_jn"" as username"
+athenscene,mitedu9mai,1,not_found,"No user has ""mitedu9mai"" as username"
+aufgewachtonline,hydracomicsdd,1,flood_wait_exceeded,flood wait 74175s exceeds maxWait=3600s
+benediktkaiser,afd_thl,1,flood_wait_exceeded,flood wait 73974s exceeds maxWait=3600s
+bnsiyi,mladezhi,1,flood_wait_exceeded,flood wait 74582s exceeds maxWait=3600s
+bnsiyi,n_reporter,1,flood_wait_exceeded,flood wait 74602s exceeds maxWait=3600s
+braunschweigverteidigen,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+braunschweigverteidigen,dn2013,1,invalid_username,username invalid
+braunschweigverteidigen,mundsrechte,1,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+braunschweigverteidigen,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+clauscremernrw,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+clauscremernrw,imatnrw,1,not_found,"No user has ""imatnrw"" as username"
+clauscremernrw,n_aktioneuropa,1,not_found,"No user has ""n_aktioneuropa"" as username"
+clauscremernrw,nationalisten,1,not_found,"No user has ""nationalisten"" as username"
+clauscremernrw,ndsrechte,1,not_found,"No user has ""ndsrechte"" as username"
+clauscremernrw,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+comitedu9mai,c9m_admin,1,not_found,"No user has ""c9m_admin"" as username"
+comitedu9mai,comite_du_9_mai,1,not_found,"No user has ""comite_du_9_mai"" as username"
+comitedu9mai,stcasual3e,1,not_found,"No user has ""stcasual3e"" as username"
+comitedu9mai,tedu9mai,1,not_found,"No user has ""tedu9mai"" as username"
+decommunizationbg,mladezhi,1,flood_wait_exceeded,flood wait 74582s exceeds maxWait=3600s
+decommunizationbg,n_reporter,1,flood_wait_exceeded,flood wait 74602s exceeds maxWait=3600s
+deutschestimmemagazin,hydracomicsdd,1,flood_wait_exceeded,flood wait 74175s exceeds maxWait=3600s
+deutscheswarenhaus,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+dortmundsrechte,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+dortmundsrechte,ichaelbrueck90,1,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+dortmundsrechte,imatnrw,1,not_found,"No user has ""imatnrw"" as username"
+dortmundsrechte,nationalisten,1,not_found,"No user has ""nationalisten"" as username"
+dortmundsrechte,tmundsrechte,1,not_found,"No user has ""tmundsrechte"" as username"
+dortmundsrechte,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+dresden_spaziert,arcus_fuchs,1,not_found,"No user has ""arcus_fuchs"" as username"
+dresden_spaziert,lukreta,1,flood_wait_exceeded,flood wait 74460s exceeds maxWait=3600s
+eichsfeldrevolte,dn2013,1,invalid_username,username invalid
+elblandrevolte,lblandrevolte,1,not_found,"No user has ""lblandrevolte"" as username"
+flakdieband,aetzendmitbiss,1,flood_wait_exceeded,flood wait 73816s exceeds maxWait=3600s
+flakdieband,afd_thl,1,flood_wait_exceeded,flood wait 73974s exceeds maxWait=3600s
+flakdieband,amuncensored2,1,flood_wait_exceeded,flood wait 74209s exceeds maxWait=3600s
+flakdieband,atnrw,1,flood_wait_exceeded,flood wait 74010s exceeds maxWait=3600s
+flakdieband,carstenjahn_teamheimat,1,flood_wait_exceeded,flood wait 74298s exceeds maxWait=3600s
+flakdieband,chaelbrueck90,1,flood_wait_exceeded,flood wait 74422s exceeds maxWait=3600s
+flakdieband,dailyjwaller,1,flood_wait_exceeded,flood wait 74279s exceeds maxWait=3600s
+flakdieband,dieband,1,flood_wait_exceeded,flood wait 74229s exceeds maxWait=3600s
+flakdieband,dieframinggmbh,1,flood_wait_exceeded,flood wait 73852s exceeds maxWait=3600s
+flakdieband,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+flakdieband,eahrens,1,flood_wait_exceeded,flood wait 73796s exceeds maxWait=3600s
+flakdieband,enationalisten,1,flood_wait_exceeded,flood wait 74101s exceeds maxWait=3600s
+flakdieband,erblehre,1,flood_wait_exceeded,flood wait 73991s exceeds maxWait=3600s
+flakdieband,fortresskyiv,1,flood_wait_exceeded,flood wait 74497s exceeds maxWait=3600s
+flakdieband,gespraeche,1,flood_wait_exceeded,flood wait 74027s exceeds maxWait=3600s
+flakdieband,heimatgespraeche,1,flood_wait_exceeded,flood wait 74121s exceeds maxWait=3600s
+flakdieband,heimatkurier,1,flood_wait_exceeded,flood wait 73902s exceeds maxWait=3600s
+flakdieband,hueterderirminsul,1,flood_wait_exceeded,flood wait 74476s exceeds maxWait=3600s
+flakdieband,hydracomicsdd,1,flood_wait_exceeded,flood wait 74175s exceeds maxWait=3600s
+flakdieband,ibsachsen,1,flood_wait_exceeded,flood wait 74047s exceeds maxWait=3600s
+flakdieband,iddle_east_spectator,1,flood_wait_exceeded,flood wait 74334s exceeds maxWait=3600s
+flakdieband,irfreischaltbot,1,flood_wait_exceeded,flood wait 73884s exceeds maxWait=3600s
+flakdieband,kanal_resolut,1,flood_wait_exceeded,flood wait 74517s exceeds maxWait=3600s
+flakdieband,lukreta,1,flood_wait_exceeded,flood wait 74460s exceeds maxWait=3600s
+flakdieband,middle_east_spectator,1,flood_wait_exceeded,flood wait 74354s exceeds maxWait=3600s
+flakdieband,mundsrechte,1,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+flakdieband,nickjfuentes,1,flood_wait_exceeded,flood wait 74535s exceeds maxWait=3600s
+flakdieband,oposrecords,1,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+flakdieband,punikoff,1,flood_wait_exceeded,flood wait 74388s exceeds maxWait=3600s
+flakdieband,resum25,1,flood_wait_exceeded,flood wait 73920s exceeds maxWait=3600s
+flakdieband,snicklink3000,1,flood_wait_exceeded,flood wait 74065s exceeds maxWait=3600s
+flakdieband,swkanal,1,flood_wait_exceeded,flood wait 74439s exceeds maxWait=3600s
+flakdieband,teamasgardgermania,1,flood_wait_exceeded,flood wait 73832s exceeds maxWait=3600s
+flakdieband,v_isionaer,1,flood_wait_exceeded,flood wait 73936s exceeds maxWait=3600s
+flakdieband,whitelads,1,flood_wait_exceeded,flood wait 74319s exceeds maxWait=3600s
+flakdieband,whitensw,1,flood_wait_exceeded,flood wait 74193s exceeds maxWait=3600s
+freie_mittelsachsen,e_mittelsachsen,1,not_found,"No user has ""e_mittelsachsen"" as username"
+freie_mittelsachsen,eie_mittelsachsen,1,not_found,"No user has ""eie_mittelsachsen"" as username"
+freie_mittelsachsen,fs_leisnig,1,not_found,"No user has ""fs_leisnig"" as username"
+freie_mittelsachsen,fsleisnig,1,not_found,"No user has ""fsleisnig"" as username"
+freie_mittelsachsen,reie_mittelsachsen,1,not_found,"No user has ""reie_mittelsachsen"" as username"
+freiesachsen_leisnig,fs_leisnig,1,not_found,"No user has ""fs_leisnig"" as username"
+freiesachsen_leisnig,fsleisnig,1,not_found,"No user has ""fsleisnig"" as username"
+freiesachsen_leisnig,ittelsachsen,1,not_found,"No user has ""ittelsachsen"" as username"
+gefangenenhilfe,oposrecords,1,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+gefangenenhilfe,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+harzverteidigen,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+harzverteidigen,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+heimat2023,imatnrw,1,not_found,"No user has ""imatnrw"" as username"
+heimat2023,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+heimat2023,matnrw,1,not_found,"No user has ""matnrw"" as username"
+heimathessen,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+heimatnrw,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+heimatnrw,imatnrw,1,not_found,"No user has ""imatnrw"" as username"
+heimatnrw,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+heimatnrw,mundsrechte,1,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+heimatnrw,n_aktioneuropa,1,not_found,"No user has ""n_aktioneuropa"" as username"
+heimatnrw,nationalisten,1,not_found,"No user has ""nationalisten"" as username"
+heimatnrw,tmundsrechte,1,not_found,"No user has ""tmundsrechte"" as username"
+heimatsachsen,ichaelbrueck90,1,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+heimatsachsen,v_isionaer,1,flood_wait_exceeded,flood wait 73936s exceeds maxWait=3600s
+heimatsachsenanhalt,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+heimatsachsenanhalt,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+heimatsachsenanhalt,matnrw,1,not_found,"No user has ""matnrw"" as username"
+heimatsachsenanhalt,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+hermanns_heide,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+hermanns_heide,legiohungaria,1,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+hermanns_heide,ungenationalisten,1,not_found,"No user has ""ungenationalisten"" as username"
+hermannsland,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+homefrontsince2021,oposrecords,1,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+homefrontsince2021,swkanal,1,flood_wait_exceeded,flood wait 74439s exceeds maxWait=3600s
+inczebelalegionarius,whitelads,1,flood_wait_exceeded,flood wait 74319s exceeds maxWait=3600s
+infodeutschoesterreich,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+irmhild_bossdorf,afd_thl,1,flood_wait_exceeded,flood wait 73974s exceeds maxWait=3600s
+jn_aktioneuropa,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+jn_mup,ungenationalisten,1,not_found,"No user has ""ungenationalisten"" as username"
+jn_sachsen_anhalt,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+jn_sachsen_anhalt,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+jn_sachsen_anhalt,n_aktioneuropa,1,not_found,"No user has ""n_aktioneuropa"" as username"
+jn_sachsen_anhalt,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+jn_th,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+jn_th,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+jn_th,ungenationalisten,1,not_found,"No user has ""ungenationalisten"" as username"
+jn_westverband,genationalsiten,1,not_found,"No user has ""genationalsiten"" as username"
+jn_westverband,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+jn_westverband,matnrw,1,not_found,"No user has ""matnrw"" as username"
+jn_westverband,nationalisten,1,not_found,"No user has ""nationalisten"" as username"
+jn_westverband,ndsrechte,1,not_found,"No user has ""ndsrechte"" as username"
+jndortmund,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+jndortmund,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+jnhessen,genationalisten,1,not_found,"No user has ""genationalisten"" as username"
+jnhessen,n_aktioneuropa,1,not_found,"No user has ""n_aktioneuropa"" as username"
+jnhessen,tmundsrechte,1,not_found,"No user has ""tmundsrechte"" as username"
+jnhessen,ungenationalisten,1,not_found,"No user has ""ungenationalisten"" as username"
+jungenationalisten,genationalsiten,1,not_found,"No user has ""genationalsiten"" as username"
+jungenationalisten,imatnrw,1,not_found,"No user has ""imatnrw"" as username"
+jungenationalisten,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+jungenationalisten,matnrw,1,not_found,"No user has ""matnrw"" as username"
+jungenationalisten,mitedu9mai,1,not_found,"No user has ""mitedu9mai"" as username"
+jungenationalisten,n_aktioneuropa,1,not_found,"No user has ""n_aktioneuropa"" as username"
+jungenationalisten,nationalisten,1,not_found,"No user has ""nationalisten"" as username"
+jungenationalisten,ndsrechte,1,not_found,"No user has ""ndsrechte"" as username"
+jungenationalisten,ortmundsrechte,1,not_found,"No user has ""ortmundsrechte"" as username"
+jungenationalisten,tmundsrechte,1,not_found,"No user has ""tmundsrechte"" as username"
+jungenationalisten,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+kavalier_nds,ichaelbrueck90,1,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+kdn2013,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+legionbulgaria,mladezhi,1,flood_wait_exceeded,flood wait 74582s exceeds maxWait=3600s
+leisnig,ichaelbrueck90,1,flood_wait_exceeded,flood wait 73868s exceeds maxWait=3600s
+lukovmarch,avanguardia_torino,1,flood_wait_exceeded,flood wait 73709s exceeds maxWait=3600s
+lukovmarch,honoretpatria,1,flood_wait_exceeded,flood wait 73725s exceeds maxWait=3600s
+lukovmarch,jeunenationcom,1,flood_wait_exceeded,flood wait 73741s exceeds maxWait=3600s
+lukovmarch,legiohungaria,1,flood_wait_exceeded,flood wait 73690s exceeds maxWait=3600s
+lukovmarch,nzona3,1,flood_wait_exceeded,flood wait 73759s exceeds maxWait=3600s
+miesenews,dn2013,1,invalid_username,username invalid
+miesenews,hueterderirminsul,1,flood_wait_exceeded,flood wait 74476s exceeds maxWait=3600s
+miesenews,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+miesenews,rebelrecordscb,1,flood_wait_exceeded,flood wait 74261s exceeds maxWait=3600s
+multipolarpress,middle_east_spectator,1,flood_wait_exceeded,flood wait 74354s exceeds maxWait=3600s
+natsquads,mladezhi,1,flood_wait_exceeded,flood wait 74582s exceeds maxWait=3600s
+niederlausitzinfo,frankrennicke,1,flood_wait_exceeded,flood wait 73955s exceeds maxWait=3600s
+oberelbe,freiesschsen,1,not_found,"No user has ""freiesschsen"" as username"
+pcrecords,mundsrechte,1,flood_wait_exceeded,flood wait 74550s exceeds maxWait=3600s
+penigstehtauf,snicklink3000,1,flood_wait_exceeded,flood wait 74065s exceeds maxWait=3600s
+realblaircottrell,intelslava,1,flood_wait_exceeded,flood wait 74407s exceeds maxWait=3600s
+rediceuncensored,intelslava,1,flood_wait_exceeded,flood wait 74407s exceeds maxWait=3600s
+rockhate,dn2013,1,invalid_username,username invalid
+rockhate,frontmusik,1,flood_wait_exceeded,flood wait 74566s exceeds maxWait=3600s
+rockhate,lauscremernrw,1,not_found,"No user has ""lauscremernrw"" as username"
+rockhate,rebelrecordscb,1,flood_wait_exceeded,flood wait 74261s exceeds maxWait=3600s
+rockhate,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+rossmueller,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+schmidtkeswelt,chaelbrueck90,1,flood_wait_exceeded,flood wait 74422s exceeds maxWait=3600s
+schmidtkeswelt,hydracomicsdd,1,flood_wait_exceeded,flood wait 74175s exceeds maxWait=3600s
+schmidtkeswelt,oposrecords,1,flood_wait_exceeded,flood wait 74157s exceeds maxWait=3600s
+schreiberklagtan,arcus_fuchs,1,not_found,"No user has ""arcus_fuchs"" as username"
+schreiberklagtan,espraeche,1,not_found,"No user has ""espraeche"" as username"
+schreiberklagtan,freiesschsen,1,not_found,"No user has ""freiesschsen"" as username"
+stimme_der_wahrheit,turmzeichen,1,not_found,"No user has ""turmzeichen"" as username"
+theresia_brand,dn2013,1,invalid_username,username invalid
+theresia_brand,frontmusik,1,flood_wait_exceeded,flood wait 74566s exceeds maxWait=3600s
+theresia_brand,kanal_resolut,1,flood_wait_exceeded,flood wait 74517s exceeds maxWait=3600s
+waldheimspaziertgegendieampel,dieframinggmbh,1,flood_wait_exceeded,flood wait 73852s exceeds maxWait=3600s
+widerstandinaktion,dieheimat,1,flood_wait_exceeded,flood wait 74137s exceeds maxWait=3600s
+widerstandinaktion,v_isionaer,1,flood_wait_exceeded,flood wait 73936s exceeds maxWait=3600s
+wwbrex,dn2013,1,invalid_username,username invalid
+youthfront,avanguardia_torino,1,flood_wait_exceeded,flood wait 73709s exceeds maxWait=3600s

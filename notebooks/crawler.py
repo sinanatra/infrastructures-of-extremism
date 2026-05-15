@@ -19,6 +19,7 @@ import csv
 import json
 import os
 import pathlib
+import random
 import re
 from collections import defaultdict, deque
 from dataclasses import dataclass
@@ -61,6 +62,7 @@ class CrawlConfig:
     output_path: str
     incremental: bool
     known_message_streak_stop: int
+    min_mentions_to_follow: int
 
 
 def now_iso() -> str:
@@ -352,6 +354,7 @@ async def crawl_graph(
     existing_graph: Optional[Dict[str, Any]] = None,
     incremental: bool = True,
     known_message_streak_stop: int = 30,
+    min_mentions_to_follow: int = 2,
 ) -> Dict[str, Any]:
     existing_graph = existing_graph or {}
 
@@ -506,7 +509,8 @@ async def crawl_graph(
             continue
 
         if handle_delay > 0:
-            await asyncio.sleep(handle_delay)
+            jitter = random.uniform(0, handle_delay * 0.4)
+            await asyncio.sleep(handle_delay + jitter)
 
         entity, failure_status, failure_reason = await fetch_entity_with_backoff(
             client, handle, max_wait
@@ -522,6 +526,7 @@ async def crawl_graph(
         clear_broken_handle(handle)
 
         title = get_title(entity, handle)
+        await asyncio.sleep(random.uniform(3, 7))
         subscribers = await get_subscriber_count(client, entity)
         if subscribers < 200:
             print(
@@ -544,15 +549,22 @@ async def crawl_graph(
             )
             continue
 
+        await asyncio.sleep(random.uniform(3, 7))
+
         retries = 0
         max_retries_per_chat = 3
         known_ids_for_chat = message_ids_by_chat.get(handle, set()) if incremental else set()
         seen_known_streak = 0
         new_count = 0
+        msg_batch_count = 0
+        channel_mention_counts: Dict[str, int] = defaultdict(int)
 
         while True:
             try:
                 async for message in client.iter_messages(entity, limit=max_per_chat):
+                    msg_batch_count += 1
+                    if msg_batch_count % 100 == 0:
+                        await asyncio.sleep(random.uniform(2, 5))
                     msg_id = str(message.id)
                     msg_key = f"{handle}:{msg_id}".lower()
 
@@ -616,7 +628,7 @@ async def crawl_graph(
                         mention_pair_counts_by_target[target_handle][handle] += 1
 
                         if target_handle not in visited and depth < max_depth:
-                            queue.append((target_handle, depth + 1))
+                            channel_mention_counts[target_handle] += 1
 
                     for target_chat, target_msg_id, reason in msg_links:
                         target_key = f"{normalize_handle(target_chat)}:{target_msg_id}".lower()
@@ -663,6 +675,14 @@ async def crawl_graph(
 
         if incremental:
             print(f"[incremental] {handle}: +{new_count} new messages")
+
+        queued = 0
+        for target_handle, count in channel_mention_counts.items():
+            if target_handle not in visited and count >= min_mentions_to_follow:
+                queue.append((target_handle, depth + 1))
+                queued += 1
+        if queued:
+            print(f"[queue] {handle}: +{queued} targets (≥{min_mentions_to_follow} mentions)")
 
     broken_groups_out = []
     for handle, row in broken_groups.items():
@@ -896,6 +916,7 @@ async def run_crawl(config: CrawlConfig) -> Dict[str, Dict[str, Any]]:
                 existing_graph=existing_graph,
                 incremental=config.incremental,
                 known_message_streak_stop=config.known_message_streak_stop,
+                min_mentions_to_follow=config.min_mentions_to_follow,
             )
 
             graphs[slug] = graph
@@ -954,6 +975,12 @@ def parse_args() -> argparse.Namespace:
         default=int(os.getenv("TG_KNOWN_MESSAGE_STREAK_STOP", "40")),
         help="Stop scanning a chat after this many known messages in a row.",
     )
+    parser.add_argument(
+        "--min-mentions-to-follow",
+        type=int,
+        default=int(os.getenv("TG_MIN_MENTIONS_TO_FOLLOW", "2")),
+        help="Minimum times a handle must be mentioned in a channel to be followed (default: 2).",
+    )
     return parser.parse_args()
 
 
@@ -992,6 +1019,7 @@ def load_config(args: argparse.Namespace) -> CrawlConfig:
         output_path=str(args.output_path),
         incremental=bool(args.incremental),
         known_message_streak_stop=int(args.known_message_streak_stop),
+        min_mentions_to_follow=int(args.min_mentions_to_follow),
     )
 
 
@@ -1014,6 +1042,7 @@ def main() -> None:
                 "phone_configured": bool(config.phone),
                 "incremental": config.incremental,
                 "known_message_streak_stop": config.known_message_streak_stop,
+                "min_mentions_to_follow": config.min_mentions_to_follow,
             },
             ensure_ascii=False,
         ),
