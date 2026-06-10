@@ -153,7 +153,11 @@
 
   const exportPng = async () => {
     if (!pInstance?.canvas) return;
+    let exportSnapshot = null;
     try {
+      if (typeof pInstance.prepareFullExport === "function") {
+        exportSnapshot = pInstance.prepareFullExport();
+      }
       pInstance.redraw();
       await new Promise((resolve) => requestAnimationFrame(resolve));
       const downloadName = datasetSlug ?? data?.dataset?.slug ?? "network";
@@ -161,6 +165,12 @@
     } catch (err) {
       console.error("Export failed", err);
     } finally {
+      if (
+        exportSnapshot &&
+        typeof pInstance.restoreAfterExport === "function"
+      ) {
+        pInstance.restoreAfterExport(exportSnapshot);
+      }
       requestRedraw();
     }
   };
