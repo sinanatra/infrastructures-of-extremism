@@ -1,31 +1,21 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
+  import CoverGL from "$lib/CoverGL.svelte";
 
   let { data } = $props();
 
-  const datasets = (data?.datasets ?? [])
-    .slice()
-    .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0));
+  const datasets = $derived(
+    (data?.datasets ?? [])
+      .slice()
+      .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0))
+  );
 
-  const coverSets = datasets.map((d) => {
-    const slug = d.slug;
-    return {
-      slug,
-      label: d.label || slug,
-      items: [
-        { src: `/cover/${slug}.png`, key: "normal", alt: `${slug} map` },
-        { src: `/cover/${slug}_pie.png`, key: "pie", alt: `${slug} topics` },
-        { src: `/cover/${slug}_tree.png`, key: "tree", alt: `${slug} network` },
-      ],
-    };
-  });
+  const coverImages = $derived(datasets.flatMap((d) => [
+    `/cover/${d.slug}.png`,
+    // `/cover/${d.slug}_pie.png`,
+    // `/cover/${d.slug}_tree.png`,
+  ]));
 
-  const fadeDuration = 1500;
-  const cycleDelay = fadeDuration + 2000;
-  const coverOrientation = "vertical";
-
-  let coverIndex = $state(0);
-  let coverTimer = null;
   let downloadingSlug = $state(null);
 
   const formatDate = new Intl.DateTimeFormat("en-US", {
@@ -33,20 +23,6 @@
     month: "short",
     day: "numeric",
   });
-
-  const startCoverCycle = () => {
-    stopCoverCycle();
-    if (coverSets.length < 2) return;
-    coverTimer = setInterval(() => {
-      coverIndex = (coverIndex + 1) % coverSets.length;
-    }, cycleDelay);
-  };
-
-  const stopCoverCycle = () => {
-    if (!coverTimer) return;
-    clearInterval(coverTimer);
-    coverTimer = null;
-  };
 
   const downloadDataset = async (slug) => {
     if (!slug || downloadingSlug === slug) return;
@@ -75,9 +51,6 @@
     }
   };
 
-  onMount(startCoverCycle);
-  onDestroy(stopCoverCycle);
-
   const formatRange = (start, end) => {
     if (!start || !end) return null;
     try {
@@ -89,31 +62,14 @@
 </script>
 
 <section class="bg-[#111111] text-gray-400 min-h-screen">
-  {#if coverSets.length}
+  {#if coverImages.length}
     <div class="sticky top-0 w-screen h-screen overflow-hidden">
-      {#each coverSets as set, i (set.slug)}
-        <div
-          class={`absolute inset-0 coverTriptych ${coverOrientation}`}
-          style={`opacity:${coverIndex === i ? 1 : 0};transition:opacity ${fadeDuration}ms ease-in-out;`}
-        >
-          {#each set.items as item (item.src)}
-            <div class="coverPane {item.key}">
-              <img
-                src={item.src}
-                alt={item.alt}
-                class="coverImg {item.key}"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          {/each}
-        </div>
-      {/each}
+      <CoverGL images={coverImages} />
     </div>
   {/if}
 
-  <!-- left column -->
   <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 -mt-[30vh]">
+    <div class="hidden md:block md:col-span-2"></div>
     <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
       <h1 class="text-4xl mb-4 max-w-[300px] text-white">
         Infrastructures of Extremism
@@ -128,7 +84,7 @@
           >Infrastructures of Extremism.</em
         >
       </p>
-      <p>
+      <p class="mb-3">
         At a rally held in Berlin on 29 November 2025 against so-called
         <em>"criminal foreigners"</em>, participants promoted Telegram
         channels used for youth recruitment and for coordinating activities at
@@ -136,7 +92,7 @@
         tightly interwoven with a broader digital ecosystem that fuels the
         expansion of far right extremism.
       </p>
-      <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+      <figure class="flex flex-col items-start mt-6 mb-10 gap-2">
         <img
           src="/intro/berlin-demo.png"
           alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
@@ -146,15 +102,7 @@
           A banner that promotes a link to a Telegram far-right youth group.
         </figcaption>
       </figure>
-    </article>
-    <div class="hidden md:block"></div>
-    <div class="hidden md:block"></div>
-  </div>
 
-  <!-- center column -->
-  <div class="relative z-10 grid grid-cols-1 md:grid-cols-3">
-    <div class="hidden md:block"></div>
-    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
       <p class="mb-3">
         These Telegram channels collectively form a digital infrastructure
         that sustains ultra-nationalist ideologies, enabling the circulation
@@ -165,7 +113,7 @@
         parliamentary politics gives symbolic legitimacy within these online
         spaces.
       </p>
-      <p>
+      <p class="mb-3">
         The former youth organisation of AFD, <em>Junge Alternative</em>, was
         banned after being classified as right-wing extremist and subsequently
         ousted from the public sphere. Yet, recently a successor movement
@@ -178,7 +126,7 @@
         provided these groups with the means to absorb the ban rather than enforcing
         its implementation.
       </p>
-      <figure class="flex flex-col items-end mt-10 mb-6 gap-2">
+      <figure class="flex flex-col items-end mt-6 mb-10 gap-2">
         <img
           src="/intro/gd.png"
           alt="Telegram profile of Generation Deutschland"
@@ -190,15 +138,7 @@
           former.
         </figcaption>
       </figure>
-    </article>
-    <div class="hidden md:block"></div>
-  </div>
 
-  <!-- right column -->
-  <div class="relative z-10 grid grid-cols-1 md:grid-cols-3">
-    <div class="hidden md:block"></div>
-    <div class="hidden md:block"></div>
-    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
       <p class="mb-3">
         These organisations operate within a strategically interconnected
         system. Groups like <em>Generation Deutschland</em>, which present
@@ -217,7 +157,7 @@
         audiences to be funneled from one channel to another, enabling
         persistent networks, even in the face of bans or restrictions.
       </p>
-      <figure class="flex flex-col items-start mt-10 mb-6 gap-2">
+      <figure class="flex flex-col items-start mt-6 mb-10 gap-2">
         <img
           src="/intro/roma.jpg"
           alt="Rome, Italy, 7 January 2025"
@@ -387,6 +327,7 @@
       {/if}
     </section>
   </div>
+
   <div
     class="custom-shadow justify-center flex relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
@@ -402,7 +343,7 @@
           {#each datasets as dataset (dataset.slug)}
             <button
               class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-white/10 bg-black/60 text-left hover:bg-gray-400 hover:text-black transition text-sm disabled:cursor-wait disabled:opacity-80 disabled:hover:bg-black/60 disabled:hover:text-current"
-              on:click={() => downloadDataset(dataset.slug)}
+              onclick={() => downloadDataset(dataset.slug)}
               disabled={downloadingSlug === dataset.slug}
               aria-busy={downloadingSlug === dataset.slug}
             >
@@ -448,50 +389,13 @@
 </section>
 
 <style>
-  .coverTriptych {
-    width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    display: grid;
-  }
-
-  .coverTriptych.vertical {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .coverTriptych.horizontal {
-    grid-template-rows: repeat(3, 1fr);
-  }
-
-  .coverPane {
-    overflow: hidden;
-  }
-
-  .coverImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .coverImg.pie {
-    background-color: gainsboro;
-  }
-
-  /* @media (min-width: 1024px) {
-    img.pie {
-      object-fit: contain;
-      transform: scale(1.8);
-    }
-  } */
-
   .custom-shadow {
     box-shadow:
       0 0 0 8px rgba(0, 0, 0, 0.9),
-      0 0 0 16px rgba(0, 0, 0, 0.7),
+      /* 0 0 0 16px rgba(0, 0, 0, 0.7),
       0 0 0 24px rgba(0, 0, 0, 0.5),
       0 0 0 31px rgba(0, 0, 0, 0.32),
-      0 0 0 39px rgba(0, 0, 0, 0.18),
+      0 0 0 39px rgba(0, 0, 0, 0.18), */
       0 -12px 36px 12px rgba(0, 0, 0, 0.32);
   }
 </style>
