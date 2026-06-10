@@ -49,5 +49,17 @@
       "textColor": "#896F61",
       "highlightColor": "#017BF7"
     }
+  },
+  {
+    "slug": "whitelivesmatterofficial",
+    "theme": {
+      "backgroundColor": "#0f1411",
+      "pieBackground": "gainsboro",
+      "pieFill": "white",
+      "hexaFill": "#111",
+      "circleColor": "red",
+      "textColor": "#726963",
+      "highlightColor": "red"
+    }
   }
 ]
