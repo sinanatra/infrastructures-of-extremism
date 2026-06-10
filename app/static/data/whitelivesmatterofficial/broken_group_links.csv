@@ -1,0 +1,327 @@
+from,to,count,status,reason
+wlm_canada,wlm_canada_bc,83,flood_wait_exceeded,flood wait 73543s exceeds maxWait=3600s
+wlm_usa_north_carolina,wlm_usa_north_carolina_chat,57,flood_wait_exceeded,flood wait 72969s exceeds maxWait=3600s
+wlm_usa_arizona,az_action_14,34,flood_wait_exceeded,flood wait 73811s exceeds maxWait=3600s
+wlm_usa_arizona,arizona_action,33,flood_wait_exceeded,flood wait 73777s exceeds maxWait=3600s
+wlm_canada,wlm_bc_chat,32,flood_wait_exceeded,flood wait 73526s exceeds maxWait=3600s
+wlm_usa_minnesota,whitelivesmatterofficialchat,23,not_found,"No user has ""whitelivesmatterofficialchat"" as username"
+wlm_canada,wlm_bc,22,flood_wait_exceeded,flood wait 73406s exceeds maxWait=3600s
+whitelivesmatterofficial,lmsubmissionbot,21,not_found,"No user has ""lmsubmissionbot"" as username"
+whitelivesmatterofficial,hitelivesmatterofficial,20,not_found,"No user has ""hitelivesmatterofficial"" as username"
+wlm_canada,wlm_canada_ab,19,flood_wait_exceeded,flood wait 73423s exceeds maxWait=3600s
+whitelivesmatterofficial,lmcontactbot,18,not_found,"No user has ""lmcontactbot"" as username"
+wlm_usa_illinois,wlm_usa_illinois_chat,14,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_north_carolina,wlmsubmissionsbot,13,flood_wait_exceeded,flood wait 72950s exceeds maxWait=3600s
+wlm_usa_wisconsin,whitelivematterofficial,13,not_found,"No user has ""whitelivematterofficial"" as username"
+wlm_usa_new_york2,sugartreelegion,12,flood_wait_exceeded,flood wait 73187s exceeds maxWait=3600s
+novanow,az_action_14,11,flood_wait_exceeded,flood wait 73811s exceeds maxWait=3600s
+wlm_usa_arizona,lasvegasactiveclub,11,flood_wait_exceeded,flood wait 73761s exceeds maxWait=3600s
+wlm_usa_washington2,elivesmatterofficial,11,not_found,"No user has ""elivesmatterofficial"" as username"
+norcal_ac,ca_legion_xiv,10,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+whitelivesmatterofficial,telivesmatterofficial,10,not_found,"No user has ""telivesmatterofficial"" as username"
+wlm_usa_north_carolina,wlm_usa_south_carolina_chat,10,flood_wait_exceeded,flood wait 72929s exceeds maxWait=3600s
+paxactiveclub,ca_legion_xiv,9,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+hbmw88,memecannons88,8,flood_wait_exceeded,flood wait 73116s exceeds maxWait=3600s
+wlm_canada,wlm_canada_toronto,8,flood_wait_exceeded,flood wait 73311s exceeds maxWait=3600s
+wlm_eu_united_kingdom,itelivesmatterofficial,8,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_usa_new_york2,wlm_usa_new_york_chat2,8,flood_wait_exceeded,flood wait 73096s exceeds maxWait=3600s
+wlm_usa_texas2,lmsubmissionbot,7,not_found,"No user has ""lmsubmissionbot"" as username"
+herrcent,realblaircottrell,6,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+hersantite,realblaircottrell,6,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+markacollett,realblaircottrell,6,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+media2rise,ca_legion_xiv,6,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+wlm_canada,wlm_canada_qc,6,flood_wait_exceeded,flood wait 73224s exceeds maxWait=3600s
+wlm_eu_poland,hitelivesmatterofficialchat,6,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_eu_united_kingdom,livesmatterofficial,6,not_found,"No user has ""livesmatterofficial"" as username"
+wlm_usa_arizona,wlm_usa_arizona_chat,6,flood_wait_exceeded,flood wait 73795s exceeds maxWait=3600s
+wlm_usa_idaho,wlm_canada_bc,6,flood_wait_exceeded,flood wait 73543s exceeds maxWait=3600s
+wlm_usa_texas2,hitelivesmatterofficial,6,not_found,"No user has ""hitelivesmatterofficial"" as username"
+wlm_usa_texas2,lmcontactbot,6,not_found,"No user has ""lmcontactbot"" as username"
+ohionationalistnetwork,az_action_14,5,flood_wait_exceeded,flood wait 73811s exceeds maxWait=3600s
+thewesternchauvinist1,az_action_14,5,flood_wait_exceeded,flood wait 73811s exceeds maxWait=3600s
+wlm_canada,canadian_nationalist_patriots,5,flood_wait_exceeded,flood wait 73472s exceeds maxWait=3600s
+wlm_canada,wlm_canada_on,5,flood_wait_exceeded,flood wait 73276s exceeds maxWait=3600s
+wlm_usa_arizona,arizonaactionclub,5,flood_wait_exceeded,flood wait 73689s exceeds maxWait=3600s
+wlm_usa_new_york2,wlm_new_york,5,flood_wait_exceeded,flood wait 73080s exceeds maxWait=3600s
+rediceuncensored,memecannons88,4,flood_wait_exceeded,flood wait 73116s exceeds maxWait=3600s
+ultrasnotreds8,europarevival1,4,flood_wait_exceeded,flood wait 73652s exceeds maxWait=3600s
+ultrasnotreds8,legioneuropa,4,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+whitelivesmatterofficial,itelivesmatterofficial,4,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_canada,bellcityns,4,flood_wait_exceeded,flood wait 73455s exceeds maxWait=3600s
+wlm_canada,borealproject,4,flood_wait_exceeded,flood wait 73507s exceeds maxWait=3600s
+wlm_canada,wildroseactiveclub,4,flood_wait_exceeded,flood wait 73240s exceeds maxWait=3600s
+wlm_canada,wlm_canada_materials,4,flood_wait_exceeded,flood wait 73368s exceeds maxWait=3600s
+wlm_canada,wlm_canada_viewing,4,flood_wait_exceeded,flood wait 73347s exceeds maxWait=3600s
+wlm_eu_czech_republic,ivesmatterofficial,4,not_found,"No user has ""ivesmatterofficial"" as username"
+wlm_eu_netherlands,elivesmatterofficial,4,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_eu_russia,itelivesmatterofficial,4,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_eu_russia,sariots,4,invalid_username,username invalid
+wlm_eu_slovakia,hitelivesmatterofficialchat,4,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_usa_michigan,continentalresistance,4,flood_wait_exceeded,flood wait 73847s exceeds maxWait=3600s
+wlm_usa_new_york2,lm_usa_new_york2,4,not_found,"No user has ""lm_usa_new_york2"" as username"
+wlm_usa_north_carolina,wlm_usa_virginia,4,flood_wait_exceeded,flood wait 72912s exceeds maxWait=3600s
+wlm_usa_ohio,wlm_usa_illinois_chat,4,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_oregon,hitelivesmatterofficialchat,4,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_usa_pennsylvania,dellvett,4,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_texas2,telivesmatterofficial,4,not_found,"No user has ""telivesmatterofficial"" as username"
+wlm_usa_washington3,lmcontactbot,4,not_found,"No user has ""lmcontactbot"" as username"
+alamoxiv,az_action_14,3,flood_wait_exceeded,flood wait 73811s exceeds maxWait=3600s
+ohionationalistnetwork,ca_legion_xiv,3,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+sharedefiant,newrightnews,3,invalid_username,username invalid
+thewesternchauvinist7,realblaircottrell,3,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+tomsewelluncensored,realblaircottrell,3,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+whitelivesmatterofficial,lm_usa_new_york2,3,not_found,"No user has ""lm_usa_new_york2"" as username"
+wlm_canada,patriot_gus,3,flood_wait_exceeded,flood wait 73880s exceeds maxWait=3600s
+wlm_canada,wildroseultras,3,flood_wait_exceeded,flood wait 73438s exceeds maxWait=3600s
+wlm_eu_italy,bloccostudentesconazionale,3,flood_wait_exceeded,flood wait 73632s exceeds maxWait=3600s
+wlm_eu_italy,elivesmatterofficial,3,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_eu_italy,wlm_it_ch_admin,3,flood_wait_exceeded,flood wait 73578s exceeds maxWait=3600s
+wlm_eu_netherlands,vesmatterofficial,3,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_eu_poland,battleofeuropa,3,invalid_username,username invalid
+wlm_eu_poland,whitealexandriaslibrary,3,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_eu_poland,wlmofficial,3,invalid_username,username invalid
+wlm_eu_russia,ruzkemir_news,3,not_found,"No user has ""ruzkemir_news"" as username"
+wlm_eu_slovakia,wlmofficial,3,invalid_username,username invalid
+wlm_eu_ukraine,legioneuropa,3,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_eu_united_kingdom,ivesmatterofficial,3,not_found,"No user has ""ivesmatterofficial"" as username"
+wlm_eu_united_kingdom,lmsubmissionbot,3,not_found,"No user has ""lmsubmissionbot"" as username"
+wlm_eu_united_kingdom,telivesmatterofficial,3,not_found,"No user has ""telivesmatterofficial"" as username"
+wlm_usa_arizona,hitelivesmatterofficialchat,3,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_usa_arizona,newrightnews,3,invalid_username,username invalid
+wlm_usa_california,europa_the_last_battle_blu_ray,3,invalid_username,username invalid
+wlm_usa_california,newrightnews,3,invalid_username,username invalid
+wlm_usa_michigan,thecreativitymovement,3,flood_wait_exceeded,flood wait 73937s exceeds maxWait=3600s
+wlm_usa_michigan,wolvenrad,3,not_found,"No user has ""wolvenrad"" as username"
+wlm_usa_minnesota,whitelivematterofficial,3,not_found,"No user has ""whitelivematterofficial"" as username"
+wlm_usa_new_york2,sugartreeadmin,3,flood_wait_exceeded,flood wait 73151s exceeds maxWait=3600s
+wlm_usa_new_york2,sugartreelegionchat,3,flood_wait_exceeded,flood wait 73134s exceeds maxWait=3600s
+wlm_usa_new_york2,sugartreelegionnews,3,flood_wait_exceeded,flood wait 73171s exceeds maxWait=3600s
+wlm_usa_new_york2,whiterosegarden,3,flood_wait_exceeded,flood wait 73006s exceeds maxWait=3600s
+wlm_usa_north_carolina,europa_the_last_battle_blu_ray,3,invalid_username,username invalid
+wlm_usa_oregon,battleofeuropa,3,invalid_username,username invalid
+wlm_usa_oregon,whitealexandriaslibrary,3,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_oregon,wlmofficial,3,invalid_username,username invalid
+wlm_usa_pennsylvania,embracestruggleac,3,flood_wait_exceeded,flood wait 73990s exceeds maxWait=3600s
+wlm_usa_pennsylvania,europa_the_last_battle_blu_ray,3,invalid_username,username invalid
+wlm_usa_pennsylvania,realvincentjames,3,flood_wait_exceeded,flood wait 73972s exceeds maxWait=3600s
+wlm_usa_pennsylvania,wlmpennsylvania,3,flood_wait_exceeded,flood wait 74044s exceeds maxWait=3600s
+wlm_usa_tennessee,hitelivesmatterofficialchat,3,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_usa_tennessee,wlm_usa_kentucky,3,flood_wait_exceeded,flood wait 74023s exceeds maxWait=3600s
+wlm_usa_washington2,whitelivesmatterofficialchat,3,not_found,"No user has ""whitelivesmatterofficialchat"" as username"
+wlm_usa_washington3,telivesmatterofficial,3,not_found,"No user has ""telivesmatterofficial"" as username"
+wlm_usa_wisconsin,dellvett,3,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+activeclubcr,veclubcr,2,not_found,"No user has ""veclubcr"" as username"
+bigskyac_uncensor3d,ca_legion_xiv,2,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+fashposting,realblaircottrell,2,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+njeha1,embracestruggleac,2,flood_wait_exceeded,flood wait 73990s exceeds maxWait=3600s
+sharedefiant,lewiscountrystore,2,flood_wait_exceeded,flood wait 73061s exceeds maxWait=3600s
+thewesternchauvinist1,realblaircottrell,2,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_canada,borealadmin,2,flood_wait_exceeded,flood wait 73489s exceeds maxWait=3600s
+wlm_canada,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_canada,lm_canada,2,flood_wait_exceeded,flood wait 73294s exceeds maxWait=3600s
+wlm_canada,wildroseac,2,flood_wait_exceeded,flood wait 73208s exceeds maxWait=3600s
+wlm_canada,wlm_canada_listening,2,flood_wait_exceeded,flood wait 73387s exceeds maxWait=3600s
+wlm_canada,wlm_canada_reading,2,flood_wait_exceeded,flood wait 73327s exceeds maxWait=3600s
+wlm_canada,wlm_on_chat,2,flood_wait_exceeded,flood wait 73259s exceeds maxWait=3600s
+wlm_eu_czech_republic,esmatterofficial,2,not_found,"No user has ""esmatterofficial"" as username"
+wlm_eu_czech_republic,livesmatterofficial,2,not_found,"No user has ""livesmatterofficial"" as username"
+wlm_eu_czech_republic,veclubcr,2,not_found,"No user has ""veclubcr"" as username"
+wlm_eu_italy,europarevival1,2,flood_wait_exceeded,flood wait 73652s exceeds maxWait=3600s
+wlm_eu_italy,lm_eu_italy,2,flood_wait_exceeded,flood wait 73617s exceeds maxWait=3600s
+wlm_eu_italy,wlm_ita_video,2,flood_wait_exceeded,flood wait 73598s exceeds maxWait=3600s
+wlm_eu_netherlands,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_eu_netherlands,newrightnews,2,invalid_username,username invalid
+wlm_eu_netherlands,wolvenrad,2,not_found,"No user has ""wolvenrad"" as username"
+wlm_eu_poland,elivesmatterofficial,2,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_eu_poland,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_eu_poland,lm_eu_poland,2,not_found,"No user has ""lm_eu_poland"" as username"
+wlm_eu_poland,lmofficial,2,invalid_username,username invalid
+wlm_eu_poland,smatterofficial,2,not_found,"No user has ""smatterofficial"" as username"
+wlm_eu_russia,vesmatterofficial,2,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_eu_russia,whitelivesmatteroffficial,2,not_found,"No user has ""whitelivesmatteroffficial"" as username"
+wlm_eu_slovakia,battleofeuropa,2,invalid_username,username invalid
+wlm_eu_slovakia,smatterofficial,2,not_found,"No user has ""smatterofficial"" as username"
+wlm_eu_slovakia,whitealexandriaslibrary,2,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_eu_ukraine,ivesmatterofficial,2,not_found,"No user has ""ivesmatterofficial"" as username"
+wlm_eu_ukraine,mofficial14,2,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_united_kingdom,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_eu_united_kingdom,vesmatterofficial,2,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_usa_arizona,azactionchat,2,flood_wait_exceeded,flood wait 73673s exceeds maxWait=3600s
+wlm_usa_arizona,clockworkupdates,2,flood_wait_exceeded,flood wait 73721s exceeds maxWait=3600s
+wlm_usa_arizona,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_usa_arizona,nationalismunited,2,flood_wait_exceeded,flood wait 73741s exceeds maxWait=3600s
+wlm_usa_arizona,twcaddyshack,2,flood_wait_exceeded,flood wait 73704s exceeds maxWait=3600s
+wlm_usa_california,livesmatterofficial,2,not_found,"No user has ""livesmatterofficial"" as username"
+wlm_usa_idaho,ca_legion_xiv,2,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+wlm_usa_idaho,wlm_bc_chat,2,flood_wait_exceeded,flood wait 73526s exceeds maxWait=3600s
+wlm_usa_idaho,wlm_usa_california_chat,2,flood_wait_exceeded,flood wait 72858s exceeds maxWait=3600s
+wlm_usa_michigan,airraidbombshelter2,2,flood_wait_exceeded,flood wait 73899s exceeds maxWait=3600s
+wlm_usa_michigan,michiganwlm_vetting,2,flood_wait_exceeded,flood wait 73917s exceeds maxWait=3600s
+wlm_usa_michigan,patriot_gus,2,flood_wait_exceeded,flood wait 73880s exceeds maxWait=3600s
+wlm_usa_michigan,realblaircottrell,2,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_michigan,whitelivesmattercanadaofficial,2,flood_wait_exceeded,flood wait 73865s exceeds maxWait=3600s
+wlm_usa_michigan,wlm_mittens_tha_don,2,flood_wait_exceeded,flood wait 73955s exceeds maxWait=3600s
+wlm_usa_new_jersey,mofficial14,2,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_new_york2,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_usa_new_york2,lewiscountrystore,2,flood_wait_exceeded,flood wait 73061s exceeds maxWait=3600s
+wlm_usa_new_york2,memecannons88,2,flood_wait_exceeded,flood wait 73116s exceeds maxWait=3600s
+wlm_usa_new_york2,oldarminius,2,flood_wait_exceeded,flood wait 73025s exceeds maxWait=3600s
+wlm_usa_new_york2,tradpics,2,flood_wait_exceeded,flood wait 73042s exceeds maxWait=3600s
+wlm_usa_north_carolina,ca_legion_xiv,2,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+wlm_usa_north_carolina,elivesmatterofficial,2,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_north_carolina,legioneuropa,2,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_usa_north_carolina,wlm_usa_california_chat,2,flood_wait_exceeded,flood wait 72858s exceeds maxWait=3600s
+wlm_usa_north_carolina,wlm_usa_virginia_chat,2,flood_wait_exceeded,flood wait 72894s exceeds maxWait=3600s
+wlm_usa_ohio,wlm_usa_kentucky,2,flood_wait_exceeded,flood wait 74023s exceeds maxWait=3600s
+wlm_usa_oregon,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+wlm_usa_oregon,lmofficial,2,invalid_username,username invalid
+wlm_usa_oregon,smatterofficial,2,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_pennsylvania,wlm_usa_kentucky,2,flood_wait_exceeded,flood wait 74023s exceeds maxWait=3600s
+wlm_usa_texas,elivesmatterofficial,2,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_texas,wolvenrad,2,not_found,"No user has ""wolvenrad"" as username"
+wlm_usa_texas2,wolvenrad,2,not_found,"No user has ""wolvenrad"" as username"
+wlm_usa_washington3,elivesmatterofficial,2,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_washington3,itelivesmatterofficial,2,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlmofficial14,battleofeuropa,2,invalid_username,username invalid
+wlmofficial14,europa_the_last_battle_blu_ray,2,invalid_username,username invalid
+evropean_americans,ca_legion_xiv,1,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+howtoirritatejews,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+noticernews,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+ohionationalistnetwork,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+sharedefiant,ca_legion_xiv,1,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+sharedefiant,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+siciliangorillian2,memecannons88,1,flood_wait_exceeded,flood wait 73116s exceeds maxWait=3600s
+siciliangorillian2,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+theaustralianvanguard,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+whitelads,ca_legion_xiv,1,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+whitelivesmatterofficial,esmatterofficial,1,not_found,"No user has ""esmatterofficial"" as username"
+whitelivesmatterofficial,livesmatterofficial,1,not_found,"No user has ""livesmatterofficial"" as username"
+whitelivesmatterofficial,wlm_usa_virginia,1,flood_wait_exceeded,flood wait 72912s exceeds maxWait=3600s
+whitelivesmatterofficialchat2,livesmatterofficial,1,not_found,"No user has ""livesmatterofficial"" as username"
+whitelivesmatterofficialchat2,wlm_usa_virginia,1,flood_wait_exceeded,flood wait 72912s exceeds maxWait=3600s
+wlm_canada,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_canada,hitelivesmatterofficialchat,1,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_canada,ivesmatterofficial,1,not_found,"No user has ""ivesmatterofficial"" as username"
+wlm_canada,lmofficial,1,invalid_username,username invalid
+wlm_canada,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_canada,realvincentjames,1,flood_wait_exceeded,flood wait 73972s exceeds maxWait=3600s
+wlm_canada,whitelivesmatterofficialchat,1,not_found,"No user has ""whitelivesmatterofficialchat"" as username"
+wlm_eu_czech_republic,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_eu_czech_republic,elivesmatterofficial,1,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_eu_czech_republic,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_eu_czech_republic,itelivesmatterofficial,1,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_eu_czech_republic,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_czech_republic,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_eu_czech_republic,vesmatterofficial,1,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_eu_italy,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_eu_italy,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_netherlands,ivesmatterofficial,1,not_found,"No user has ""ivesmatterofficial"" as username"
+wlm_eu_netherlands,legioneuropa,1,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_eu_netherlands,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_poland,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_eu_poland,europarevival1,1,flood_wait_exceeded,flood wait 73652s exceeds maxWait=3600s
+wlm_eu_poland,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_poland,vesmatterofficial,1,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_eu_romania,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_eu_russia,legioneuropa,1,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_eu_russia,livesmatterofficial,1,not_found,"No user has ""livesmatterofficial"" as username"
+wlm_eu_russia,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_russia_chat,hitelivesmatterofficialchat,1,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_eu_russia_chat,legioneuropa,1,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_eu_russia_chat,ruzkemir_news,1,not_found,"No user has ""ruzkemir_news"" as username"
+wlm_eu_russia_chat,wlm_usa_kentucky,1,flood_wait_exceeded,flood wait 74023s exceeds maxWait=3600s
+wlm_eu_slovakia,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_eu_slovakia,esmatterofficial,1,not_found,"No user has ""esmatterofficial"" as username"
+wlm_eu_slovakia,lmofficial,1,invalid_username,username invalid
+wlm_eu_ukraine,europarevival1,1,flood_wait_exceeded,flood wait 73652s exceeds maxWait=3600s
+wlm_eu_ukraine,wolvenrad,1,not_found,"No user has ""wolvenrad"" as username"
+wlm_eu_united_kingdom,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_eu_united_kingdom,hitelivesmatterofficialchat,1,not_found,"No user has ""hitelivesmatterofficialchat"" as username"
+wlm_eu_united_kingdom,lmcontactbot,1,not_found,"No user has ""lmcontactbot"" as username"
+wlm_eu_united_kingdom,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_eu_united_kingdom,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_eu_united_kingdom,whitealexandriaslibrary,1,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_arizona,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_arizona,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_california,ca_legion_xiv,1,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+wlm_usa_california,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_california,elivesmatterofficial,1,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_california,itelivesmatterofficial,1,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_usa_california,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_california,wlm_it_ch_admin,1,flood_wait_exceeded,flood wait 73578s exceeds maxWait=3600s
+wlm_usa_california,wlm_usa_california_chat,1,flood_wait_exceeded,flood wait 72858s exceeds maxWait=3600s
+wlm_usa_colorado,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_colorado,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_idaho,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_idaho,realvincentjames,1,flood_wait_exceeded,flood wait 73972s exceeds maxWait=3600s
+wlm_usa_idaho,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_idaho,whitealexandriaslibrary,1,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_idaho,wlm_bc,1,flood_wait_exceeded,flood wait 73406s exceeds maxWait=3600s
+wlm_usa_idaho,wlm_usa_illinois_chat,1,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_illinois,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_michigan,canadian_nationalist_patriots,1,flood_wait_exceeded,flood wait 73472s exceeds maxWait=3600s
+wlm_usa_michigan,clockworkupdates,1,flood_wait_exceeded,flood wait 73721s exceeds maxWait=3600s
+wlm_usa_michigan,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_usa_michigan,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_michigan,realvincentjames,1,flood_wait_exceeded,flood wait 73972s exceeds maxWait=3600s
+wlm_usa_michigan,wlm_usa_illinois_chat,1,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_minnesota,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_usa_minnesota,itelivesmatterofficial,1,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_usa_minnesota,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_minnesota,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_minnesota,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_minnesota,wlm_usa_illinois_chat,1,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_montana,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_usa_montana,lmofficial,1,invalid_username,username invalid
+wlm_usa_montana,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_montana,whitealexandriaslibrary,1,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_new_jersey,europarevival1,1,flood_wait_exceeded,flood wait 73652s exceeds maxWait=3600s
+wlm_usa_new_jersey,memecannons88,1,flood_wait_exceeded,flood wait 73116s exceeds maxWait=3600s
+wlm_usa_new_york2,elivesmatterofficial,1,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_new_york2,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_new_york2,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_new_york2,vesmatterofficial,1,not_found,"No user has ""vesmatterofficial"" as username"
+wlm_usa_north_carolina,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_north_carolina,lmofficial,1,invalid_username,username invalid
+wlm_usa_north_carolina,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_north_carolina,whitealexandriaslibrary,1,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_north_carolina,whitelivesmatterofficialchat,1,not_found,"No user has ""whitelivesmatterofficialchat"" as username"
+wlm_usa_north_carolina,wlm_usa_arizona_chat,1,flood_wait_exceeded,flood wait 73795s exceeds maxWait=3600s
+wlm_usa_north_carolina,wlmofficial,1,invalid_username,username invalid
+wlm_usa_ohio,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_ohio,embracestruggleac,1,flood_wait_exceeded,flood wait 73990s exceeds maxWait=3600s
+wlm_usa_ohio,realvincentjames,1,flood_wait_exceeded,flood wait 73972s exceeds maxWait=3600s
+wlm_usa_ohio,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_ohio,wlm_usa_virginia,1,flood_wait_exceeded,flood wait 72912s exceeds maxWait=3600s
+wlm_usa_oregon,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_pennsylvania,legioneuropa,1,flood_wait_exceeded,flood wait 72985s exceeds maxWait=3600s
+wlm_usa_pennsylvania,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_pennsylvania,newrightnews,1,invalid_username,username invalid
+wlm_usa_pennsylvania,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_tennessee,ca_legion_xiv,1,flood_wait_exceeded,flood wait 72876s exceeds maxWait=3600s
+wlm_usa_tennessee,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_tennessee,oldarminius,1,flood_wait_exceeded,flood wait 73025s exceeds maxWait=3600s
+wlm_usa_tennessee,whitealexandriaslibrary,1,not_found,"No user has ""whitealexandriaslibrary"" as username"
+wlm_usa_tennessee,wlm_usa_arizona_chat,1,flood_wait_exceeded,flood wait 73795s exceeds maxWait=3600s
+wlm_usa_tennessee,wlm_usa_california_chat,1,flood_wait_exceeded,flood wait 72858s exceeds maxWait=3600s
+wlm_usa_tennessee,wlm_usa_north_carolina_chat,1,flood_wait_exceeded,flood wait 72969s exceeds maxWait=3600s
+wlm_usa_tennessee,wlm_usa_south_carolina_chat,1,flood_wait_exceeded,flood wait 72929s exceeds maxWait=3600s
+wlm_usa_texas,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_usa_texas,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_texas,newrightnews,1,invalid_username,username invalid
+wlm_usa_texas,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_texas2,elivesmatterofficial,1,not_found,"No user has ""elivesmatterofficial"" as username"
+wlm_usa_texas2,europa_the_last_battle_blu_ray,1,invalid_username,username invalid
+wlm_usa_texas2,itelivesmatterofficial,1,not_found,"No user has ""itelivesmatterofficial"" as username"
+wlm_usa_texas2,realblaircottrell,1,flood_wait_exceeded,flood wait 73828s exceeds maxWait=3600s
+wlm_usa_washington2,dellvett,1,flood_wait_exceeded,flood wait 74005s exceeds maxWait=3600s
+wlm_usa_washington2,mofficial14,1,not_found,"No user has ""mofficial14"" as username"
+wlm_usa_washington2,wlm_it_ch_admin,1,flood_wait_exceeded,flood wait 73578s exceeds maxWait=3600s
+wlm_usa_wisconsin,newrightnews,1,invalid_username,username invalid
+wlm_usa_wisconsin,smatterofficial,1,not_found,"No user has ""smatterofficial"" as username"
+wlm_usa_wisconsin,wlm_usa_illinois_chat,1,flood_wait_exceeded,flood wait 73561s exceeds maxWait=3600s
+wlm_usa_wisconsin,wlm_usa_virginia,1,flood_wait_exceeded,flood wait 72912s exceeds maxWait=3600s
+wlm_usa_wisconsin,wlm_usa_virginia_chat,1,flood_wait_exceeded,flood wait 72894s exceeds maxWait=3600s
+wlmofficial14,ivesmatterofficial,1,not_found,"No user has ""ivesmatterofficial"" as username"
+wlmofficial14,lmofficial,1,invalid_username,username invalid
+wlmofficial14,wlmofficial,1,invalid_username,username invalid

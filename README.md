@@ -121,11 +121,13 @@ python3 notebooks/crawler.py --start-seed generationidentitaire --output-path no
 python3 notebooks/crawler.py --start-seed tricoloredelsangueitalico --output-path notebooks/data
 python3 notebooks/crawler.py --start-seed jungenationalisten --output-path notebooks/data
 python3 notebooks/crawler.py --start-seed afdjugendbw --output-path notebooks/data
+python3 notebooks/crawler.py --start-seed WhiteLivesMatterOfficial --output-path notebooks/data
 
 python3 notebooks/tag_st.py --dataset generationidentitaire
 python3 notebooks/tag_st.py --dataset tricoloredelsangueitalico
 python3 notebooks/tag_st.py --dataset jungenationalisten
 python3 notebooks/tag_st.py --dataset afdjugendbw
+python3 notebooks/tag_st.py --dataset WhiteLivesMatterOfficial
 
 node app/scripts/precompute-layout.js
 ```
