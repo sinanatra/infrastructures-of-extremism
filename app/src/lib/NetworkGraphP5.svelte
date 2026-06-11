@@ -93,12 +93,13 @@
   );
 
   const visibleNodes = $derived.by(() => {
-    const base =
+    let base =
       trailerVisibleGroups === null
         ? nodes
         : nodes.filter((n) => trailerVisibleGroups.has(n.groupId));
-    if (selectedEmoji === null) return base;
-    return base.filter((n) => n.topEmoji === selectedEmoji);
+    if (selectedGroupId !== null) base = base.filter((n) => n.groupId === selectedGroupId);
+    if (selectedEmoji !== null) base = base.filter((n) => n.topEmoji === selectedEmoji);
+    return base;
   });
 
   const visibleNodeIds = $derived.by(() => new Set(visibleNodes.map((n) => n.id)));
