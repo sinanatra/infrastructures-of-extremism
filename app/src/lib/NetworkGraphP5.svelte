@@ -5,10 +5,8 @@
   import { prepareNetwork } from "$lib/networkPrep.js";
   import { captureCanvasAsPng } from "$lib/captureCanvas.js";
   import Tooltip from "$lib/Tooltip.svelte";
-  import Trailer from "$lib/Trailer.svelte";
   import {
     buildLinkSegments,
-    buildTrailerGroups,
     computeTopEmojis,
     createTooltipForPost,
   } from "$lib/networkGraph/data.js";
@@ -72,16 +70,15 @@
   );
 
   const topEmojis = $derived.by(() => computeTopEmojis(nodes, 30));
-  const trailerGroups = buildTrailerGroups({
-    slicePaths,
-    linkSegments,
-    datasetSlug,
-  });
-  const trailerAvailable = trailerGroups.length > 0;
 
-  let trailerVisibleGroups = $state(null);
-  let trailerState = $state(trailerAvailable ? "idle" : "done");
-  let trailerBlocking = $state(trailerAvailable);
+  const seedLabel = (() => {
+    const match = slicePaths.find(
+      (s) => s.id && datasetSlug && s.id.toLowerCase() === datasetSlug.toLowerCase()
+    );
+    return (match ?? slicePaths[0])?.group?.label ?? (match ?? slicePaths[0])?.id ?? null;
+  })();
+
+  let entered = $state(false);
 
   let sizeMode = $state("links");
   let showLinks = $state(false);
@@ -94,10 +91,7 @@
   );
 
   const visibleNodes = $derived.by(() => {
-    let base =
-      trailerVisibleGroups === null
-        ? nodes
-        : nodes.filter((n) => trailerVisibleGroups.has(n.groupId));
+    let base = nodes;
     if (selectedGroupId !== null) base = base.filter((n) => n.groupId === selectedGroupId);
     if (selectedEmoji !== null) base = base.filter((n) => n.topEmoji === selectedEmoji);
     return base;
@@ -195,8 +189,6 @@
     hexaFill;
     hoveredNode;
     hoveredGroupId;
-    trailerBlocking;
-    trailerVisibleGroups;
     requestRedraw();
   });
 
@@ -216,8 +208,6 @@
     visibleNodes,
     visibleLinks,
     visibleNodeIds,
-    trailerVisibleGroups,
-    trailerBlocking,
     highlightColor,
     textColor,
     backgroundColor,
@@ -260,9 +250,39 @@
     <ExportControl label="Export PNG" on:export={exportPng} />
   </div>
 
+  {#if !entered}
+    <div
+      class="absolute inset-0 z-30 flex items-center justify-center"
+      style="backdrop-filter:blur(2px);"
+      on:click|stopPropagation
+      on:pointerdown|stopPropagation
+    >
+      <div
+        class="pointer-events-auto px-5 py-4 rounded shadow-lg flex flex-col gap-3 items-center max-w-2xl w-[90vw] text-center"
+        style={`background:${backgroundColor}; border:1px solid ${highlightColor}; color:${textColor};`}
+      >
+        <div class="text-2xl">
+          Starting from the right-wing extremist Telegram group
+          <span class="italic" style={`color:${highlightColor};`}>
+            {seedLabel ?? "the seed"}
+          </span>,
+          this visualization shows the network of related channels: the ones they
+          talk about and the ones resharing their posts.
+        </div>
+        <button
+          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
+          style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
+          on:click={() => (entered = true)}
+        >
+          Enter
+        </button>
+      </div>
+    </div>
+  {/if}
+
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
-    hidden={trailerState !== "done"}
+    hidden={!entered}
   >
     <div
       class="pointer-events-auto max-w-5xl mx-auto"
@@ -312,24 +332,6 @@
     role="img"
     on:instance={handleP5Instance}
   />
-
-  {#if trailerAvailable}
-    <Trailer
-      groups={trailerGroups}
-      {highlightColor}
-      {backgroundColor}
-      {textColor}
-      on:update={(event) => {
-        trailerVisibleGroups = event.detail?.visible ?? null;
-        trailerState = event.detail?.state ?? trailerState;
-        trailerBlocking = event.detail?.state === "idle";
-        requestRedraw();
-      }}
-      on:block={(event) => {
-        trailerBlocking = event.detail?.blocking ?? false;
-      }}
-    />
-  {/if}
 
   {#if hoveredNode}
     <Tooltip text={hoveredText} />
