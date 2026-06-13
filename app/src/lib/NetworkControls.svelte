@@ -4,6 +4,9 @@
 
   let {
     counts = { posts: 0, groups: 0, links: 0 },
+    groups = [],
+    selectedGroupId = null,
+    hoveredGroupId = null,
     selectedGroup = null,
     sizeMode = "links",
     showLinks = false,
@@ -20,63 +23,66 @@
   const setSizeMode = (mode) => dispatch("sizeMode", mode);
   const toggleLinks = (checked) => dispatch("showLinks", checked);
   const clearSelection = () => dispatch("clearSelection");
-  const setEmoji = (emoji) =>
-    dispatch("selectEmoji", selectedEmoji === emoji ? null : emoji);
+  const setEmoji = (emoji) => dispatch("selectEmoji", selectedEmoji === emoji ? null : emoji);
+
+  let showGroups = $state(false);
 </script>
 
 <header
-  class="controls fixed left-1/2 top-4 z-50 flex w-[min(1100px,90vw)] -translate-x-1/2 flex-wrap items-center justify-between gap-1 rounded p-2 px-2"
-  style={`--controls-bg:${backgroundColor}; --controls-text:${textColor}; --controls-highlight:${highlightColor};`}
+  class="controls fixed left-1/2 top-3 z-50 -translate-x-1/2 flex flex-col items-stretch rounded-lg w-max"
+  style={`--bg:${backgroundColor}; --text:${textColor}; --hi:${highlightColor};`}
 >
-  <div class="flex flex-wrap items-center gap-1 text-xs">
-    <span>{counts.posts} posts</span>
-    <span>{counts.groups} groups</span>
-    <span>{counts.links} links</span>
-    {#if selectedGroup}
-      <span
-        class="group-pill flex items-center gap-1 px-2 py-1 rounded-full text-xs"
-      >
-        <span>{selectedGroup.label}</span>
-        {#if subscriberText(selectedGroup.subscribers)}
-          <span>
-            {subscriberText(selectedGroup.subscribers)}
-          </span>
-        {/if}
-        <span>
-          {(selectedGroup.postCount ?? 0).toLocaleString()} posts
-        </span>
-        <button class="underline decoration-dotted" on:click={clearSelection}>
-          clear
-        </button>
-      </span>
-    {/if}
-
-    <div class="flex rounded-full overflow-hidden toggle-group">
+  <div class="flex items-center gap-2 px-2.5 py-1.5">
+    <div class="toggle-group flex text-[11px] rounded overflow-hidden">
       <button
-        class={`toggle-btn px-3 py-2 ${sizeMode === "reactions" ? "active" : ""}`}
+        class={`tbtn px-2 py-1 ${sizeMode === "reactions" ? "active" : ""}`}
         on:click={() => setSizeMode("reactions")}
-        style={`color:${textColor};`}
-      >
-        Size by reactions
-      </button>
+      >reactions</button>
       <button
-        class={`toggle-btn px-3 py-2 ${sizeMode === "links" ? "active" : ""}`}
+        class={`tbtn px-2 py-1 ${sizeMode === "links" ? "active" : ""}`}
         on:click={() => setSizeMode("links")}
-        style={`color:${textColor};`}
-      >
-        Size by forwards
-      </button>
+      >forwards</button>
     </div>
-    <label class="flex items-center gap-2 cursor-pointer select-none">
+
+    <label class="flex items-center gap-1 cursor-pointer select-none text-[11px]">
       <input
         type="checkbox"
         checked={showLinks}
-        on:change={(event) => toggleLinks(event.currentTarget.checked)}
-        style={`accent-color:${highlightColor};`}
+        on:change={(e) => toggleLinks(e.currentTarget.checked)}
+        style={`accent-color:${highlightColor}; width:10px; height:10px;`}
       />
-      <span>Show links</span>
+      links
     </label>
+
+    {#if groups.length}
+      <button
+        class={`tbtn-groups text-[11px] px-2 py-1 rounded ${showGroups ? "active" : ""}`}
+        on:click={() => (showGroups = !showGroups)}
+      >groups{#if selectedGroupId}<span class="dot"> ·</span>{/if}</button>
+    {/if}
   </div>
+
+  {#if showGroups && groups.length}
+    <div class="group-list px-1.5 pb-1.5">
+      {#if selectedGroupId}
+        <button class="clear-all text-[10px] px-1.5 py-0.5 mb-1" on:click={clearSelection}>clear ×</button>
+      {/if}
+      <ul>
+        {#each groups as g}
+          {@const isSelected = selectedGroupId === g.id}
+          {@const isHovered = hoveredGroupId === g.id}
+          <li>
+            <button
+              class={`group-item text-[11px] w-full text-left px-1.5 py-0.5 rounded ${isSelected ? "selected" : ""} ${isHovered && !isSelected ? "hovered" : ""}`}
+              on:click={() => dispatch("selectGroup", g.id)}
+              on:mouseenter={() => dispatch("hoverGroup", g.id)}
+              on:mouseleave={() => dispatch("clearHoverGroup")}
+            >{g.label}</button>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  {/if}
 
   <EmojiFilter
     {topEmojis}
@@ -84,43 +90,96 @@
     {textColor}
     {backgroundColor}
     {highlightColor}
-    on:select={(event) => setEmoji(event.detail)}
+    on:select={(e) => setEmoji(e.detail)}
   />
 </header>
 
 <style>
   .controls {
-    background: var(--controls-bg);
-    color: var(--controls-text);
-    border: 0.75px solid var(--controls-highlight);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-  }
-
-  .group-pill {
-    background: var(--controls-text);
-    color: var(--controls-bg);
+    background: var(--bg);
+    color: var(--text);
+    border: 0.5px solid color-mix(in srgb, var(--hi) 45%, transparent);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
   }
 
   .toggle-group {
-    border: 0.75px solid var(--controls-highlight);
+    border: 0.5px solid color-mix(in srgb, var(--hi) 40%, transparent);
   }
 
-  .toggle-btn {
+  .tbtn {
     background: transparent;
-    color: inherit;
-    transition:
-      background 120ms ease,
-      color 120ms ease;
+    color: var(--text);
+    line-height: 1;
+    transition: background 100ms ease;
   }
 
-  .toggle-btn.active {
-    /* background: var(--controls-highlight);
-    color: var(--controls-bg); */
-    background-color: var(--controls-highlight);
-    color: black !important;
+  .tbtn.active {
+    background: color-mix(in srgb, var(--hi) 25%, transparent);
   }
 
-  .toggle-btn + .toggle-btn {
-    border-left: 0.75px solid var(--controls-highlight);
+  .tbtn + .tbtn {
+    border-left: 0.5px solid color-mix(in srgb, var(--hi) 40%, transparent);
+  }
+
+  .tbtn-groups {
+    background: transparent;
+    color: var(--text);
+    line-height: 1;
+    border: 0.5px solid color-mix(in srgb, var(--hi) 40%, transparent);
+    transition: background 100ms ease;
+  }
+
+  .tbtn-groups.active {
+    background: color-mix(in srgb, var(--hi) 25%, transparent);
+  }
+
+  .dot {
+    color: var(--hi);
+  }
+
+  .group-list {
+    border-top: 0.5px solid color-mix(in srgb, var(--hi) 25%, transparent);
+    max-height: 50vh;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .group-item {
+    background: transparent;
+    color: var(--text);
+    display: block;
+    transition: background 80ms ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .group-item.hovered {
+    background: color-mix(in srgb, var(--hi) 8%, transparent);
+  }
+
+  .group-item.selected {
+    background: color-mix(in srgb, var(--hi) 18%, transparent);
+  }
+
+  .clear-all {
+    background: transparent;
+    color: var(--text);
+    opacity: 0.5;
+    display: block;
+    border-top: none;
+  }
+
+  .clear-all:hover {
+    opacity: 1;
   }
 </style>

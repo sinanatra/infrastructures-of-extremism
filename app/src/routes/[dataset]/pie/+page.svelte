@@ -11,6 +11,7 @@
     circleColor: "#fff8bc",
     textColor: "#fff8bc",
     highlightColor: "#7B68EE",
+    pieHighlightColor: "#4040cc",
   };
 
   const theme = data?.dataset?.theme ?? defaultTheme;
@@ -29,14 +30,15 @@
   <Pie
     {data}
     dotSize={5}
-    extrudeOffsetX={0}
-    extrudeOffsetY={80}
+    extrudeOffsetX={theme.pieExtrudeOffsetX ?? 0}
+    extrudeOffsetY={theme.pieExtrudeOffsetY ?? 80}
     backgroundColor={theme.backgroundColor}
     pieBackground={theme.pieBackground}
     pieFill={theme.pieFill}
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}
+    pieHighlightColor={theme.pieHighlightColor ?? theme.highlightColor}
     datasetSlug={data?.dataset?.slug}
   />
 </section>

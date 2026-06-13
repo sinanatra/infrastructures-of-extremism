@@ -10,6 +10,8 @@
     hexaFill = "gainsboro",
     textColor = "#ffffff",
     highlightColor = "yellow",
+    extrudeOffsetX = 0,
+    extrudeOffsetY = 950,
     datasetSlug = null,
   } = $props();
 </script>
@@ -22,5 +24,7 @@
   {circleColor}
   {textColor}
   {highlightColor}
+  {extrudeOffsetX}
+  {extrudeOffsetY}
   {datasetSlug}
 />

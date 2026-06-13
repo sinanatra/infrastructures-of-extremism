@@ -219,18 +219,20 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
-              <img
-                src={`/cover/${dataset.slug}.png`}
-                alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover"
-                loading="lazy"
-              />
-              <div class="mt-2">
-                <div class="text-lg">
+              <div class="w-[350px] h-[350px] overflow-hidden">
+                <img
+                  src={`/cover/${dataset.slug}.png`}
+                  alt={dataset.label || dataset.slug}
+                  class="w-full h-full object-cover scale-[1.35]"
+                  loading="lazy"
+                />
+              </div>
+              <div class="mt-4 pb-2 w-[350px]">
+                <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
                 {#if dataset.endDate}
-                  <div class="text-xs text-gray-600 mt-0.5">
+                  <div class="text-xs text-gray-600 mt-2">
                     Updated {formatDate.format(new Date(dataset.endDate))}
                   </div>
                 {/if}
@@ -262,18 +264,20 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/pie`}
             >
-              <img
-                src={`/cover/${dataset.slug}_pie.png`}
-                alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover"
-                loading="lazy"
-              />
-              <div class="mt-2">
-                <div class="text-lg">
+              <div class="w-[350px] h-[350px] overflow-hidden">
+                <img
+                  src={`/cover/${dataset.slug}_pie.png`}
+                  alt={dataset.label || dataset.slug}
+                  class="w-full h-full object-cover scale-[1.35]"
+                  loading="lazy"
+                />
+              </div>
+              <div class="mt-4 pb-2 w-[350px]">
+                <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
                 {#if dataset.endDate}
-                  <div class="text-xs text-gray-600 mt-0.5">
+                  <div class="text-xs text-gray-600 mt-2">
                     Updated {formatDate.format(new Date(dataset.endDate))}
                   </div>
                 {/if}
@@ -305,18 +309,20 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/tree`}
             >
-              <img
-                src={`/cover/${dataset.slug}_tree.png`}
-                alt={dataset.label || dataset.slug}
-                class="w-[450px] h-[450px] object-cover"
-                loading="lazy"
-              />
-              <div class="mt-2">
-                <div class="text-lg">
+              <div class="w-[350px] h-[350px] overflow-hidden">
+                <img
+                  src={`/cover/${dataset.slug}_tree.png`}
+                  alt={dataset.label || dataset.slug}
+                  class="w-full h-full object-cover scale-[1.35]"
+                  loading="lazy"
+                />
+              </div>
+              <div class="mt-4 pb-2 w-[350px]">
+                <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
                 {#if dataset.endDate}
-                  <div class="text-xs text-gray-600 mt-0.5">
+                  <div class="text-xs text-gray-600 mt-2">
                     Updated {formatDate.format(new Date(dataset.endDate))}
                   </div>
                 {/if}

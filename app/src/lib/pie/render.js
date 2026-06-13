@@ -131,7 +131,7 @@ export const drawArcText = (ctx, txt, cx, cy, r, startAngle, endAngle) => {
 };
 
 export const drawWedgeLayer = (ctx, { cx, cy, outerRadius, wedgeData }, theme, style) => {
-  const { pieFill, circleColor, highlightColor, labelFont, dotSize } = theme;
+  const { pieFill, circleColor, pieHighlightColor, labelFont, dotSize } = theme;
   const { shortenLabel = (s) => shortenText(s, 64).toLowerCase() } = style ?? {};
 
   ctx.push();
@@ -161,7 +161,7 @@ export const drawWedgeLayer = (ctx, { cx, cy, outerRadius, wedgeData }, theme, s
 
     ctx.push();
     ctx.noStroke();
-    ctx.fill(highlightColor);
+    ctx.fill(pieHighlightColor);
     ctx.textFont(labelFont);
     ctx.textSize(dotSize * 1.5);
     drawArcText(ctx, labelRaw, cx, cy, labelRadius, wedge.start, wedge.start + wedge.angle);
@@ -226,7 +226,7 @@ export const drawHoverOverlay = ({
   visibleNodeIds,
   nodeInnerSize,
   dotSize,
-  highlightColor,
+  pieHighlightColor,
   labelFont,
   labelText,
 }) => {
@@ -235,7 +235,7 @@ export const drawHoverOverlay = ({
   const neighborIds = linksByNode.get(hoverNode.id);
   if (neighborIds && neighborIds.size) {
     p.push();
-    p.stroke(highlightColor);
+    p.stroke(pieHighlightColor);
     p.strokeWeight(0.5);
     p.noFill();
     for (const neighborId of neighborIds) {
@@ -250,11 +250,11 @@ export const drawHoverOverlay = ({
   const innerSize = nodeInnerSize(hoverNode);
 
   p.noStroke();
-  p.fill(highlightColor);
+  p.fill(pieHighlightColor);
   p.ellipse(hoverNode.x, hoverNode.y, dotSize, dotSize);
 
   p.noStroke();
-  p.fill(highlightColor);
+  p.fill(pieHighlightColor);
   p.ellipse(hoverNode.x, hoverNode.y, innerSize, innerSize);
 
   p.push();
@@ -262,7 +262,7 @@ export const drawHoverOverlay = ({
   p.textSize(8);
   p.stroke(255);
   p.strokeWeight(1);
-  p.fill(highlightColor);
+  p.fill(pieHighlightColor);
   p.text(labelText, hoverNode.x, hoverNode.y - 8);
   p.pop();
 };

@@ -24,6 +24,8 @@
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}
+    extrudeOffsetX={theme.graphExtrudeOffsetX ?? 0}
+    extrudeOffsetY={theme.graphExtrudeOffsetY ?? 950}
     datasetSlug={data?.dataset?.slug}
   />
 </section>

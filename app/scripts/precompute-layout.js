@@ -610,7 +610,7 @@ const loadData = async ({ slug, dir }) => {
 
 const LAYOUT_WIDTH = 5000;
 const LAYOUT_HEIGHT = 5000;
-const POLYGON_SIDES = 12;
+const POLYGON_SIDES = 36;
 const BASE_START = -Math.PI / 2;
 const MIN_NODE_RADIUS = 4;
 const MAX_NODE_RADIUS_DESIRED = 42;

@@ -17,76 +17,56 @@
 
 {#if topEmojis.length}
   <div
-    class="emoji-filter flex w-full items-center gap-1 text-xs pt-1"
-    style={`--filter-text:${textColor}; --filter-highlight:${highlightColor}; --filter-bg:${backgroundColor};`}
+    class="flex items-center gap-1 px-2.5 py-1 border-t border-t-[0.5px] border-t-[color-mix(in_srgb,var(--hi)_30%,transparent)]"
+    style={`--text:${textColor}; --hi:${highlightColor}; --bg:${backgroundColor};`}
   >
-    <span class="label uppercase">Filter by emoji</span>
     <div class="flex-1 overflow-x-auto no-scrollbar">
-      <div class="flex gap-1 py-1 min-w-max">
+      <div class="flex gap-0.5 min-w-max">
         {#each topEmojis as option}
           <button
-            class={`emoji-pill ${selectedEmoji === option.emoji ? "active" : ""}`}
+            class={`pill ${selectedEmoji === option.emoji ? "active" : ""}`}
             on:click={() => selectEmoji(option.emoji)}
+            title={`${option.emoji} · ${option.count}`}
           >
-            <span class="emoji text-xs leading-none">
-              {option.emoji.length > 5 ? "?" : option.emoji}
-            </span>
-            <span class="count text-xs">
-              {option.count.toLocaleString()}
-            </span>
+            {option.emoji.length > 5 ? "?" : option.emoji}
           </button>
         {/each}
       </div>
     </div>
-    <button
-      class={`emoji-pill clear ${selectedEmoji === null ? "active" : ""}`}
-      on:click={() => selectEmoji(null)}
-    >
-      Clear
-    </button>
+    {#if selectedEmoji}
+      <button class="clear" on:click={() => selectEmoji(null)}>×</button>
+    {/if}
   </div>
 {/if}
 
 <style>
-  .emoji-filter {
-    color: var(--filter-text);
-    border-top: 0.75px solid var(--filter-highlight);
+  div {
+    /* border-top: 0.5px solid color-mix(in srgb, var(--hi) 30%, transparent); */
+    color: var(--text);
   }
 
-  .label {
-    color: var(--filter-text);
-  }
-
-  .emoji-pill {
-    border: 0.75px solid var(--filter-highlight);
-    color: var(--filter-text);
+  .pill {
     background: transparent;
-    border-radius: 9999px;
-    padding: 0.1rem 0.2rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    transition:
-      background 120ms ease,
-      color 120ms ease,
-      border-color 120ms ease;
+    border: none;
+    color: var(--text);
+    border-radius: 4px;
+    padding: 1px 3px;
+    font-size: 12px;
+    line-height: 1.3;
+    transition: background 80ms ease;
   }
 
-  .emoji-pill.active {
-    background: var(--filter-text);
-    color: var(--filter-bg);
-    border-color: var(--filter-highlight);
+  .pill.active {
+    background: color-mix(in srgb, var(--hi) 25%, transparent);
   }
 
-  .emoji-pill:hover {
-    border-color: var(--filter-text);
-  }
-
-  .emoji-pill.clear {
+  .clear {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1;
+    padding: 0 2px;
     flex-shrink: 0;
-  }
-
-  .count {
-    opacity: 0.75;
   }
 </style>

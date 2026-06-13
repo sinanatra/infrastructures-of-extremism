@@ -22,12 +22,13 @@
     circleColor = "#ffffff",
     textColor = "#ffffff",
     highlightColor: highlightColorProp = "yellow",
+    extrudeOffsetX = 0,
+    extrudeOffsetY = 950,
     datasetSlug = null,
   } = $props();
 
-  const { posts, links } = data;
-  const extrudeOffsetX = 0;
-  const extrudeOffsetY = 950;
+  const { posts, links, groups: scraperGroups = [] } = data;
+  const scraperOrder = new Map(scraperGroups.map((g, i) => [g.id, i]));
 
   const prepared = prepareNetwork(data, { circleColor });
   const {
@@ -116,6 +117,9 @@
 
   let hoveredNode = $state(null);
   let hoveredText = $state("");
+  let listHoveredGroupId = $state(null);
+
+  const hoveredGroupId = $derived(hoveredNode?.groupId ?? listHoveredGroupId ?? null);
 
   const setHoverState = (node, text) => {
     hoveredNode = node;
@@ -190,6 +194,7 @@
     circleColor;
     hexaFill;
     hoveredNode;
+    hoveredGroupId;
     trailerBlocking;
     trailerVisibleGroups;
     requestRedraw();
@@ -205,6 +210,7 @@
     sizeMode,
     showLinks,
     selectedGroupId,
+    hoveredGroupId,
     hoveredNode,
     hoveredText,
     visibleNodes,
@@ -273,6 +279,9 @@
           groups: slicePaths.length,
           links: links.length,
         }}
+        groups={[...slicePaths].sort((a, b) => (scraperOrder.get(a.id) ?? 9999) - (scraperOrder.get(b.id) ?? 9999))}
+        {selectedGroupId}
+        {hoveredGroupId}
         {selectedGroup}
         {sizeMode}
         {showLinks}
@@ -282,23 +291,16 @@
         {textColor}
         {backgroundColor}
         {highlightColor}
-        on:sizeMode={(event) => {
-          sizeMode = event.detail;
-        }}
-        on:showLinks={(event) => {
-          showLinks = event.detail;
-        }}
+        on:sizeMode={(event) => { sizeMode = event.detail; }}
+        on:showLinks={(event) => { showLinks = event.detail; }}
         on:selectEmoji={(event) => {
           selectedEmoji = event.detail;
-          if (
-            selectedEmoji &&
-            hoveredNode &&
-            hoveredNode.topEmoji !== selectedEmoji
-          ) {
-            clearHover();
-          }
+          if (selectedEmoji && hoveredNode && hoveredNode.topEmoji !== selectedEmoji) clearHover();
         }}
         on:clearSelection={() => (selectedGroupId = null)}
+        on:selectGroup={(event) => toggleGroup(event.detail)}
+        on:hoverGroup={(event) => { listHoveredGroupId = event.detail; }}
+        on:clearHoverGroup={() => { listHoveredGroupId = null; }}
       />
     </div>
   </div>

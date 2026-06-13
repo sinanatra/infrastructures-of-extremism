@@ -19,7 +19,7 @@ export const prepareNetwork = (
   const innerRadius = INNER_RADIUS;
   const outerRadius = Math.min(width, height) / 2 - 50;
   const baseStart = -Math.PI / 2;
-  const polygonSides = layout?.polygonSides ?? 12;
+  const polygonSides = layout?.polygonSides ?? 72;
 
   const postCountByGroup = new Map();
   const postLabelByGroup = new Map();

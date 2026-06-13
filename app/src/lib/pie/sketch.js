@@ -249,7 +249,7 @@ export const createPieSketch = ({
         pieFill,
         pieBackground,
         circleColor,
-        highlightColor,
+        pieHighlightColor,
         labelFont,
         dotSize,
         extrudeOffsetX,
@@ -263,7 +263,7 @@ export const createPieSketch = ({
         pieFill,
         pieBackground,
         circleColor,
-        highlightColor,
+        pieHighlightColor,
         labelFont,
         dotSize,
         extrudeOffsetX,
@@ -336,7 +336,7 @@ export const createPieSketch = ({
       const {
         pieFill,
         circleColor,
-        highlightColor,
+        pieHighlightColor,
         labelFont,
         dotSize,
         extrudeOffsetX,
@@ -357,7 +357,7 @@ export const createPieSketch = ({
           outerRadius,
           wedgeData,
         },
-        { pieFill, circleColor, highlightColor, labelFont, dotSize },
+        { pieFill, circleColor, pieHighlightColor, labelFont, dotSize },
         { extrudeOffsetX, extrudeOffsetY }
       );
       staticKey = getStaticKey();
@@ -395,7 +395,7 @@ export const createPieSketch = ({
 
     const rebuildLinksLayer = () => {
       if (!renderer) return;
-      const { showLinks, highlightColor, visibleNodeIds } = getState();
+      const { showLinks, pieHighlightColor, visibleNodeIds } = getState();
 
       linksLayer = renderer.createGraphics(
         p.width * increase,
@@ -409,7 +409,7 @@ export const createPieSketch = ({
         return;
       }
 
-      linksLayer.stroke(highlightColor);
+      linksLayer.stroke(pieHighlightColor);
       linksLayer.strokeWeight(0.5);
       linksLayer.noFill();
 
@@ -457,7 +457,7 @@ export const createPieSketch = ({
       const { trailerBlocking } = getState();
       if (trailerBlocking) return false;
       camera.zoomAt(event.deltaY, p.mouseX, p.mouseY, {
-        step: 0.001,
+        step: 0.0004,
         minZoom: 0.001,
         maxZoom: 5,
       });
@@ -622,7 +622,7 @@ export const createPieSketch = ({
         pieBackground,
         showLinks,
         dotSize,
-        highlightColor,
+        pieHighlightColor,
         labelFont,
         visibleNodeIds,
       } = getState();
@@ -648,7 +648,7 @@ export const createPieSketch = ({
         visibleNodeIds,
         nodeInnerSize,
         dotSize,
-        highlightColor,
+        pieHighlightColor,
         labelFont,
         labelText: shortenText(hoverNode?.id),
       });

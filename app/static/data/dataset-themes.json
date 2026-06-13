@@ -2,64 +2,86 @@
   {
     "slug": "jungenationalisten",
     "theme": {
-      "backgroundColor": "#0f1411",
+      "backgroundColor": "#000",
       "pieBackground": "gainsboro",
       "pieFill": "white",
       "hexaFill": "#111",
-
       "circleColor": "#7B68EE",
-      "textColor": "#7B68EE",
-      "highlightColor": "red"
+      "textColor": "#9b8fff",
+      "highlightColor": "#cc2200",
+      "pieHighlightColor": "#cc2200",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
     }
   },
   {
     "slug": "tricoloredelsangueitalico",
     "theme": {
-      "backgroundColor": "#0f1411",
+      "backgroundColor": "#000",
       "pieBackground": "gainsboro",
       "pieFill": "white",
       "hexaFill": "#111",
-
       "circleColor": "#FF4701",
       "textColor": "#FF4701",
-      "highlightColor": "steelblue"
+      "highlightColor": "#1b6ca8",
+      "pieHighlightColor": "#1b6ca8",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
     }
   },
   {
     "slug": "generationidentitaire",
     "theme": {
-      "backgroundColor": "#0f1411",
+      "backgroundColor": "#000",
       "pieBackground": "gainsboro",
       "pieFill": "white",
       "hexaFill": "#111",
       "circleColor": "#76b68d",
       "textColor": "#76b68d",
-      "highlightColor": "steelblue"
+      "highlightColor": "#1b6ca8",
+      "pieHighlightColor": "#1b6ca8",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
     }
   },
   {
     "slug": "afdjugendbw",
     "theme": {
-      "backgroundColor": "#0f1411",
+      "backgroundColor": "#000",
       "pieBackground": "gainsboro",
       "pieFill": "white",
       "hexaFill": "#111",
-
       "circleColor": "#896F61",
-      "textColor": "#896F61",
-      "highlightColor": "#017BF7"
+      "textColor": "#b09080",
+      "highlightColor": "#017BF7",
+      "pieHighlightColor": "#0060c0",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
     }
   },
   {
     "slug": "whitelivesmatterofficial",
     "theme": {
-      "backgroundColor": "#0f1411",
+      "backgroundColor": "#000",
       "pieBackground": "gainsboro",
       "pieFill": "white",
       "hexaFill": "#111",
-      "circleColor": "red",
-      "textColor": "#726963",
-      "highlightColor": "red"
+      "circleColor": "#aa963e",
+      "textColor": "#c4a89a",
+      "highlightColor": "#ff8223",
+      "pieHighlightColor": "#a03820",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
     }
   }
 ]

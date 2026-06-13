@@ -321,7 +321,7 @@ export const createNetworkGraphSketch = ({
   };
 
   const zoomAt = (deltaY, sx, sy) => {
-    const zoomStep = 1.1;
+    const zoomStep = 1.05;
     const direction = deltaY > 0 ? 1 / zoomStep : zoomStep;
     const nextScale = clamp(view.scale * direction, minScale, maxScale);
     const worldBefore = screenToWorld(sx, sy);
@@ -540,9 +540,11 @@ export const createNetworkGraphSketch = ({
         p.line(top.x, top.y, bottom.x, bottom.y);
     }
 
-    for (let i = 0; i < 6; i++) {
-      const current = preBottomPoly[(3 + i) % 12];
-      const next = preBottomPoly[(3 + i + 1) % 12];
+    const bottomStart = Math.round(polygonSides / 4);
+    const bottomCount = Math.round(polygonSides / 2);
+    for (let i = 0; i < bottomCount; i++) {
+      const current = preBottomPoly[(bottomStart + i) % polygonSides];
+      const next = preBottomPoly[(bottomStart + i + 1) % polygonSides];
       p.line(current.x, current.y, next.x, next.y);
     }
   };
@@ -595,28 +597,22 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawSlices = (p, state) => {
-    const { pieBackground, highlightColor, textColor, selectedGroupId, trailerVisibleGroups } = state;
+    const { pieBackground, highlightColor, selectedGroupId, hoveredGroupId, trailerVisibleGroups } = state;
 
     drawExtrudedSides(p, pieBackground, highlightColor, trailerVisibleGroups);
 
-    p.push();
-    for (const slice of slicePaths ?? []) {
-      if (trailerVisibleGroups && !trailerVisibleGroups.has(slice.id)) continue;
-      const pos = slice.labelPos;
-      p.push();
-      p.translate(pos.x, pos.y);
-      p.rotate((slice.labelRotation * Math.PI) / 180);
-      p.textAlign(slice.labelAnchor === "end" ? p.RIGHT : p.LEFT, p.BASELINE);
-      const active = selectedGroupId === null || selectedGroupId === slice.id;
-      const inactiveLabel = p.color(textColor);
-      p.fill(active ? highlightColor : inactiveLabel);
-      p.noStroke();
-      p.textStyle(p.NORMAL);
-      p.textSize(textSizeFor(24));
-      p.text(slice.label, 0, 0);
-      p.pop();
+    const focusId = hoveredGroupId ?? selectedGroupId;
+    if (focusId) {
+      const slice = (slicePaths ?? []).find((s) => s.id === focusId);
+      if (slice && Number.isFinite(slice.start) && Number.isFinite(slice.end)) {
+        p.push();
+        p.noFill();
+        p.stroke(cachedColor(highlightColor));
+        p.strokeWeight(2.5 / view.scale);
+        p.arc(cx, cy, outerRingRadius * 2, outerRingRadius * 2, slice.start, slice.end);
+        p.pop();
+      }
     }
-    p.pop();
   };
 
   const drawLinks = (p, state) => {
