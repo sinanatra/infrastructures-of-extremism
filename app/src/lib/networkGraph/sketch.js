@@ -686,7 +686,7 @@ export const createNetworkGraphSketch = ({
 
     p.push();
     p.noFill();
-    if (ctx?.setLineDash) ctx.setLineDash([8 / view.scale, 10 / view.scale]);
+    if (ctx?.setLineDash) ctx.setLineDash([4 / view.scale, 10 / view.scale]);
     p.stroke(highlightColor);
     p.strokeWeight(0.9 / view.scale);
 
@@ -712,11 +712,11 @@ export const createNetworkGraphSketch = ({
       p.noStroke();
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
-      p.textSize(textSizeFor(36));
+      p.textSize(textSizeFor(52));
       p.text(
         formatTick.format(tick.time),
         cx,
-        cy - tick.radius - 8 / view.scale
+        cy - tick.radius - 10 / view.scale
       );
       p.pop();
     }
@@ -726,11 +726,11 @@ export const createNetworkGraphSketch = ({
       p.noStroke();
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
-      p.textSize(textSizeFor(14));
+      p.textSize(textSizeFor(22));
       p.text(
         formatTick.format(outerTick.time),
         cx,
-        cy - outerRingRadius - 10 / view.scale
+        cy - outerRingRadius - 12 / view.scale
       );
       p.pop();
     }

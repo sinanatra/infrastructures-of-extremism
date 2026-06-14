@@ -608,12 +608,12 @@ const loadData = async ({ slug, dir }) => {
   };
 };
 
-const LAYOUT_WIDTH = 5000;
-const LAYOUT_HEIGHT = 5000;
+const LAYOUT_WIDTH = 6000;
+const LAYOUT_HEIGHT = 6000;
 const POLYGON_SIDES = 36;
 const BASE_START = -Math.PI / 2;
-const MIN_NODE_RADIUS = 4;
-const MAX_NODE_RADIUS_DESIRED = 42;
+const MIN_NODE_RADIUS = 3;
+const MAX_NODE_RADIUS_DESIRED = 32;
 const BIG_GAP_THRESHOLD_DAYS = 30;
 const GAP_RADIUS_PX = 50;
 const LABEL_CHAR_PX = 9;

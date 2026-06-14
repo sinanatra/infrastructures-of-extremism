@@ -1,2355 +1,2355 @@
 {
-  "width": 5000,
-  "height": 5000,
-  "cx": 2500,
-  "cy": 2500,
+  "width": 6000,
+  "height": 6000,
+  "cx": 3000,
+  "cy": 3000,
   "nodes": [
     {
       "id": "patriotfrontupdates:25106",
       "groupId": "patriotfrontupdates",
-      "x": 2839.3931171518498,
-      "y": 632.1246912575727,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3408.377122117744,
+      "y": 758.8458155988596,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25101",
       "groupId": "patriotfrontupdates",
-      "x": 2788.4964897277873,
-      "y": 625.9423672586809,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3344.5000733297684,
+      "y": 750.9824849287761,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25120",
       "groupId": "patriotfrontupdates",
-      "x": 2721.2304068145936,
-      "y": 620.0573475639817,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3266.2130058569824,
+      "y": 744.1332540242183,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25116",
       "groupId": "patriotfrontupdates",
-      "x": 2771.9430238974264,
-      "y": 624.4941266564606,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3329.9500924307367,
+      "y": 749.7095265455919,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25133",
       "groupId": "patriotfrontupdates",
-      "x": 2834.0651850119475,
-      "y": 514.8342454362839,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3401.3449429431785,
+      "y": 617.8419273138447,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25130",
       "groupId": "patriotfrontupdates",
-      "x": 3049.341511572212,
-      "y": 569.6786413108764,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3661.295822592727,
+      "y": 684.1733139212483,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25124",
       "groupId": "patriotfrontupdates",
-      "x": 3146.754169630809,
-      "y": 595.7802843702464,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3778.655068535899,
+      "y": 715.619629096047,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25134",
       "groupId": "patriotfrontupdates",
-      "x": 3264.5175274764224,
-      "y": 642.3217869195498,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3920.342628781882,
+      "y": 772.1485068037782,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25141",
       "groupId": "patriotfrontupdates",
-      "x": 3520.272915982545,
-      "y": 636.3376954655696,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4228.49751359181,
+      "y": 765.5497442139676,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25142",
       "groupId": "patriotfrontupdates",
-      "x": 3747.571936228741,
-      "y": 638.2583236598368,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4500.946168995987,
+      "y": 768.6126813222822,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25143",
       "groupId": "patriotfrontupdates",
-      "x": 3693.7532685383953,
-      "y": 600.5740868466539,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4436.831521182048,
+      "y": 723.7191216133019,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25158",
       "groupId": "patriotfrontupdates",
-      "x": 4028.772910080681,
-      "y": 764.7034919042526,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4839.478553872732,
+      "y": 922.5952520610176,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25151",
       "groupId": "patriotfrontupdates",
-      "x": 4107.458044364299,
-      "y": 843.3886261878704,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4934.264022455418,
+      "y": 1017.3807206437039,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25164",
       "groupId": "patriotfrontupdates",
-      "x": 3941.139323911121,
-      "y": 691.4931757904019,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 4734.711485324792,
+      "y": 833.5339277362496,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25168",
       "groupId": "patriotfrontupdates",
-      "x": 4328.806525059786,
-      "y": 955.7727527991799,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5200.861286055616,
+      "y": 1153.2207593428902,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25185",
       "groupId": "patriotfrontupdates",
-      "x": 4608.307818232446,
-      "y": 983.2774121666152,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5535.871220681474,
+      "y": 1188.361593921897,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25177",
       "groupId": "patriotfrontupdates",
-      "x": 4544.756711017657,
-      "y": 892.5170250715596,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5459.36527693873,
+      "y": 1079.0997828617742,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25202",
       "groupId": "patriotfrontupdates",
-      "x": 4673.4072821075215,
-      "y": 1076.2490817397843,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5614.266529494946,
+      "y": 1300.3216979417898,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25194",
       "groupId": "patriotfrontupdates",
-      "x": 4567.590353734664,
-      "y": 925.1268464045154,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5486.870429362058,
+      "y": 1118.3812114702876,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25189",
       "groupId": "patriotfrontupdates",
-      "x": 4630.534842882976,
-      "y": 1015.0208931170766,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5562.701437027052,
+      "y": 1226.6791139162945,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25218",
       "groupId": "patriotfrontupdates",
-      "x": 4526.935563045016,
-      "y": 867.0657881165764,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5437.848682241918,
+      "y": 1048.3709010336427,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25210",
       "groupId": "patriotfrontupdates",
-      "x": 4590.695732376866,
-      "y": 958.1247468573968,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5514.6373021074905,
+      "y": 1158.0364154351391,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25206",
       "groupId": "patriotfrontupdates",
-      "x": 4653.296152623286,
-      "y": 1047.5274122535398,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5590.081243742616,
+      "y": 1265.7815303021118,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25224",
       "groupId": "patriotfrontupdates",
-      "x": 4893.932496264,
-      "y": 1187.137184969816,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5877.8764642726555,
+      "y": 1435.6248494030228,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25234",
       "groupId": "patriotfrontupdates",
-      "x": 4854.502877600191,
-      "y": 1112.593600622301,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5832.216463848994,
+      "y": 1344.8423084389585,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25229",
       "groupId": "patriotfrontupdates",
-      "x": 4932.206615715038,
-      "y": 1269.216299008977,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5923.985655476203,
+      "y": 1534.5063290381286,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25242",
       "groupId": "patriotfrontupdates",
-      "x": 4802.3263216841715,
-      "y": 1038.0777562921696,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5769.350800378335,
+      "y": 1255.0608364608165,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25258",
       "groupId": "patriotfrontupdates",
-      "x": 5287.097623938499,
-      "y": 1366.272523566606,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6350.80435392649,
+      "y": 1653.009983342614,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25250",
       "groupId": "patriotfrontupdates",
-      "x": 5250.423061660113,
-      "y": 1287.6236709539464,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6306.626092016194,
+      "y": 1558.2693949399006,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25246",
       "groupId": "patriotfrontupdates",
-      "x": 5214.306430573741,
-      "y": 1210.1713056437309,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6263.126145062581,
+      "y": 1464.9834576560775,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25274",
       "groupId": "patriotfrontupdates",
-      "x": 5234.033374290724,
-      "y": 1252.4758729653054,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6286.891668570794,
+      "y": 1515.9487872889738,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25270",
       "groupId": "patriotfrontupdates",
-      "x": 5324.6668834220745,
-      "y": 1446.84006052755,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6396.0771561132115,
+      "y": 1750.0978209428993,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25266",
       "groupId": "patriotfrontupdates",
-      "x": 5305.778018400018,
-      "y": 1406.3327587671813,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6373.311707463223,
+      "y": 1701.2771587644922,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25263",
       "groupId": "patriotfrontupdates",
-      "x": 5268.965697323389,
-      "y": 1327.388481458328,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6328.957967773327,
+      "y": 1606.1602570490327,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25278",
       "groupId": "patriotfrontupdates",
-      "x": 5198.148524230908,
-      "y": 1175.5205636705812,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6243.64853493565,
+      "y": 1423.2135879438888,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25285",
       "groupId": "patriotfrontupdates",
-      "x": 5606.136028781543,
-      "y": 1434.8460806212106,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6731.741001525763,
+      "y": 1738.1533455680324,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25301",
       "groupId": "patriotfrontupdates",
-      "x": 5615.22859042453,
-      "y": 1468.7799826437883,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6734.89634876212,
+      "y": 1749.929261769641,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25299",
       "groupId": "patriotfrontupdates",
-      "x": 5631.277710341273,
-      "y": 1528.6761135898373,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6755.245051998434,
+      "y": 1825.8716561157066,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25298",
       "groupId": "patriotfrontupdates",
-      "x": 5629.016162602615,
-      "y": 1520.235902525424,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6739.36504394234,
+      "y": 1766.6066592257603,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25297",
       "groupId": "patriotfrontupdates",
-      "x": 5623.72457532047,
-      "y": 1500.4874299357725,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6783.0117212775785,
+      "y": 1929.4982766224377,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25292",
       "groupId": "patriotfrontupdates",
-      "x": 5618.366555748014,
-      "y": 1480.4910286634204,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6750.823841425954,
+      "y": 1809.3714736282502,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25311",
       "groupId": "patriotfrontupdates",
-      "x": 5593.719074608211,
-      "y": 1388.5053767710785,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6716.823810086871,
+      "y": 1682.4816292118603,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25320",
       "groupId": "patriotfrontupdates",
-      "x": 5826.538717704702,
-      "y": 2013.988151455022,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 6993.58331020963,
+      "y": 2436.638056246404,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25326",
       "groupId": "patriotfrontupdates",
-      "x": 5991.093024339045,
-      "y": 2292.5243500577267,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7191.247758323354,
+      "y": 2773.159277135759,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25321",
       "groupId": "patriotfrontupdates",
-      "x": 5986.621562164706,
-      "y": 2241.4153035352197,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7185.854340402855,
+      "y": 2711.512228213807,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25336",
       "groupId": "patriotfrontupdates",
-      "x": 5971.458828282021,
-      "y": 2068.104462203275,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7167.5951425167195,
+      "y": 2502.8086413688247,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25340",
       "groupId": "patriotfrontupdates",
-      "x": 6375.125987521028,
-      "y": 2495.991846591421,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7648.775924396665,
+      "y": 3020.5290850047795,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25352",
       "groupId": "patriotfrontupdates",
-      "x": 6351.557710400026,
-      "y": 2773.394793587608,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7619.555981739633,
+      "y": 3354.514557858341,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25351",
       "groupId": "patriotfrontupdates",
-      "x": 6356.46460721659,
-      "y": 2717.3087063300213,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7625.460393277331,
+      "y": 3287.026825165428,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25342",
       "groupId": "patriotfrontupdates",
-      "x": 6370.994616506454,
-      "y": 2551.229940187269,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7642.963464599226,
+      "y": 3086.9658044971948,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25367",
       "groupId": "patriotfrontupdates",
-      "x": 6360.94953704802,
-      "y": 2666.0457237825585,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7630.860219411305,
+      "y": 3225.3065300282965,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25364",
       "groupId": "patriotfrontupdates",
-      "x": 6346.648776693159,
-      "y": 2829.5041626078837,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7613.642329032389,
+      "y": 3422.1079176025046,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25362",
       "groupId": "patriotfrontupdates",
-      "x": 6365.879724430011,
-      "y": 2609.693424143993,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7636.806090596431,
+      "y": 3157.344911396814,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25372",
       "groupId": "patriotfrontupdates",
-      "x": 6370.724338186322,
-      "y": 2445.6807644773153,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7647.070135261782,
+      "y": 2959.973655966014,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25382",
       "groupId": "patriotfrontupdates",
-      "x": 6607.619620881007,
-      "y": 2964.424367417513,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7926.608592543701,
+      "y": 3586.283880715418,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25377",
       "groupId": "patriotfrontupdates",
-      "x": 6613.703978871428,
-      "y": 2894.879837358294,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7933.9324581186,
+      "y": 3502.5717141359287,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25396",
       "groupId": "patriotfrontupdates",
-      "x": 6563.150119094107,
-      "y": 3302.740395657015,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7866.280400727498,
+      "y": 3998.741995283247,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25392",
       "groupId": "patriotfrontupdates",
-      "x": 6601.353678999154,
-      "y": 3036.0444108531588,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7919.053528346478,
+      "y": 3672.6386596404077,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25388",
       "groupId": "patriotfrontupdates",
-      "x": 6553.111988363933,
-      "y": 3340.2032095550453,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7856.994534641883,
+      "y": 4033.397319307044,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25387",
       "groupId": "patriotfrontupdates",
-      "x": 6595.73023615991,
-      "y": 3100.3206566273057,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7912.271222773309,
+      "y": 3750.1607670750327,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontupdates:25386",
       "groupId": "patriotfrontupdates",
-      "x": 6557.898192638961,
-      "y": 3322.340852025238,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 7861.288099479004,
+      "y": 4017.373517189316,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3507",
       "groupId": "patriotfrontnews",
-      "x": 4222.837836524344,
-      "y": 3021.8501497728284,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5064.124791240662,
+      "y": 3638.463592587814,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3511",
       "groupId": "patriotfrontnews",
-      "x": 4225.440659150412,
-      "y": 3105.16633085547,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5067.241353236337,
+      "y": 3738.468481714481,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3515",
       "groupId": "patriotfrontnews",
-      "x": 4261.861633146049,
-      "y": 3198.6955189300033,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5108.824972116853,
+      "y": 3850.0342341824044,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3521",
       "groupId": "patriotfrontnews",
-      "x": 4227.750036445958,
-      "y": 3271.848074122977,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5067.962749708766,
+      "y": 3937.6635529239493,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3524",
       "groupId": "patriotfrontnews",
-      "x": 4297.570184764337,
-      "y": 3393.419610178512,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5151.205416392197,
+      "y": 4084.710670918019,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3525",
       "groupId": "patriotfrontnews",
-      "x": 4346.908745734571,
-      "y": 3287.6127247298614,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5210.60320682103,
+      "y": 3957.331698280411,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3533",
       "groupId": "patriotfrontnews",
-      "x": 4452.249194170283,
-      "y": 3330.2977180920448,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 5336.82962835292,
+      "y": 4008.944240604695,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontnews:3534",
       "groupId": "patriotfrontnews",
-      "x": 4382.606535992733,
-      "y": 3633.8165858457514,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 5250.710935039991,
+      "y": 4372.600493614098,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3535",
       "groupId": "patriotfrontnews",
-      "x": 4440.291654099014,
-      "y": 3526.8605817357893,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5322.375353417582,
+      "y": 4245.04533668484,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3543",
       "groupId": "patriotfrontnews",
-      "x": 4415.78030968055,
-      "y": 3670.396769736599,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5290.88744242826,
+      "y": 4415.971185860741,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3550",
       "groupId": "patriotfrontnews",
-      "x": 4416.97596052174,
-      "y": 3786.229343093898,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5292.204488668611,
+      "y": 4555.13841656528,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3556",
       "groupId": "patriotfrontnews",
-      "x": 4365.105165748018,
-      "y": 3860.308515258115,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5225.78358956446,
+      "y": 4649.997291226893,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3560",
       "groupId": "patriotfrontnews",
-      "x": 4389.141661183856,
-      "y": 3904.340935360963,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5263.53082582581,
+      "y": 4690.120762778544,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3569",
       "groupId": "patriotfrontnews",
-      "x": 4309.492417570152,
-      "y": 4063.5413546904547,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5157.96573533849,
+      "y": 4889.674791374237,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3577",
       "groupId": "patriotfrontnews",
-      "x": 4263.843798396807,
-      "y": 4109.189973863799,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5110.569767445006,
+      "y": 4937.070759267721,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3581",
       "groupId": "patriotfrontnews",
-      "x": 4247.734236383049,
-      "y": 4182.051803629731,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5078.712303982886,
+      "y": 5037.030944032452,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3586",
       "groupId": "patriotfrontnews",
-      "x": 4159.08206884687,
-      "y": 4270.70397116591,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4981.395328142276,
+      "y": 5134.34791987306,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3594",
       "groupId": "patriotfrontnews",
-      "x": 4222.688514581292,
-      "y": 4241.148886082794,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 5066.083079730941,
+      "y": 5090.521801065963,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3598",
       "groupId": "patriotfrontnews",
-      "x": 4144.477184921885,
-      "y": 4342.061122843072,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4963.883128155885,
+      "y": 5219.962841162063,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3602",
       "groupId": "patriotfrontnews",
-      "x": 4087.1087701073416,
-      "y": 4427.730812444482,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4888.414370452194,
+      "y": 5324.561627224692,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3610",
       "groupId": "patriotfrontnews",
-      "x": 4031.3478482337205,
-      "y": 4466.775030277914,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4831.981464927518,
+      "y": 5364.076373076146,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3616",
       "groupId": "patriotfrontnews",
-      "x": 4020.9398366293126,
-      "y": 4605.354868835031,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4814.100462253994,
+      "y": 5534.147270387619,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3621",
       "groupId": "patriotfrontnews",
-      "x": 3971.2688993702404,
-      "y": 4640.134833533775,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4754.639140925359,
+      "y": 5575.78253581384,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3626",
       "groupId": "patriotfrontnews",
-      "x": 3903.580551427144,
-      "y": 4843.17761441102,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4673.24293837394,
+      "y": 5819.553037700221,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3634",
       "groupId": "patriotfrontnews",
-      "x": 3988.263663336077,
-      "y": 4783.881861093329,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4774.588362006161,
+      "y": 5748.590208109882,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3638",
       "groupId": "patriotfrontnews",
-      "x": 3891.5712353904973,
-      "y": 4934.401187911495,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4657.47031590483,
+      "y": 5927.070712739749,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3642",
       "groupId": "patriotfrontnews",
-      "x": 3784.5864942242288,
-      "y": 4984.288992023056,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4529.446887965704,
+      "y": 5986.769017611017,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3650",
       "groupId": "patriotfrontnews",
-      "x": 3749.48006241498,
-      "y": 5036.082158272733,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4487.332352231892,
+      "y": 6048.914670039169,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3655",
       "groupId": "patriotfrontnews",
-      "x": 3846.5658028443713,
-      "y": 4990.81033401286,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4603.5378598774805,
+      "y": 5994.727151904242,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3658",
       "groupId": "patriotfrontnews",
-      "x": 3702.456574595377,
-      "y": 5093.432339002698,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4430.929280326857,
+      "y": 6117.723176307787,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3662",
       "groupId": "patriotfrontnews",
-      "x": 3554.5596626519364,
-      "y": 5197.820569905928,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4253.776279914442,
+      "y": 6242.838298961064,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3666",
       "groupId": "patriotfrontnews",
-      "x": 3653.8865315891744,
-      "y": 5151.503690259936,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4372.606476107414,
+      "y": 6187.426868456221,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3670",
       "groupId": "patriotfrontnews",
-      "x": 3500.0913072122416,
-      "y": 5249.659612214922,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4187.583780707726,
+      "y": 6302.947809422859,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3683",
       "groupId": "patriotfrontnews",
-      "x": 3453.490052251441,
-      "y": 5411.710337229589,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 4130.848416749353,
+      "y": 6497.6267520357615,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3690",
       "groupId": "patriotfrontnews",
-      "x": 3312.4306387799484,
-      "y": 5482.743527905559,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3962.3780160256456,
+      "y": 6582.651981559999,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3695",
       "groupId": "patriotfrontnews",
-      "x": 3163.6468893381166,
-      "y": 5522.610013415372,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 3783.919736006017,
+      "y": 6630.469733573906,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontnews:3696",
       "groupId": "patriotfrontnews",
-      "x": 2911.257665806925,
-      "y": 5615.549564370428,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3480.445440839797,
+      "y": 6739.802407983803,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3697",
       "groupId": "patriotfrontnews",
-      "x": 2735.179463149519,
-      "y": 5767.91730162197,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 3268.793986917411,
+      "y": 6922.674979570791,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3699",
       "groupId": "patriotfrontnews",
-      "x": 3083.609444976916,
-      "y": 5735.1654818171955,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3672.1630812736175,
+      "y": 6887.384756597904,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3709",
       "groupId": "patriotfrontnews",
-      "x": 3003.4827398745547,
-      "y": 5744.443806521671,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3606.4306004152245,
+      "y": 6893.135603498448,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3718",
       "groupId": "patriotfrontnews",
-      "x": 2920.317217299221,
-      "y": 5832.286253193222,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3492.594276504178,
+      "y": 6999.774678838129,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3719",
       "groupId": "patriotfrontnews",
-      "x": 2683.1243549057353,
-      "y": 5909.434424096917,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3207.5043682853243,
+      "y": 7092.3925951429255,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3724",
       "groupId": "patriotfrontnews",
-      "x": 2576.049604095038,
-      "y": 5918.802250942716,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3078.714564686671,
+      "y": 7103.660242935539,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3734",
       "groupId": "patriotfrontnews",
-      "x": 2472.13302159709,
-      "y": 5955.24424696969,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2954.765329416345,
+      "y": 7145.261229125601,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3738",
       "groupId": "patriotfrontnews",
-      "x": 2332.1854180085306,
-      "y": 6063.850027543071,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2786.856653090659,
+      "y": 7275.590654689459,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3740",
       "groupId": "patriotfrontnews",
-      "x": 2399.698223280483,
-      "y": 6069.756632647199,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2867.63865756772,
+      "y": 7282.658164298103,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3749",
       "groupId": "patriotfrontnews",
-      "x": 2585.1869631421987,
-      "y": 6119.418851236524,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 3089.2433637179047,
+      "y": 7344.438311129763,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3750",
       "groupId": "patriotfrontnews",
-      "x": 2241.147203119539,
-      "y": 6128.394981417647,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2677.629394310071,
+      "y": 7353.046226548146,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3760",
       "groupId": "patriotfrontnews",
-      "x": 2152.5818931598255,
-      "y": 6152.873083314513,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2571.4482817216867,
+      "y": 7382.428457916092,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3762",
       "groupId": "patriotfrontnews",
-      "x": 2013.2577743750724,
-      "y": 6140.683802365109,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2404.752304780911,
+      "y": 7367.844449678395,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3765",
       "groupId": "patriotfrontnews",
-      "x": 1847.6126840896186,
-      "y": 6173.737484676239,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2206.514551016511,
+      "y": 7405.6391816911055,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3770",
       "groupId": "patriotfrontnews",
-      "x": 1988.1780929291112,
-      "y": 6186.829458303746,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2374.6389166702725,
+      "y": 7423.217682098359,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3775",
       "groupId": "patriotfrontnews",
-      "x": 1669.536749347439,
-      "y": 6274.399122625456,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1992.9550845157196,
+      "y": 7526.468424131962,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3780",
       "groupId": "patriotfrontnews",
-      "x": 1812.3390537120647,
-      "y": 6312.662884757261,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2163.87244321312,
+      "y": 7572.265592367391,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3784",
       "groupId": "patriotfrontnews",
-      "x": 1457.843916674672,
-      "y": 6217.676199067331,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 1738.8367376396568,
+      "y": 7458.377618304589,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontnews:3785",
       "groupId": "patriotfrontnews",
-      "x": 1601.293775206137,
-      "y": 6256.113472815196,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 1910.7150210543548,
+      "y": 7504.432265542006,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontnews:3786",
       "groupId": "patriotfrontnews",
-      "x": 1311.3160953672282,
-      "y": 6312.546942212053,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1563.5297666236402,
+      "y": 7572.3635624325925,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3790",
       "groupId": "patriotfrontnews",
-      "x": 1383.54690735156,
-      "y": 6331.901129951899,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1650.1579468960306,
+      "y": 7595.575513378358,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3794",
       "groupId": "patriotfrontnews",
-      "x": 1537.0749622921098,
-      "y": 6373.038848288741,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1835.7322427210474,
+      "y": 7645.299996080645,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontnews:3795",
       "groupId": "patriotfrontnews",
-      "x": 980.6379436166546,
-      "y": 6247.4436189935495,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1167.2091756865213,
+      "y": 7492.4761405006875,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3803",
       "groupId": "patriotfrontnews",
-      "x": 1120.6640773782444,
-      "y": 6311.316540083755,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1334.2586949155102,
+      "y": 7570.372610608277,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontnews:3808",
       "groupId": "patriotfrontnews",
-      "x": 895.6278788366528,
-      "y": 6207.802774766382,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1065.458755425393,
+      "y": 7445.029140312435,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1201",
       "groupId": "patriotfrontsightings",
-      "x": 2455.3325679582745,
-      "y": 2548.085264143143,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2948.688969374159,
+      "y": 3059.9922047960013,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1202",
       "groupId": "patriotfrontsightings",
-      "x": 2468.6177037916045,
-      "y": 2557.732405835013,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2960.364007996819,
+      "y": 3068.3255347777886,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1203",
       "groupId": "patriotfrontsightings",
-      "x": 2448.716013472434,
-      "y": 2583.348024811173,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2936.0851639646626,
+      "y": 3098.355300525283,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1204",
       "groupId": "patriotfrontsightings",
-      "x": 2435.5202582812885,
-      "y": 2573.6747686678973,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2924.3704036012196,
+      "y": 3090.15253701048,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1206",
       "groupId": "patriotfrontsightings",
-      "x": 2428.057979261096,
-      "y": 2627.376016290098,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2907.302481212461,
+      "y": 3148.7464421290347,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1210",
       "groupId": "patriotfrontsightings",
-      "x": 2390.792470745257,
-      "y": 2597.0497024344763,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2896.2717641148724,
+      "y": 3141.022650865445,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1211",
       "groupId": "patriotfrontsightings",
-      "x": 2415.5287402746094,
-      "y": 2618.8975401427165,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2874.4028576594224,
+      "y": 3121.9115356864854,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1212",
       "groupId": "patriotfrontsightings",
-      "x": 2401.6069399138896,
-      "y": 2607.864171603109,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2884.9292910086056,
+      "y": 3132.4379690356686,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1213",
       "groupId": "patriotfrontsightings",
-      "x": 2381.5370135482513,
-      "y": 2644.085855349894,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2857.500709174782,
+      "y": 3172.662360129336,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1217",
       "groupId": "patriotfrontsightings",
-      "x": 2367.7205672419477,
-      "y": 2653.4309737842123,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2840.428144167142,
+      "y": 3183.2806320178597,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1221",
       "groupId": "patriotfrontsightings",
-      "x": 2343.6105205375957,
-      "y": 2652.0218341807304,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2822.8534430601235,
+      "y": 3192.947019431885,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1222",
       "groupId": "patriotfrontsightings",
-      "x": 2314.196621535407,
-      "y": 2642.8414316284893,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2812.6684725234336,
+      "y": 3210.00313741624,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1224",
       "groupId": "patriotfrontsightings",
-      "x": 2346.2447168090657,
-      "y": 2697.757248728762,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 2774.1801200846785,
+      "y": 3198.7558734985287,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontsightings:1225",
       "groupId": "patriotfrontsightings",
-      "x": 2295.3761806804255,
-      "y": 2671.890215626171,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2734.1837837512758,
+      "y": 3177.376282206405,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1226",
       "groupId": "patriotfrontsightings",
-      "x": 2279.8709851154913,
-      "y": 2677.776585054449,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2738.085688029436,
+      "y": 3216.5316760874443,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1230",
       "groupId": "patriotfrontsightings",
-      "x": 2262.236781325861,
-      "y": 2680.5780796148765,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2743.5977529960505,
+      "y": 3249.8967719730335,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1231",
       "groupId": "patriotfrontsightings",
-      "x": 2277.373532057948,
-      "y": 2721.990288306304,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2710.2325452082746,
+      "y": 3243.7726527063014,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontsightings:1232",
       "groupId": "patriotfrontsightings",
-      "x": 2231.258871126776,
-      "y": 2692.3085340171606,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2677.5218376217567,
+      "y": 3230.786225038149,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1233",
       "groupId": "patriotfrontsightings",
-      "x": 2220.8084340344035,
-      "y": 2719.3623844437134,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2668.8222046245755,
+      "y": 3268.7362071093667,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1234",
       "groupId": "patriotfrontsightings",
-      "x": 2211.5915818222607,
-      "y": 2706.199355328505,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2659.464257043801,
+      "y": 3255.371672924686,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1235",
       "groupId": "patriotfrontsightings",
-      "x": 2191.5783943204056,
-      "y": 2719.596182818783,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2629.4603629505323,
+      "y": 3262.8960169764136,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1236",
       "groupId": "patriotfrontsightings",
-      "x": 2172.5265204710704,
-      "y": 2720.3730347092246,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2606.58513150176,
+      "y": 3263.809697842771,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1237",
       "groupId": "patriotfrontsightings",
-      "x": 2153.783003744638,
-      "y": 2721.590266210105,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2583.8483326509986,
+      "y": 3264.9210809480464,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1238",
       "groupId": "patriotfrontsightings",
-      "x": 2090.6782880655323,
-      "y": 2707.9601487924406,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2513.1215324882564,
+      "y": 3258.7898282748483,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1239",
       "groupId": "patriotfrontsightings",
-      "x": 2123.4872094723783,
-      "y": 2762.2806306667244,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2541.9927318858113,
+      "y": 3305.8937793353107,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1242",
       "groupId": "patriotfrontsightings",
-      "x": 2114.9105737997306,
-      "y": 2750.0319255262793,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2525.1759331937665,
+      "y": 3281.8769018034827,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1243",
       "groupId": "patriotfrontsightings",
-      "x": 2105.9516982600067,
-      "y": 2737.2373252815723,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2534.59293495329,
+      "y": 3295.3257740958334,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1244",
       "groupId": "patriotfrontsightings",
-      "x": 2096.7959821554296,
-      "y": 2721.079586105786,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2518.4522664272613,
+      "y": 3270.2216240984403,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1245",
       "groupId": "patriotfrontsightings",
-      "x": 2056.9817996717757,
-      "y": 2749.644353707585,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2467.9688807886796,
+      "y": 3298.6955231926595,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1246",
       "groupId": "patriotfrontsightings",
-      "x": 2037.0971462882821,
-      "y": 2744.9837627388915,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2444.101173331698,
+      "y": 3293.0896823634366,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1247",
       "groupId": "patriotfrontsightings",
-      "x": 2016.8689716667604,
-      "y": 2739.5864880979043,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2419.8210296405837,
+      "y": 3286.599369175845,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1248",
       "groupId": "patriotfrontsightings",
-      "x": 1996.290028267956,
-      "y": 2733.4369873865353,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2395.119725271035,
+      "y": 3279.205873998705,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1249",
       "groupId": "patriotfrontsightings",
-      "x": 1975.3521095389692,
-      "y": 2726.5176615952983,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2369.987384655776,
+      "y": 3270.88801860965,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1250",
       "groupId": "patriotfrontsightings",
-      "x": 1954.0460052149137,
-      "y": 2718.808759247405,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2344.412927206965,
+      "y": 3261.622040611368,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1251",
       "groupId": "patriotfrontsightings",
-      "x": 1924.810223168446,
-      "y": 2713.0857010584587,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2309.3165505125708,
+      "y": 3254.7255523888844,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1252",
       "groupId": "patriotfrontsightings",
-      "x": 1920.0308378944533,
-      "y": 2697.611772349273,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2303.7624919584523,
+      "y": 3236.109628434189,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1253",
       "groupId": "patriotfrontsightings",
-      "x": 1898.8984043418243,
-      "y": 2711.7745040095074,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2273.321330002397,
+      "y": 3234.1377222122196,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1256",
       "groupId": "patriotfrontsightings",
-      "x": 1873.2015293342256,
-      "y": 2677.89249246288,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 2247.3749688157336,
+      "y": 3211.728621885032,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontsightings:1257",
       "groupId": "patriotfrontsightings",
-      "x": 1847.109617045472,
-      "y": 2642.5361817120993,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2221.2569105504963,
+      "y": 3188.6787393370964,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1258",
       "groupId": "patriotfrontsightings",
-      "x": 1832.8044995332139,
-      "y": 2651.1687879255865,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2199.076684889036,
+      "y": 3180.3250481381597,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1263",
       "groupId": "patriotfrontsightings",
-      "x": 1812.344537430409,
-      "y": 2636.8312014144626,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2174.5215845756393,
+      "y": 3163.108204076585,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1264",
       "groupId": "patriotfrontsightings",
-      "x": 1792.2065757504142,
-      "y": 2621.51351373576,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2150.5486533081767,
+      "y": 3144.681925612294,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1265",
       "groupId": "patriotfrontsightings",
-      "x": 1774.640117306667,
-      "y": 2604.9036224060505,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2129.468615149304,
+      "y": 3124.7467638600947,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1269",
       "groupId": "patriotfrontsightings",
-      "x": 1757.7797156055522,
-      "y": 2596.363996573346,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2109.234973475679,
+      "y": 3114.4859582031577,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1273",
       "groupId": "patriotfrontsightings",
-      "x": 1732.4961232306882,
-      "y": 2583.6346845118596,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2078.660843796343,
+      "y": 3096.5382222788294,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1277",
       "groupId": "patriotfrontsightings",
-      "x": 1731.090416717637,
-      "y": 2567.567385545352,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2077.4393473784075,
+      "y": 3082.5764543341875,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1278",
       "groupId": "patriotfrontsightings",
-      "x": 1698.1918128279399,
-      "y": 2559.885917311493,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2037.493578838169,
+      "y": 3068.015784541113,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1279",
       "groupId": "patriotfrontsightings",
-      "x": 1696.7747882073434,
-      "y": 2543.689251783772,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2036.2585130515665,
+      "y": 3053.898918002893,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1283",
       "groupId": "patriotfrontsightings",
-      "x": 1666.3034608427051,
-      "y": 2563.751681184604,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1999.455331166169,
+      "y": 3075.2581780406063,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1287",
       "groupId": "patriotfrontsightings",
-      "x": 1664.5714424993566,
-      "y": 2543.9546209307873,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1997.3783982353725,
+      "y": 3051.5187260122802,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1288",
       "groupId": "patriotfrontsightings",
-      "x": 1640.3141332274654,
-      "y": 2542.955778413717,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1968.2666988309059,
+      "y": 3050.2866446188436,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1292",
       "groupId": "patriotfrontsightings",
-      "x": 1622.4523768195595,
-      "y": 2522.9706159087764,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1946.831959103052,
+      "y": 3026.297225381325,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1296",
       "groupId": "patriotfrontsightings",
-      "x": 1605.2416617537242,
-      "y": 2510.4268899949575,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1926.1778979274625,
+      "y": 3011.2310028278253,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1300",
       "groupId": "patriotfrontsightings",
-      "x": 1588.4445839529703,
-      "y": 2497.3889403446065,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1906.2466773964586,
+      "y": 2995.573113351496,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1304",
       "groupId": "patriotfrontsightings",
-      "x": 1566.1129082603488,
-      "y": 2476.3776903346657,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1879.5797077135553,
+      "y": 2968.8618061613447,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1308",
       "groupId": "patriotfrontsightings",
-      "x": 1567.5130750041822,
-      "y": 2460.373711220067,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1880.9981586531717,
+      "y": 2952.648837732627,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1309",
       "groupId": "patriotfrontsightings",
-      "x": 1546.5145324146142,
-      "y": 2424.1246801156854,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1855.9298580408627,
+      "y": 2907.6646594507743,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1313",
       "groupId": "patriotfrontsightings",
-      "x": 1520.4806902710893,
-      "y": 2445.4293862730988,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1824.6940705055404,
+      "y": 2933.175179275564,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1317",
       "groupId": "patriotfrontsightings",
-      "x": 1524.7676294970445,
-      "y": 2396.4294467016734,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1829.834343856277,
+      "y": 2874.4215860261547,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1318",
       "groupId": "patriotfrontsightings",
-      "x": 1498.740027572812,
-      "y": 2417.6628268261934,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1798.605893800362,
+      "y": 2899.8482380775436,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1322",
       "groupId": "patriotfrontsightings",
-      "x": 1486.1475670807686,
-      "y": 2377.419661414102,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1783.4937902299614,
+      "y": 2851.5695953440463,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1326",
       "groupId": "patriotfrontsightings",
-      "x": 1457.9557621516449,
-      "y": 2331.3021713500248,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1749.4536785935595,
+      "y": 2798.6282978441036,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1330",
       "groupId": "patriotfrontsightings",
-      "x": 1455.1604165633141,
-      "y": 2363.2531176289394,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1746.6524160639322,
+      "y": 2830.6468750715126,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1331",
       "groupId": "patriotfrontsightings",
-      "x": 1456.5775037848055,
-      "y": 2347.055736569718,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1747.8818999871737,
+      "y": 2816.593809523457,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1332",
       "groupId": "patriotfrontsightings",
-      "x": 1425.2460921903153,
-      "y": 2336.824114900877,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1710.4170526828661,
+      "y": 2802.797419830812,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1336",
       "groupId": "patriotfrontsightings",
-      "x": 1411.5089318467908,
-      "y": 2309.6649286621746,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1693.9326643986215,
+      "y": 2770.2040631508266,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1340",
       "groupId": "patriotfrontsightings",
-      "x": 1403.0384838480625,
-      "y": 2278.198965385925,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1684.005138329297,
+      "y": 2732.499110045568,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1341",
       "groupId": "patriotfrontsightings",
-      "x": 1391.6422877953212,
-      "y": 2227.7001007015547,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1669.6359389130141,
+      "y": 2674.4896354917655,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1345",
       "groupId": "patriotfrontsightings",
-      "x": 1387.4528420590334,
-      "y": 2243.335325044933,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1665.9905309731832,
+      "y": 2688.094483137529,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1349",
       "groupId": "patriotfrontsightings",
-      "x": 1351.3961077549118,
-      "y": 2253.86082626797,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1622.7373552758975,
+      "y": 2700.6694566425526,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1350",
       "groupId": "patriotfrontsightings",
-      "x": 1355.583712255512,
-      "y": 2238.232473509726,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1626.3805581163995,
+      "y": 2687.0728385395196,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1354",
       "groupId": "patriotfrontsightings",
-      "x": 1344.281317980627,
-      "y": 2187.383535824555,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1613.5022501813066,
+      "y": 2623.499281229343,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1358",
       "groupId": "patriotfrontsightings",
-      "x": 1321.3253563819067,
-      "y": 2211.0363192700997,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1585.9670776497505,
+      "y": 2651.8379062193117,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1362",
       "groupId": "patriotfrontsightings",
-      "x": 1317.910612205458,
-      "y": 2161.7602864539786,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1581.8629988279495,
+      "y": 2592.7304990075672,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1366",
       "groupId": "patriotfrontsightings",
-      "x": 1310.9919647540412,
-      "y": 2125.560998684844,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1573.5581422931264,
+      "y": 2549.300607652123,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1370",
       "groupId": "patriotfrontsightings",
-      "x": 1304.3125905088832,
-      "y": 2088.4687311530633,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1565.5407172807347,
+      "y": 2504.7980072512682,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1374",
       "groupId": "patriotfrontsightings",
-      "x": 1303.2979363261572,
-      "y": 2024.499894642585,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1574.9598816254918,
+      "y": 2405.805240625045,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontsightings:1377",
       "groupId": "patriotfrontsightings",
-      "x": 1321.8874102790778,
-      "y": 1984.6346391019151,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1591.2363561707402,
+      "y": 2370.900228321262,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1378",
       "groupId": "patriotfrontsightings",
-      "x": 1296.867339322521,
-      "y": 1981.3170756836782,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1542.0253029229034,
+      "y": 2408.0657380933576,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1379",
       "groupId": "patriotfrontsightings",
-      "x": 1240.079219263492,
-      "y": 1970.1619417684979,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1491.6839811072841,
+      "y": 2356.497870653155,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1380",
       "groupId": "patriotfrontsightings",
-      "x": 1232.921731492347,
-      "y": 1985.5112238271806,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1485.5783271889961,
+      "y": 2369.5914877351597,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1381",
       "groupId": "patriotfrontsightings",
-      "x": 1260.334514831938,
-      "y": 1926.7243202449986,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1497.3495407558219,
+      "y": 2344.348038778306,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1384",
       "groupId": "patriotfrontsightings",
-      "x": 1246.0428561737292,
-      "y": 1957.3728811430876,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1509.40905627783,
+      "y": 2318.486324283367,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1385",
       "groupId": "patriotfrontsightings",
-      "x": 1253.6488446628507,
-      "y": 1941.0617861908506,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1503.0806253683334,
+      "y": 2332.057688164749,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1386",
       "groupId": "patriotfrontsightings",
-      "x": 1266.3083230900293,
-      "y": 1913.9134470937242,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1515.693334922642,
+      "y": 2305.009645239158,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1387",
       "groupId": "patriotfrontsightings",
-      "x": 1213.1907264603801,
-      "y": 1875.8957573702733,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1456.4350049636594,
+      "y": 2249.775051978152,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1388",
       "groupId": "patriotfrontsightings",
-      "x": 1227.5584164343925,
-      "y": 1845.0841467892683,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1473.663666904752,
+      "y": 2212.828067214359,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1389",
       "groupId": "patriotfrontsightings",
-      "x": 1208.2951024636768,
-      "y": 1791.4389923510614,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1450.5507422924175,
+      "y": 2148.4473365263007,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1390",
       "groupId": "patriotfrontsightings",
-      "x": 1193.4927185220577,
-      "y": 1823.182807153903,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1432.800091444646,
+      "y": 2186.513730112896,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1392",
       "groupId": "patriotfrontsightings",
-      "x": 1217.3626322915027,
-      "y": 1771.9936118833618,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1461.424612149756,
+      "y": 2125.1282473645188,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1400",
       "groupId": "patriotfrontsightings",
-      "x": 1205.1142553725979,
-      "y": 1730.2182822270547,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1447.1064748083413,
+      "y": 2074.877537179584,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1401",
       "groupId": "patriotfrontsightings",
-      "x": 1230.1974758857316,
-      "y": 1666.4099832954776,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1477.0062136881347,
+      "y": 1998.5933876326112,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1402",
       "groupId": "patriotfrontsightings",
-      "x": 1195.828804173311,
-      "y": 1687.5077857428728,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1435.792952953813,
+      "y": 2023.8691267379895,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1403",
       "groupId": "patriotfrontsightings",
-      "x": 1216.2642863912642,
-      "y": 1630.337144993417,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1460.290145567474,
+      "y": 1955.3006128723255,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1407",
       "groupId": "patriotfrontsightings",
-      "x": 1220.1657318748087,
-      "y": 1582.7866820730715,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1464.961657409325,
+      "y": 1898.2546569513838,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1411",
       "groupId": "patriotfrontsightings",
-      "x": 1254.7644242618983,
-      "y": 1533.3746285045654,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1506.4496757328022,
+      "y": 1839.0036262790295,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1415",
       "groupId": "patriotfrontsightings",
-      "x": 1213.908876166236,
-      "y": 1549.7437767521346,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1457.4531377174205,
+      "y": 1858.6035887874316,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1419",
       "groupId": "patriotfrontsightings",
-      "x": 1236.513553788089,
-      "y": 1489.4752039103653,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1484.555995965613,
+      "y": 1786.3137987395744,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1423",
       "groupId": "patriotfrontsightings",
-      "x": 1249.4173051955,
-      "y": 1444.4915562847916,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1500.1960345697894,
+      "y": 1732.4945992065607,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1427",
       "groupId": "patriotfrontsightings",
-      "x": 1267.9988869671613,
-      "y": 1403.2090674122599,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1522.470714223036,
+      "y": 1682.9788310322695,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1428",
       "groupId": "patriotfrontsightings",
-      "x": 1301.0617643767393,
-      "y": 1347.4452829018117,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1562.1102477811548,
+      "y": 1616.0982089531071,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1432",
       "groupId": "patriotfrontsightings",
-      "x": 1255.3358600877714,
-      "y": 1359.1198265394746,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1507.2789079097035,
+      "y": 1630.0679160429918,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1433",
       "groupId": "patriotfrontsightings",
-      "x": 1301.0189185875442,
-      "y": 1313.4367680397017,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1562.0545525024072,
+      "y": 1575.2922714502881,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1437",
       "groupId": "patriotfrontsightings",
-      "x": 1316.9140464623379,
-      "y": 1263.4902795136034,
-      "radiusReactions": 4,
-      "radiusLinks": 30.870057685088806,
-      "collisionRadius": 30.870057685088806
+      "x": 1581.5845244709421,
+      "y": 1514.9006667001865,
+      "radiusReactions": 3,
+      "radiusLinks": 23.50609665440988,
+      "collisionRadius": 23.50609665440988
     },
     {
       "id": "patriotfrontsightings:1438",
       "groupId": "patriotfrontsightings",
-      "x": 1337.0030822600795,
-      "y": 1220.7003366149913,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1605.1972398578764,
+      "y": 1464.0468627922091,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1439",
       "groupId": "patriotfrontsightings",
-      "x": 1357.793817819829,
-      "y": 1177.2086939543717,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1629.6611517725878,
+      "y": 1412.3418623564532,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1442",
       "groupId": "patriotfrontsightings",
-      "x": 1383.9845857915136,
-      "y": 1134.016397213455,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1661.6497919004987,
+      "y": 1360.2116941875338,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1446",
       "groupId": "patriotfrontsightings",
-      "x": 1412.3264798784762,
-      "y": 1094.5753579275274,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1695.629441291021,
+      "y": 1312.9038898596534,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1447",
       "groupId": "patriotfrontsightings",
-      "x": 1436.5231115794836,
-      "y": 1048.2389469125555,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1724.6390644721196,
+      "y": 1257.318636509254,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1451",
       "groupId": "patriotfrontsightings",
-      "x": 1479.6456998080532,
-      "y": 904.6683039016054,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 1777.0270645993933,
+      "y": 1084.5851059089744,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontsightings:1452",
       "groupId": "patriotfrontsightings",
-      "x": 1376.7770544703483,
-      "y": 836.7274805332368,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1652.9787697093116,
+      "y": 1003.4803879579706,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1454",
       "groupId": "patriotfrontsightings",
-      "x": 1369.2487135109095,
-      "y": 772.0137694836237,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1643.9467259614705,
+      "y": 925.8225585080982,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1458",
       "groupId": "patriotfrontsightings",
-      "x": 1405.5220861011023,
-      "y": 727.0190491605861,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1687.4414683251648,
+      "y": 871.8522143536356,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1462",
       "groupId": "patriotfrontsightings",
-      "x": 1430.4843357896655,
-      "y": 660.5507152602438,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1717.3721256114218,
+      "y": 792.1070483009426,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1467",
       "groupId": "patriotfrontsightings",
-      "x": 1552.914463938142,
-      "y": 602.2098597282529,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1864.2360611442111,
+      "y": 722.3073681464721,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1468",
       "groupId": "patriotfrontsightings",
-      "x": 1438.280122778486,
-      "y": 611.3862705903944,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1726.7999702848754,
+      "y": 733.2607174512755,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1472",
       "groupId": "patriotfrontsightings",
-      "x": 1610.4119715650334,
-      "y": 495.6971030423224,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 1933.9933842068554,
+      "y": 594.1375199243448,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontsightings:1473",
       "groupId": "patriotfrontsightings",
-      "x": 1321.0814588727765,
-      "y": 43.608263049038214,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1586.2326703298322,
+      "y": 51.89395545113575,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1474",
       "groupId": "patriotfrontsightings",
-      "x": 1384.1162237231185,
-      "y": -133.80189784652248,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1661.78525703517,
+      "y": -160.95667510199792,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1477",
       "groupId": "patriotfrontsightings",
-      "x": 1289.7684074772826,
-      "y": -346.6218583882105,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1548.1212381259581,
+      "y": -416.13235637274556,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1478",
       "groupId": "patriotfrontsightings",
-      "x": 1429.5732041681415,
-      "y": -463.46831810038066,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 1725.028072650684,
+      "y": -558.7182780145922,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontsightings:1479",
       "groupId": "patriotfrontsightings",
-      "x": 1477.3970148978628,
-      "y": -476.28266956438847,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1765.8001447780512,
+      "y": -569.6431218148641,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1480",
       "groupId": "patriotfrontsightings",
-      "x": 1718.7631397758305,
-      "y": -574.1929625571456,
-      "radiusReactions": 4,
-      "radiusLinks": 42,
-      "collisionRadius": 42
+      "x": 2063.315592036545,
+      "y": -689.245867345333,
+      "radiusReactions": 3,
+      "radiusLinks": 32,
+      "collisionRadius": 32
     },
     {
       "id": "patriotfrontsightings:1483",
       "groupId": "patriotfrontsightings",
-      "x": 1535.9426647769728,
-      "y": -741.2431898059217,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1843.8874476770568,
+      "y": -889.6944643290622,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1487",
       "groupId": "patriotfrontsightings",
-      "x": 1613.810342327367,
-      "y": -795.3442058735131,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1937.2544450001851,
+      "y": -954.5957975632841,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1491",
       "groupId": "patriotfrontsightings",
-      "x": 1721.4298723307893,
-      "y": -910.5955023815854,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2066.2952995293654,
+      "y": -1092.869866749605,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1495",
       "groupId": "patriotfrontsightings",
-      "x": 1641.1575157104444,
-      "y": -889.0865892506208,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 1970.0423120847865,
+      "y": -1067.0789564947481,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1496",
       "groupId": "patriotfrontsightings",
-      "x": 1797.1849142985197,
-      "y": -1002.3523394150975,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2157.129582116739,
+      "y": -1202.958841072761,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1500",
       "groupId": "patriotfrontsightings",
-      "x": 1715.1601922486439,
-      "y": -980.3738813824466,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2058.7747869918435,
+      "y": -1176.6047531473168,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1501",
       "groupId": "patriotfrontsightings",
-      "x": 1838.612695384923,
-      "y": -1063.307532028627,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2206.8034790534407,
+      "y": -1276.0945041945142,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1502",
       "groupId": "patriotfrontsightings",
-      "x": 1944.3274135086708,
-      "y": -1134.6531772165463,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2333.1025156897995,
+      "y": -1361.5759053888987,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1503",
       "groupId": "patriotfrontsightings",
-      "x": 1971.2001324344626,
-      "y": -1185.3440792306715,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2365.985514498999,
+      "y": -1422.4606075074416,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1504",
       "groupId": "patriotfrontsightings",
-      "x": 2086.8898255758486,
-      "y": -1339.3341984566214,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2503.8530008718208,
+      "y": -1607.164748741021,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     },
     {
       "id": "patriotfrontsightings:1505",
       "groupId": "patriotfrontsightings",
-      "x": 1997.6069874631062,
-      "y": -1331.522962274336,
-      "radiusReactions": 4,
-      "radiusLinks": 4,
-      "collisionRadius": 4
+      "x": 2396.802564690261,
+      "y": -1597.7990491496294,
+      "radiusReactions": 3,
+      "radiusLinks": 3,
+      "collisionRadius": 3
     }
   ],
   "ringTicks": [
     {
       "time": 1751328000000,
-      "radius": 65.83658854166667,
+      "radius": 79.00390625,
       "empty": false
     },
     {
       "time": 1759276800000,
-      "radius": 573.4049479166666,
+      "radius": 688.0859375,
       "empty": false
     },
     {
       "time": 1767225600000,
-      "radius": 1201.8229166666667,
+      "radius": 1442.1875,
       "empty": false
     },
     {
       "time": 1772323200000,
-      "radius": 1717.4479166666667,
+      "radius": 2060.9375,
       "empty": false
     },
     {
       "time": 1777593600000,
-      "radius": 2458.6588541666665,
+      "radius": 2950.390625,
       "empty": false
     },
     {
       "time": 1780272000000,
-      "radius": 3578.5319010416665,
+      "radius": 4294.23828125,
       "empty": false
     }
   ],
   "polygonSides": 36,
-  "generatedAt": "2026-06-13T14:11:26.734Z"
+  "generatedAt": "2026-06-14T14:54:32.262Z"
 }
