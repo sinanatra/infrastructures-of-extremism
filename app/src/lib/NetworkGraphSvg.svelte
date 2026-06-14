@@ -53,6 +53,7 @@
   let showLinks = $state(false);
   let selectedEmoji = $state(null);
   let selectedGroupId = $state(null);
+  let listHoveredGroupId = $state(null);
   const selectedGroup = $derived(() =>
     selectedGroupId === null
       ? null
@@ -177,10 +178,12 @@
       .map(([emoji, count]) => ({ emoji, count }));
   });
 
+  const effectiveFilterGroupId = $derived(listHoveredGroupId ?? selectedGroupId);
+
   const visibleNodes = $derived(() =>
     nodes.filter(
       (n) =>
-        (selectedGroupId === null || n.groupId === selectedGroupId) &&
+        (effectiveFilterGroupId === null || n.groupId === effectiveFilterGroupId) &&
         (selectedEmoji === null || n.topEmoji === selectedEmoji)
     )
   );
@@ -299,6 +302,9 @@
         on:showLinks={(event) => (showLinks = event.detail)}
         on:selectEmoji={(event) => (selectedEmoji = event.detail)}
         on:clearSelection={() => (selectedGroupId = null)}
+        on:selectGroup={(event) => toggleGroup(event.detail)}
+        on:hoverGroup={(event) => { listHoveredGroupId = event.detail; }}
+        on:clearHoverGroup={() => { listHoveredGroupId = null; }}
       />
     </div>
   </div>

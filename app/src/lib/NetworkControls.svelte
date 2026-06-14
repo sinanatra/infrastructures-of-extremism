@@ -60,13 +60,14 @@
         on:click={() => (showGroups = !showGroups)}
       >groups{#if selectedGroupId}<span class="dot"> ·</span>{/if}</button>
     {/if}
+
+    {#if selectedGroupId}
+      <button class="clear-all text-[10px] px-1.5 py-0.5 rounded" on:click={clearSelection}>clear ×</button>
+    {/if}
   </div>
 
   {#if showGroups && groups.length}
     <div class="group-list px-1.5 pb-1.5">
-      {#if selectedGroupId}
-        <button class="clear-all text-[10px] px-1.5 py-0.5 mb-1" on:click={clearSelection}>clear ×</button>
-      {/if}
       <ul>
         {#each groups as g}
           {@const isSelected = selectedGroupId === g.id}
@@ -141,7 +142,7 @@
 
   .group-list {
     border-top: 0.5px solid color-mix(in srgb, var(--hi) 25%, transparent);
-    max-height: 50vh;
+    max-height: 30vh;
     overflow-y: auto;
     width: 100%;
   }

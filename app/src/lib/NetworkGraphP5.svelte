@@ -84,15 +84,19 @@
   let showLinks = $state(false);
   let selectedEmoji = $state(null);
   let selectedGroupId = $state(null);
+  let listHoveredGroupId = $state(null);
+
   const selectedGroup = $derived(
     selectedGroupId === null
       ? null
       : (sliceForGroup.get(selectedGroupId)?.group ?? null)
   );
 
+  const effectiveFilterGroupId = $derived(listHoveredGroupId ?? selectedGroupId);
+
   const visibleNodes = $derived.by(() => {
     let base = nodes;
-    if (selectedGroupId !== null) base = base.filter((n) => n.groupId === selectedGroupId);
+    if (effectiveFilterGroupId !== null) base = base.filter((n) => n.groupId === effectiveFilterGroupId);
     if (selectedEmoji !== null) base = base.filter((n) => n.topEmoji === selectedEmoji);
     return base;
   });
@@ -111,7 +115,6 @@
 
   let hoveredNode = $state(null);
   let hoveredText = $state("");
-  let listHoveredGroupId = $state(null);
 
   const hoveredGroupId = $derived(hoveredNode?.groupId ?? listHoveredGroupId ?? null);
 
