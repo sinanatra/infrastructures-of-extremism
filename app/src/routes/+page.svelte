@@ -245,9 +245,9 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow flex justify-left relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
-    <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
+    <section id="datasets" class="max-w-8xl overflow-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-white">Topics</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
@@ -264,7 +264,7 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/pie`}
             >
-              <div class="w-[350px] h-[350px] overflow-hidden">
+              <div class="w-[250px] h-[250px] overflow-hidden">
                 <img
                   src={`/cover/${dataset.slug}_pie.png`}
                   alt={dataset.label || dataset.slug}
@@ -272,7 +272,7 @@
                   loading="lazy"
                 />
               </div>
-              <div class="mt-4 pb-2 w-[350px]">
+              <div class="mt-4 pb-2 w-[250px]">
                 <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
@@ -290,9 +290,9 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow flex  relative z-10 w-full h-full px-5 pt-10 bg-black"
   >
-    <section id="datasets" class="max-w-8xl overflow-auto mx-auto pb-10">
+    <section id="datasets" class="max-w-8xl overflow-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-white">Network</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
@@ -309,7 +309,7 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/tree`}
             >
-              <div class="w-[350px] h-[350px] overflow-hidden">
+              <div class="w-[150px] h-[150px] overflow-hidden">
                 <img
                   src={`/cover/${dataset.slug}_tree.png`}
                   alt={dataset.label || dataset.slug}
@@ -317,7 +317,7 @@
                   loading="lazy"
                 />
               </div>
-              <div class="mt-4 pb-2 w-[350px]">
+              <div class="mt-4 pb-2 w-[150px]">
                 <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
