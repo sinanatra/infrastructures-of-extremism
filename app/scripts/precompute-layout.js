@@ -657,6 +657,68 @@ const applyCollisionPass = (nodes, cellSize, collisionPadding) => {
   }
 };
 
+// Separates overlapping nodes that share the same ring by pushing them apart
+// angularly within their slice. Works directly in polar space so the result
+// is exact — no 2D→snap round-trip loss.
+const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, polygonSides, passes = 40) => {
+  const byGroup = new Map();
+  for (const node of nodes) {
+    if (!byGroup.has(node.groupId)) byGroup.set(node.groupId, []);
+    byGroup.get(node.groupId).push(node);
+  }
+
+  for (const [groupId, gNodes] of byGroup) {
+    const slice = sliceForGroup.get(groupId);
+    if (!slice) continue;
+
+    gNodes.sort((a, b) =>
+      Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx)
+    );
+
+    for (let pass = 0; pass < passes; pass++) {
+      let moved = false;
+
+      // Forward sweep: push later node forward if too close
+      for (let i = 0; i < gNodes.length - 1; i++) {
+        const a = gNodes[i];
+        const b = gNodes[i + 1];
+        const dist = Math.hypot(b.x - a.x, b.y - a.y);
+        const minDist = a.collisionRadius + b.collisionRadius + collisionPadding;
+        if (dist < minDist) {
+          const angleB = Math.atan2(b.y - cy, b.x - cx);
+          const r = b.targetRadius || Math.hypot(b.x - cx, b.y - cy);
+          const delta = (minDist - dist) / Math.max(r, 1);
+          const newAngle = clampAngleToSlice(angleB + delta, slice);
+          const pt = polygonPointAtAngle(r, polygonSides, newAngle);
+          b.x = pt.x;
+          b.y = pt.y;
+          moved = true;
+        }
+      }
+
+      // Backward sweep: push earlier node back if too close
+      for (let i = gNodes.length - 1; i > 0; i--) {
+        const a = gNodes[i - 1];
+        const b = gNodes[i];
+        const dist = Math.hypot(b.x - a.x, b.y - a.y);
+        const minDist = a.collisionRadius + b.collisionRadius + collisionPadding;
+        if (dist < minDist) {
+          const angleA = Math.atan2(a.y - cy, a.x - cx);
+          const r = a.targetRadius || Math.hypot(a.x - cx, a.y - cy);
+          const delta = (minDist - dist) / Math.max(r, 1);
+          const newAngle = clampAngleToSlice(angleA - delta, slice);
+          const pt = polygonPointAtAngle(r, polygonSides, newAngle);
+          a.x = pt.x;
+          a.y = pt.y;
+          moved = true;
+        }
+      }
+
+      if (!moved) break;
+    }
+  }
+};
+
 const computeLayout = ({ posts, links, groups }) => {
   const tau = Math.PI * 2;
   const width = LAYOUT_WIDTH;
@@ -1073,26 +1135,16 @@ const computeLayout = ({ posts, links, groups }) => {
           polygonSides,
           node.preferredAngle
         );
-        const targetX = targetPt.x;
-        const targetY = targetPt.y;
-        node.vx += (targetX - node.x) * anchorStrength;
-        node.vy += (targetY - node.y) * anchorStrength;
+        node.vx += (targetPt.x - node.x) * anchorStrength;
+        node.vy += (targetPt.y - node.y) * anchorStrength;
 
-        const currentAngle = normalizeAngle(
-          Math.atan2(node.y - cy, node.x - cx)
-        );
+        const currentAngle = normalizeAngle(Math.atan2(node.y - cy, node.x - cx));
         const clampedAngle = clampAngleToSlice(currentAngle, slice);
         if (clampedAngle !== currentAngle) {
           const radial = Math.hypot(node.x - cx, node.y - cy);
-          const mapped = polygonPointAtAngle(
-            radial,
-            polygonSides,
-            clampedAngle
-          );
-          const x = mapped.x;
-          const y = mapped.y;
-          node.vx += (x - node.x) * 0.18;
-          node.vy += (y - node.y) * 0.18;
+          const mapped = polygonPointAtAngle(radial, polygonSides, clampedAngle);
+          node.vx += (mapped.x - node.x) * 0.18;
+          node.vy += (mapped.y - node.y) * 0.18;
         }
       }
 
@@ -1110,23 +1162,13 @@ const computeLayout = ({ posts, links, groups }) => {
         node.y = snapped.y;
       }
     }
-
-    // Final pass: resolve any remaining overlaps after all iterations
-    applyCollisionPass(nodes, cellSize, collisionPadding);
-
-    for (const node of nodes) {
-      const angle = Math.atan2(node.y - cy, node.x - cx);
-      const finalPt = polygonPointAtAngle(
-        node.targetRadius,
-        polygonSides,
-        angle
-      );
-      node.x = finalPt.x;
-      node.y = finalPt.y;
-    }
   };
 
-  simulate(200);
+  simulate(300);
+
+  // Angular separation pass: works directly on the ring so nothing gets undone.
+  // Resolves remaining overlaps that the 2D simulation can't fix after ring snap.
+  applyAngularSeparation(nodes, cx, cy, 12, sliceForGroup, polygonSides, 60);
   const ringTicks = (() => {
     if (!sortedTimes.length || !posts.length) return [];
     const monthCounts = new Map();

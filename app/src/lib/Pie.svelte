@@ -96,13 +96,27 @@
   let showLinks = $state(false);
   let selectedEmoji = $state(null);
   let selectedGroupId = $state(null);
-  const selectedGroup = $derived(null);
+  let listHoveredGroupId = $state(null);
+
+  const groups = $derived(trailerGroups);
+
+  const sliceForGroup = $derived(
+    new Map((prepared?.slicePaths ?? []).map((s) => [s.id ?? s.group?.id, s]))
+  );
+
+  const selectedGroup = $derived(
+    selectedGroupId ? (sliceForGroup.get(selectedGroupId) ?? null) : null
+  );
+
+  const effectiveFilterGroupId = $derived(listHoveredGroupId ?? selectedGroupId);
 
   const visibleNodeIds = $derived.by(() => {
-    if (!selectedEmoji) return new Set(graphNodes.map((n) => n.id));
-    return new Set(
-      graphNodes.filter((n) => n.topEmoji === selectedEmoji).map((n) => n.id)
-    );
+    let nodes = graphNodes;
+    if (effectiveFilterGroupId !== null)
+      nodes = nodes.filter((n) => (n.post?.chat ?? n.groupId) === effectiveFilterGroupId);
+    if (selectedEmoji !== null)
+      nodes = nodes.filter((n) => n.topEmoji === selectedEmoji);
+    return new Set(nodes.map((n) => n.id));
   });
 
   let hoveredNode = $state(null);
@@ -217,9 +231,12 @@
       <NetworkControls
         counts={{
           posts: posts.length,
-          groups: new Set(graphNodes.map((n) => n.type)).size,
+          groups: groups.length,
           links: links.length,
         }}
+        {groups}
+        {selectedGroupId}
+        hoveredGroupId={listHoveredGroupId}
         {selectedGroup}
         {sizeMode}
         {showLinks}
@@ -229,18 +246,13 @@
         {textColor}
         backgroundColor={pieBackground}
         {highlightColor}
-        on:sizeMode={(event) => {
-          sizeMode = event.detail;
-        }}
-        on:showLinks={(event) => {
-          showLinks = event.detail;
-        }}
-        on:selectEmoji={(event) => {
-          selectedEmoji = event.detail;
-        }}
-        on:clearSelection={() => {
-          selectedGroupId = null;
-        }}
+        on:sizeMode={(e) => { sizeMode = e.detail; }}
+        on:showLinks={(e) => { showLinks = e.detail; }}
+        on:selectEmoji={(e) => { selectedEmoji = e.detail; }}
+        on:clearSelection={() => { selectedGroupId = null; }}
+        on:selectGroup={(e) => { selectedGroupId = selectedGroupId === e.detail ? null : e.detail; }}
+        on:hoverGroup={(e) => { listHoveredGroupId = e.detail; }}
+        on:clearHoverGroup={() => { listHoveredGroupId = null; }}
       />
     </div>
   </div>

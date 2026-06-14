@@ -26,6 +26,12 @@
   const setEmoji = (emoji) => dispatch("selectEmoji", selectedEmoji === emoji ? null : emoji);
 
   let showGroups = $state(false);
+  let groupSearch = $state("");
+  const filteredGroups = $derived(
+    groupSearch.trim()
+      ? groups.filter((g) => g.label.toLowerCase().includes(groupSearch.toLowerCase()))
+      : groups
+  );
 </script>
 
 <header
@@ -68,8 +74,16 @@
 
   {#if showGroups && groups.length}
     <div class="group-list px-1.5 pb-1.5">
+      <div class="search-wrap px-0.5 pt-1 pb-1">
+        <input
+          class="search-input text-[11px] w-full px-1.5 py-0.5 rounded"
+          type="text"
+          placeholder="search…"
+          bind:value={groupSearch}
+        />
+      </div>
       <ul>
-        {#each groups as g}
+        {#each filteredGroups as g}
           {@const isSelected = selectedGroupId === g.id}
           {@const isHovered = hoveredGroupId === g.id}
           <li>
@@ -170,6 +184,23 @@
 
   .group-item.selected {
     background: color-mix(in srgb, var(--hi) 18%, transparent);
+  }
+
+  .search-input {
+    background: color-mix(in srgb, var(--hi) 6%, transparent);
+    color: var(--text);
+    border: 0.5px solid color-mix(in srgb, var(--hi) 30%, transparent);
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-input::placeholder {
+    color: color-mix(in srgb, var(--text) 40%, transparent);
+  }
+
+  .search-input:focus {
+    border-color: color-mix(in srgb, var(--hi) 60%, transparent);
   }
 
   .clear-all {
