@@ -23,7 +23,8 @@
     backgroundColor = "gainsboro",
     circleColor = "#ffffff",
     textColor = "#ffffff",
-    labelFont = "monospace",
+    pieTextColor = null,
+    labelFont = "Courier, monospace",
     highlightColor = "yellow",
     pieHighlightColor = "yellow",
     dotSize = 15,
@@ -33,6 +34,15 @@
     pieBackground = "gainsboro",
     viewFill = 1.95,
   } = $props();
+
+  // Auto-detect readable text color for the controls overlay based on pieBackground
+  const controlsTextColor = $derived.by(() => {
+    if (pieTextColor) return pieTextColor;
+    // Simple luminance check for common colors
+    const dark = ["#111", "#111111", "#000", "#000000", "#1a1a1a", "#222", "#222222", "#333", "#333333", "#0d0d0d"];
+    if (dark.some(c => pieBackground?.toLowerCase() === c)) return textColor;
+    return "#111111";
+  });
 
   const increase = 2;
 
@@ -243,9 +253,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
-        {textColor}
+        textColor={controlsTextColor}
         backgroundColor={pieBackground}
-        {highlightColor}
+        highlightColor={pieHighlightColor}
         on:sizeMode={(e) => { sizeMode = e.detail; }}
         on:showLinks={(e) => { showLinks = e.detail; }}
         on:selectEmoji={(e) => { selectedEmoji = e.detail; }}
