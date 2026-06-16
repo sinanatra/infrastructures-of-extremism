@@ -17,10 +17,10 @@
 
   let {
     data,
-    backgroundColor = "#000000",
-    circleColor = "#ffffff",
-    textColor = "#ffffff",
-    highlightColor = "yellow",
+    backgroundColor = "#ffffff",
+    circleColor = "#222222",
+    textColor = "#111111",
+    highlightColor = "#888888",
   } = $props();
 
   const {
@@ -340,9 +340,7 @@
         c.setAlpha(isBroken ? clamp(110 + Math.log1p(link.count) * 35, 110, 255) : 150);
         p.stroke(c);
         p.strokeWeight(isBroken ? 1.4 : 1);
-        if (isBroken) p.drawingContext.setLineDash([9, 7]);
         p.line(link.source.x, link.source.y, link.target.x, link.target.y);
-        if (isBroken) p.drawingContext.setLineDash([]);
       }
 
       // Node circles
