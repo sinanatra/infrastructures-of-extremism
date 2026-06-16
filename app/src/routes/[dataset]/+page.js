@@ -63,7 +63,7 @@ export const load = async ({ fetch, params }) => {
 		brokenGroupLinksRes.ok ? brokenGroupLinksRes.text() : Promise.resolve('')
 	]);
 
-	const excludedGroupIds = new Set(['boost']);
+	const excludedGroupIds = new Set(['boost', 'addemoji']);
 	const excludedGroupLabels = new Set(['update to boost']);
 
 	const canonicalGroups = new Map();
