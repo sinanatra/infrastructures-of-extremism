@@ -63,9 +63,9 @@
   };
 </script>
 
-<section class="bg-[#111111] text-gray-600 min-h-screen">
+<section class="bg-white text-gray-600 min-h-screen">
   {#if coverImages.length}
-    <div class="sticky top-0 w-screen h-screen overflow-hidden">
+    <div class="sticky min-h-[60vh] top-0 w-screen h-screen overflow-hidden">
       <CoverGL images={coverImages} />
     </div>
   {/if}
@@ -100,7 +100,7 @@
         <img
           src="/intro/berlin-demo.png"
           alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
-          class="w-[350px] block grayscale hover:grayscale-0"
+          class=" border-gray-300 border w-[350px] block grayscale hover:grayscale-0"
         />
         <figcaption class="text-sm max-w-60 text-gray-600">
           A banner that promotes a link to a Telegram far-right youth group.
@@ -204,7 +204,7 @@
   </div>
 
   <div
-    class="custom-shadow sticky top-0 flex justify-center relative z-10 w-full h-full px-5 bg-[#dedede] text-black"
+    class="custom-shadow sticky min-h-[60vh] top-0 flex justify-center relative z-10 w-full h-full px-5 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl pb-10 overflow-auto mx-auto">
       <h2 class="text-2xl m-0 w-[340px] pt-4 text-black">
@@ -225,7 +225,9 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
-              <div class="w-[350px] h-[350px] overflow-hidden">
+              <div
+                class=" border-gray-300 border w-[350px] h-[350px] overflow-hidden"
+              >
                 <img
                   src={`/cover/${dataset.slug}.png`}
                   alt={dataset.label || dataset.slug}
@@ -251,7 +253,7 @@
   </div>
 
   <div
-    class="custom-shadow pt-20 sticky top-0 flex justify-left relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
+    class="custom-shadow pt-20 sticky min-h-[60vh] top-0 flex justify-left relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-black">Topics</h2>
@@ -270,7 +272,9 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/pie`}
             >
-              <div class="w-[350px] h-[350px] overflow-hidden">
+              <div
+                class=" border-gray-300 border w-[350px] h-[350px] overflow-hidden"
+              >
                 <img
                   src={`/cover/${dataset.slug}_pie.png`}
                   alt={dataset.label || dataset.slug}
@@ -296,7 +300,7 @@
   </div>
 
   <div
-    class="custom-shadow pt-20 sticky top-0 flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
+    class="custom-shadow pt-20 sticky min-h-[60vh] top-0 flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto pb-10">
       <h2 class="text-2xl p-0 m-0 text-black">Network</h2>
@@ -315,7 +319,9 @@
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/tree`}
             >
-              <div class="w-[350px] h-[350px] overflow-hidden">
+              <div
+                class=" border-gray-300 border w-[350px] h-[350px] overflow-hidden"
+              >
                 <img
                   src={`/cover/${dataset.slug}_tree.png`}
                   alt={dataset.label || dataset.slug}
@@ -341,7 +347,7 @@
   </div>
 
   <div
-    class="custom-shadow pt-20 sticky top-0 justify-center flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
+    class="custom-shadow pt-20 sticky min-h-[60vh] top-0 justify-center flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
       <h2 class="text-2xl p-0 m-0 text-black">Datasets</h2>
