@@ -330,8 +330,7 @@
       <g class="slices">
         {#each slicePaths as slice}
           <text
-            on:click={() => toggleGroup(slice.id)}
-            class="cursor-pointer select-none"
+            class="select-none"
             x={slice.labelPos.x}
             y={slice.labelPos.y}
             text-anchor={slice.labelAnchor}

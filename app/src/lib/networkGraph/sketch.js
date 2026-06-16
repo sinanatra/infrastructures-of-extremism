@@ -377,8 +377,7 @@ export const createNetworkGraphSketch = ({
     isPanning = false;
     const hoverChanged = updateHover(x, y);
     if (dragDistance < 6) handleClick(x, y);
-    const clickable =
-      Boolean(getState().hoveredNode) || Boolean(hitSliceLabel(x, y));
+    const clickable = Boolean(getState().hoveredNode);
     const cursorChanged = setCursor(clickable ? "pointer" : "grab");
     if (hoverChanged || cursorChanged || dragDistance < 6) requestRedraw();
   };
@@ -396,13 +395,6 @@ export const createNetworkGraphSketch = ({
   let lastTouch = null;
 
   const handleClick = (sx, sy) => {
-    const hit = hitSliceLabel(sx, sy);
-    if (hit) {
-      toggleGroup(hit.id);
-      requestRedraw();
-      return;
-    }
-
     updateHover(sx, sy);
     const { hoveredNode } = getState();
     if (hoveredNode?.post?.url) {
@@ -597,21 +589,24 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawSlices = (p, state) => {
-    const { pieBackground, highlightColor, textColor, selectedGroupId, hoveredGroupId, trailerVisibleGroups } = state;
-
+    const { pieBackground, highlightColor, trailerVisibleGroups } = state;
     drawExtrudedSides(p, pieBackground, highlightColor, trailerVisibleGroups);
+  };
+
+  const drawLabels = (p, state) => {
+    const { highlightColor, selectedGroupId, hoveredGroupId } = state;
 
     p.push();
-    p.noStroke();
     p.textFont("sans-serif");
     p.textSize(textSizeFor(36));
     for (const slice of slicePaths ?? []) {
-      const isActive = slice.id === hoveredGroupId || slice.id === selectedGroupId;
-      p.fill(cachedColor(highlightColor));
       p.push();
       p.translate(slice.labelPos.x, slice.labelPos.y);
       p.rotate((slice.labelRotation * Math.PI) / 180);
       p.textAlign(slice.labelAnchor === "end" ? p.RIGHT : p.LEFT, p.CENTER);
+      p.stroke(255);
+      p.strokeWeight(3 / view.scale);
+      p.fill(cachedColor(highlightColor));
       p.text(slice.label, 0, 0);
       p.pop();
     }
@@ -725,7 +720,8 @@ export const createNetworkGraphSketch = ({
 
     for (const tick of innerTicks ?? []) {
       p.push();
-      p.noStroke();
+      p.stroke(255);
+      p.strokeWeight(3 / view.scale);
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
       p.textSize(textSizeFor(52));
@@ -739,7 +735,8 @@ export const createNetworkGraphSketch = ({
 
     if (outerTick) {
       p.push();
-      p.noStroke();
+      p.stroke(255);
+      p.strokeWeight(3 / view.scale);
       p.fill(highlightColor);
       p.textAlign(p.CENTER, p.BOTTOM);
       p.textSize(textSizeFor(22));
@@ -801,9 +798,7 @@ export const createNetworkGraphSketch = ({
       if (getState().trailerBlocking) return;
       if (isPanning || overControls(evt)) return;
       const hoverChanged = updateHover(p.mouseX, p.mouseY);
-      const clickable =
-        Boolean(getState().hoveredNode) ||
-        Boolean(hitSliceLabel(p.mouseX, p.mouseY));
+      const clickable = Boolean(getState().hoveredNode);
       const cursorChanged = setCursor(clickable ? "pointer" : "grab");
       if (hoverChanged || cursorChanged) requestRedraw();
     };
@@ -905,6 +900,7 @@ export const createNetworkGraphSketch = ({
       drawLinks(p, state);
       drawNodes(p, state);
       drawRings(p, state);
+      drawLabels(p, state);
 
       if (outerTick) {
         drawExtrudedPolygonOutline(p, highlightColor);
