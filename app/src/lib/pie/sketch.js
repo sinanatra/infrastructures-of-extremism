@@ -377,10 +377,8 @@ export const createPieSketch = ({
       for (const n of nodes) {
         if (visibleNodeIds.has(n.id)) {
           const innerSize = nodeInnerSize(n);
-          const c = nodesLayer.color(n.color);
-          c.setAlpha(160);
           nodesLayer.noStroke();
-          nodesLayer.fill(c);
+          nodesLayer.fill(nodesLayer.color(n.color));
           nodesLayer.ellipse(n.x, n.y, innerSize, innerSize);
         }
 
@@ -426,6 +424,7 @@ export const createPieSketch = ({
 
     p.setup = () => {
       renderer = p;
+      p.pixelDensity(Math.max(2, window.devicePixelRatio ?? 1));
       p.createCanvas(p.windowWidth, p.windowHeight);
       p.textAlign(p.CENTER, p.CENTER);
       p.noLoop();
