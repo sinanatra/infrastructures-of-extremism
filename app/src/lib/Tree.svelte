@@ -450,7 +450,7 @@
       textColor={theme.textColor}
       introMode={true}
       introHeading=""
-      introSummary="the network shows links, mentions, forwards, and unresolved targets."
+      introSummary="the network shows links, mentions, forwards, and broken targets."
       introBody=""
       enterLabel="Enter"
       on:update={(event) => {

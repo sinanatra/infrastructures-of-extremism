@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black text-black antialiased font-sans;
+  @apply bg-gray-300 text-black antialiased font-sans;
   font-family: "Geist", "Helvetica Neue", Arial, sans-serif;
   --highlite-color: orangered;
 

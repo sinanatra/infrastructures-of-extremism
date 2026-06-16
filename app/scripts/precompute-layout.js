@@ -608,11 +608,11 @@ const loadData = async ({ slug, dir }) => {
   };
 };
 
-const LAYOUT_WIDTH = 6000;
-const LAYOUT_HEIGHT = 6000;
+const LAYOUT_WIDTH = 5000;
+const LAYOUT_HEIGHT = 5000;
 const POLYGON_SIDES = 36;
 const BASE_START = -Math.PI / 2;
-const MIN_NODE_RADIUS = 3;
+const MIN_NODE_RADIUS = 2;
 const MAX_NODE_RADIUS_DESIRED = 32;
 const BIG_GAP_THRESHOLD_DAYS = 30;
 const GAP_RADIUS_PX = 50;
@@ -660,7 +660,7 @@ const applyCollisionPass = (nodes, cellSize, collisionPadding) => {
 // Separates overlapping nodes that share the same ring by pushing them apart
 // angularly within their slice. Works directly in polar space so the result
 // is exact — no 2D→snap round-trip loss.
-const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, polygonSides, passes = 40) => {
+const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, polygonSides, polygonPointAtAngle, passes = 40) => {
   const byGroup = new Map();
   for (const node of nodes) {
     if (!byGroup.has(node.groupId)) byGroup.set(node.groupId, []);
@@ -1100,7 +1100,7 @@ const computeLayout = ({ posts, links, groups }) => {
     })
     .filter((edge) => edge !== null);
 
-  const maxNodeRadius = nodes.reduce((m, n) => Math.max(m, n.radius ?? 0), 0);
+  const maxNodeRadius = nodes.reduce((m, n) => Math.max(m, n.collisionRadius ?? 0), 0);
 
   const simulate = (iterations = 300) => {
     if (nodes.length === 0) return;
@@ -1157,7 +1157,9 @@ const computeLayout = ({ posts, links, groups }) => {
         node.y += node.vy;
 
         const angle = Math.atan2(node.y - cy, node.x - cx);
-        const snapped = polygonPointAtAngle(node.targetRadius, polygonSides, angle);
+        const currentR = Math.hypot(node.x - cx, node.y - cy);
+        const allowedR = clamp(currentR, node.targetRadius - node.collisionRadius, node.targetRadius + node.collisionRadius);
+        const snapped = polygonPointAtAngle(allowedR, polygonSides, angle);
         node.x = snapped.x;
         node.y = snapped.y;
       }
@@ -1168,7 +1170,14 @@ const computeLayout = ({ posts, links, groups }) => {
 
   // Angular separation pass: works directly on the ring so nothing gets undone.
   // Resolves remaining overlaps that the 2D simulation can't fix after ring snap.
-  applyAngularSeparation(nodes, cx, cy, 12, sliceForGroup, polygonSides, 60);
+  applyAngularSeparation(nodes, cx, cy, 12, sliceForGroup, polygonSides, polygonPointAtAngle, 120);
+
+  // Final 2D collision pass without ring snap — resolves remaining overlaps at
+  // slice boundaries where angular separation hits its limit.
+  const finalCellSize = Math.max(32, maxNodeRadius * 4);
+  for (let i = 0; i < 40; i++) {
+    applyCollisionPass(nodes, finalCellSize, 4);
+  }
   const ringTicks = (() => {
     if (!sortedTimes.length || !posts.length) return [];
     const monthCounts = new Map();

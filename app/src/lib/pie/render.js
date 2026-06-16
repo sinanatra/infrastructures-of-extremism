@@ -144,7 +144,7 @@ export const drawWedgeLayer = (ctx, { cx, cy, outerRadius, wedgeData }, theme, s
   for (const type of Object.keys(wedgeData)) {
     const wedge = wedgeData[type];
 
-    ctx.stroke(circleColor);
+    ctx.stroke(pieHighlightColor);
     ctx.strokeWeight(0.5);
     ctx.noFill();
     ctx.arc(cx, cy, outerRadius * 2, outerRadius * 2, wedge.start, wedge.start + wedge.angle);
@@ -176,10 +176,10 @@ export const drawBaseGeometry = (
   theme,
   { extrudeOffsetX = 0, extrudeOffsetY = 0 } = {}
 ) => {
-  const { pieFill, circleColor, dotSize } = theme;
+  const { pieFill, circleColor, pieHighlightColor, dotSize } = theme;
 
   ctx.fill(pieFill);
-  ctx.stroke(circleColor);
+  ctx.stroke(pieHighlightColor);
   ctx.strokeWeight(0.5);
 
   ctx.ellipse(cx + extrudeOffsetX, cy + extrudeOffsetY, outerRadius * 2, outerRadius * 2);
@@ -202,7 +202,7 @@ export const drawBaseGeometry = (
       y: pt.y + extrudeOffsetY,
     }));
 
-    ctx.stroke(circleColor);
+    ctx.stroke(pieHighlightColor);
     ctx.noFill();
     ctx.strokeWeight(0.5);
 

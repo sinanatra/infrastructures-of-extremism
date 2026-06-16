@@ -597,9 +597,25 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawSlices = (p, state) => {
-    const { pieBackground, highlightColor, selectedGroupId, hoveredGroupId, trailerVisibleGroups } = state;
+    const { pieBackground, highlightColor, textColor, selectedGroupId, hoveredGroupId, trailerVisibleGroups } = state;
 
     drawExtrudedSides(p, pieBackground, highlightColor, trailerVisibleGroups);
+
+    p.push();
+    p.noStroke();
+    p.textFont("sans-serif");
+    p.textSize(textSizeFor(36));
+    for (const slice of slicePaths ?? []) {
+      const isActive = slice.id === hoveredGroupId || slice.id === selectedGroupId;
+      p.fill(cachedColor(highlightColor));
+      p.push();
+      p.translate(slice.labelPos.x, slice.labelPos.y);
+      p.rotate((slice.labelRotation * Math.PI) / 180);
+      p.textAlign(slice.labelAnchor === "end" ? p.RIGHT : p.LEFT, p.CENTER);
+      p.text(slice.label, 0, 0);
+      p.pop();
+    }
+    p.pop();
 
     const focusId = hoveredGroupId ?? selectedGroupId;
     if (focusId) {
@@ -686,9 +702,9 @@ export const createNetworkGraphSketch = ({
 
     p.push();
     p.noFill();
-    if (ctx?.setLineDash) ctx.setLineDash([4 / view.scale, 10 / view.scale]);
+    if (ctx?.setLineDash) ctx.setLineDash([]);
     p.stroke(highlightColor);
-    p.strokeWeight(0.9 / view.scale);
+    p.strokeWeight(0.4 / view.scale);
 
     for (const tick of innerTicks ?? []) {
       if (polygonSides && polygonSides >= 3) {

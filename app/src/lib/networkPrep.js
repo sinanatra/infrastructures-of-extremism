@@ -251,11 +251,19 @@ export const prepareNetwork = (
     return `M ${p0.x} ${p0.y} A ${r1} ${r1} 0 ${largeArc} 1 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${r0} ${r0} 0 ${largeArc} 0 ${p3.x} ${p3.y} Z`;
   };
 
+  const outerRingPadding = 60;
+  const maxNodeRadialAll = maxRadiusByGroup.size > 0 ? Math.max(...maxRadiusByGroup.values()) : 0;
+  const earlyRingTicks = layout?.ringTicks ?? [];
+  const earlyOuterTick = earlyRingTicks.length ? earlyRingTicks[earlyRingTicks.length - 1] : null;
+  const outerRingRadiusEarly =
+    Math.max(earlyOuterTick?.radius ?? 0, maxNodeRadialAll + maxNodeRadius + outerRingPadding) ||
+    Math.min(width, height) / 2 - 50;
+
   const slicePaths = groupSlices.map((slice) => {
     const angleDeg = (slice.center * 180) / Math.PI;
     const normalized = ((angleDeg % 360) + 360) % 360;
     const flipped = normalized > 90 && normalized < 270;
-    const baseLabelRadius = maxRadiusByGroup.get(slice.group.id) ?? outerRadius;
+    const baseLabelRadius = Math.min(maxRadiusByGroup.get(slice.group.id) ?? outerRadius, outerRingRadiusEarly - 36);
     const labelRadius = baseLabelRadius + 36;
 
     return {
@@ -266,7 +274,7 @@ export const prepareNetwork = (
       labelPos: toCartesian(labelRadius, slice.center),
       angleDeg,
       labelRotation: flipped ? angleDeg + 180 : angleDeg,
-      labelAnchor: flipped ? "end" : "start",
+      labelAnchor: flipped ? "start" : "end",
     };
   });
 
@@ -308,7 +316,7 @@ export const prepareNetwork = (
     dateMs: n.post.dateMs,
   }));
   const outerRingRadius =
-    Math.max(outerTick?.radius ?? 0, maxNodeRadial + maxNodeRadius + 12) ||
+    Math.max(outerTick?.radius ?? 0, maxNodeRadial + maxNodeRadius + outerRingPadding) ||
     Math.min(width, height) / 2 - 50;
 
   const ticksByRadius = [...ringTicks].sort((a, b) => a.radius - b.radius);

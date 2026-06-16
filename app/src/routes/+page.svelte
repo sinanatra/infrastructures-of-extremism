@@ -7,14 +7,16 @@
   const datasets = $derived(
     (data?.datasets ?? [])
       .slice()
-      .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0))
+      .sort((a, b) => (b?.postCount ?? 0) - (a?.postCount ?? 0)),
   );
 
-  const coverImages = $derived(datasets.flatMap((d) => [
-    `/cover/${d.slug}.png`,
-    // `/cover/${d.slug}_pie.png`,
-    // `/cover/${d.slug}_tree.png`,
-  ]));
+  const coverImages = $derived(
+    datasets.flatMap((d) => [
+      `/cover/${d.slug}.png`,
+      // `/cover/${d.slug}_pie.png`,
+      // `/cover/${d.slug}_tree.png`,
+    ]),
+  );
 
   let downloadingSlug = $state(null);
 
@@ -61,7 +63,7 @@
   };
 </script>
 
-<section class="bg-[#111111] text-gray-400 min-h-screen">
+<section class="bg-[#111111] text-gray-600 min-h-screen">
   {#if coverImages.length}
     <div class="sticky top-0 w-screen h-screen overflow-hidden">
       <CoverGL images={coverImages} />
@@ -70,33 +72,35 @@
 
   <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 -mt-[30vh]">
     <div class="hidden md:block md:col-span-2"></div>
-    <article class="bg-black px-4 pt-10 pb-20 text-base leading-relaxed">
-      <h1 class="text-4xl mb-4 max-w-[300px] text-white">
+    <article
+      class="bg-[#dedede] text-black px-4 pt-4 pb-20 text-base leading-relaxed"
+    >
+      <h1 class="text-5xl mb-4 max-w-[300px] text-black">
         Infrastructures of Extremism
       </h1>
       <p class="mb-3">
         Right-wing extremist organisations have gained visibility on European
-        streets. During orchestrated demonstrations, in particular youth
-        groups show banners that advertise Telegram channels as
-        offline-to-online gateways into far right communities. This
-        investigation takes these banners as its starting point to surface how
-        they lead into a network of interconnected online communities as <em
+        streets. During orchestrated demonstrations, in particular youth groups
+        show banners that advertise Telegram channels as offline-to-online
+        gateways into far right communities. This investigation takes these
+        banners as its starting point to surface how they lead into a network of
+        interconnected online communities as <em
           >Infrastructures of Extremism.</em
         >
       </p>
       <p class="mb-3">
         At a rally held in Berlin on 29 November 2025 against so-called
-        <em>"criminal foreigners"</em>, participants promoted Telegram
-        channels used for youth recruitment and for coordinating activities at
-        the local level. Such events reveal how street-level mobilisation is
-        tightly interwoven with a broader digital ecosystem that fuels the
-        expansion of far right extremism.
+        <em>"criminal foreigners"</em>, participants promoted Telegram channels
+        used for youth recruitment and for coordinating activities at the local
+        level. Such events reveal how street-level mobilisation is tightly
+        interwoven with a broader digital ecosystem that fuels the expansion of
+        far right extremism.
       </p>
       <figure class="flex flex-col items-start mt-6 mb-10 gap-2">
         <img
           src="/intro/berlin-demo.png"
           alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
-          class="w-[150px] block grayscale hover:grayscale-0"
+          class="w-[350px] block grayscale hover:grayscale-0"
         />
         <figcaption class="text-sm max-w-60 text-gray-600">
           A banner that promotes a link to a Telegram far-right youth group.
@@ -104,11 +108,13 @@
       </figure>
 
       <p class="mb-3">
-        These Telegram channels collectively form a digital infrastructure
-        that sustains ultra-nationalist ideologies, enabling the circulation
-        of fascist worldviews among younger supporters. Across Germany,
-        numerous members of these networks maintain ties to far-right parties
-        such as <em>Die Heimat</em> and
+        These Telegram channels collectively form a digital infrastructure that
+        sustains ultra-nationalist ideologies, enabling the circulation of
+        fascist worldviews among younger supporters. Across Germany, numerous
+        members of these networks maintain ties to far-right parties such as <em
+          >Die Heimat</em
+        >
+        and
         <em>Alternative für Deutschland (AFD)</em>, whose presence in
         parliamentary politics gives symbolic legitimacy within these online
         spaces.
@@ -116,15 +122,15 @@
       <p class="mb-3">
         The former youth organisation of AFD, <em>Junge Alternative</em>, was
         banned after being classified as right-wing extremist and subsequently
-        ousted from the public sphere. Yet, recently a successor movement
-        called <em>Generation Deutschland</em> emerged, taking on the role of
-        mobilising younger supporters through the same networks. While the
-        organisation was newly formed, some local groups that once operated
-        under the banner of <em>Junge Alternative</em> have simply renamed
-        their Telegram channels to <em>Generation Deutschland</em> and continued
-        their activities business as usual. Hence, it occurs that the platform
-        provided these groups with the means to absorb the ban rather than enforcing
-        its implementation.
+        ousted from the public sphere. Yet, recently a successor movement called
+        <em>Generation Deutschland</em>
+        emerged, taking on the role of mobilising younger supporters through the
+        same networks. While the organisation was newly formed, some local groups
+        that once operated under the banner of <em>Junge Alternative</em>
+        have simply renamed their Telegram channels to
+        <em>Generation Deutschland</em> and continued their activities business as
+        usual. Hence, it occurs that the platform provided these groups with the
+        means to absorb the ban rather than enforcing its implementation.
       </p>
       <figure class="flex flex-col items-end mt-6 mb-10 gap-2">
         <img
@@ -179,13 +185,13 @@
       <p class="mb-3">
         This approach reveals how individual groups expand and contract, which
         channels serve as key hubs, and how various national factions are
-        connected across borders. Although these maps cannot capture the
-        entire movement –due to private groups, deleted links, or blocked
-        content– they expose part of the infrastructure that allows today's
-        far-right ideologies to circulate uncensored. Extremists take
-        advantage of the lack of moderation on Telegram to spread their views
-        with minimal restriction, while making their content and relational
-        structures available for monitoring.
+        connected across borders. Although these maps cannot capture the entire
+        movement –due to private groups, deleted links, or blocked content– they
+        expose part of the infrastructure that allows today's far-right
+        ideologies to circulate uncensored. Extremists take advantage of the
+        lack of moderation on Telegram to spread their views with minimal
+        restriction, while making their content and relational structures
+        available for monitoring.
       </p>
       <p>
         Finally, the investigation extends to a wider selection of Telegram
@@ -198,13 +204,13 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-center relative z-10 w-full h-full px-5 bg-black"
+    class="custom-shadow sticky top-0 flex justify-center relative z-10 w-full h-full px-5 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl pb-10 overflow-auto mx-auto">
-      <h2 class="text-base pb-5 m-0 text-white">
+      <h2 class="text-2xl m-0 w-[340px] pt-4 text-black">
         Several Telegram groups have been examined
       </h2>
-      <h2 class="text-2xl p-0 m-0 text-white">Time</h2>
+      <h2 class="text-2xl pt-20 m-0 text-black">Time</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         Each timeline shows the entirety of the collected messages over time.
@@ -215,7 +221,7 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block hover:text-white"
+              class="flex-shrink-0 block hover:text-black"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}`}
             >
@@ -245,10 +251,10 @@
   </div>
 
   <div
-    class="custom-shadow flex justify-left relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow pt-20 sticky top-0 flex justify-left relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto pb-10">
-      <h2 class="text-2xl p-0 m-0 text-white">Topics</h2>
+      <h2 class="text-2xl p-0 m-0 text-black">Topics</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         Each chart shows the overall share of scraped messages by dominant
@@ -260,11 +266,11 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block hover:text-white"
+              class="flex-shrink-0 block hover:text-black"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/pie`}
             >
-              <div class="w-[250px] h-[250px] overflow-hidden">
+              <div class="w-[350px] h-[350px] overflow-hidden">
                 <img
                   src={`/cover/${dataset.slug}_pie.png`}
                   alt={dataset.label || dataset.slug}
@@ -272,7 +278,7 @@
                   loading="lazy"
                 />
               </div>
-              <div class="mt-4 pb-2 w-[250px]">
+              <div class="mt-4 pb-2 w-[350px]">
                 <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
@@ -290,10 +296,10 @@
   </div>
 
   <div
-    class="custom-shadow flex  relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow pt-20 sticky top-0 flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="datasets" class="max-w-8xl overflow-auto pb-10">
-      <h2 class="text-2xl p-0 m-0 text-white">Network</h2>
+      <h2 class="text-2xl p-0 m-0 text-black">Network</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         The network reproduces the collection logic, linking channels through
@@ -305,11 +311,11 @@
         >
           {#each datasets as dataset (dataset.slug)}
             <a
-              class="flex-shrink-0 block hover:text-white"
+              class="flex-shrink-0 block hover:text-black"
               data-sveltekit-reload
               href={`/${encodeURIComponent(dataset.slug)}/tree`}
             >
-              <div class="w-[150px] h-[150px] overflow-hidden">
+              <div class="w-[350px] h-[350px] overflow-hidden">
                 <img
                   src={`/cover/${dataset.slug}_tree.png`}
                   alt={dataset.label || dataset.slug}
@@ -317,7 +323,7 @@
                   loading="lazy"
                 />
               </div>
-              <div class="mt-4 pb-2 w-[150px]">
+              <div class="mt-4 pb-2 w-[350px]">
                 <div class="text-base leading-snug">
                   {dataset.label || dataset.slug}
                 </div>
@@ -335,10 +341,10 @@
   </div>
 
   <div
-    class="custom-shadow justify-center flex relative z-10 w-full h-full px-5 pt-10 bg-black"
+    class="custom-shadow pt-20 sticky top-0 justify-center flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
-      <h2 class="text-2xl p-0 m-0 text-white">Datasets</h2>
+      <h2 class="text-2xl p-0 m-0 text-black">Datasets</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
         All the scraped material is publicly available.<br />
@@ -348,7 +354,7 @@
         <div class="grid gap-2 max-h-[320px] overflow-auto pr-1">
           {#each datasets as dataset (dataset.slug)}
             <button
-              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-white/10 bg-black/60 text-left hover:bg-gray-400 hover:text-black transition text-sm disabled:cursor-wait disabled:opacity-80 disabled:hover:bg-black/60 disabled:hover:text-current"
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-black/20 bg-[#dedede] text-black/60 text-left hover:bg-gray-300 hover:text-black transition text-sm disabled:cursor-wait disabled:opacity-80 disabled:hover:bg-[#dedede] text-black/60 disabled:hover:text-current"
               onclick={() => downloadDataset(dataset.slug)}
               disabled={downloadingSlug === dataset.slug}
               aria-busy={downloadingSlug === dataset.slug}
@@ -374,8 +380,8 @@
     </section>
   </div>
 
-  <div class="relative z-10 w-full px-5 pb-10 pt-20 bg-black">
-    <section class="max-w-5xl text-xs text-gray-400 space-y-2 text-left">
+  <div class="relative z-10 w-full px-5 pb-10 pt-20 bg-[#dedede] text-black">
+    <section class="max-w-5xl text-xs text-gray-600 space-y-2 text-left">
       <p>
         Infrastructures of Extremism is a project by
 
@@ -396,12 +402,6 @@
 
 <style>
   .custom-shadow {
-    box-shadow:
-      0 0 0 8px rgba(0, 0, 0, 0.9),
-      /* 0 0 0 16px rgba(0, 0, 0, 0.7),
-      0 0 0 24px rgba(0, 0, 0, 0.5),
-      0 0 0 31px rgba(0, 0, 0, 0.32),
-      0 0 0 39px rgba(0, 0, 0, 0.18), */
-      0 -12px 36px 12px rgba(0, 0, 0, 0.32);
+    box-shadow: 0 -2px 5px 4px rgba(174, 174, 174, 0.9);
   }
 </style>

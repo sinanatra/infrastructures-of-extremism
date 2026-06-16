@@ -2,14 +2,12 @@
   import NetworkGraph from "$lib/NetworkGraph.svelte";
   let { data } = $props();
 
-  const title = data?.dataset?.label || data?.dataset?.slug || "Dataset";
-
   const defaultTheme = {
-    backgroundColor: "#111",
-    circleColor: "#fff8bc",
-    textColor: "#fff8bc",
-    highlightColor: "#7B68EE",
-    pieBackground: "gainsboro",
+    backgroundColor: "#eeeeee",
+    fill: "#ffffff",
+    circleColor: "#222222",
+    textColor: "#111111",
+    highlightColor: "#888888",
   };
 
   const theme = data?.dataset?.theme ?? defaultTheme;
@@ -19,8 +17,7 @@
   <NetworkGraph
     {data}
     backgroundColor={theme.backgroundColor}
-    pieFill={theme.pieFill}
-    pieBackground={theme.pieBackground}
+    fill={theme.fill}
     circleColor={theme.circleColor}
     textColor={theme.textColor}
     highlightColor={theme.highlightColor}

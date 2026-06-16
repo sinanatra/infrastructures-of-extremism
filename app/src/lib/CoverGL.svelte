@@ -92,10 +92,10 @@
 
   function draw(now) {
     rafId = requestAnimationFrame(draw);
-    if (!texCurrent || !texNoise || !gl) return;
+  if (!texCurrent || !texNoise || !gl) return;
 
-    const w = (canvas.clientWidth * devicePixelRatio) | 0;
-    const h = (canvas.clientHeight * devicePixelRatio) | 0;
+    const w = (canvas?.clientWidth * devicePixelRatio) | 0;
+    const h = (canvas?.clientHeight * devicePixelRatio) | 0;
     if (canvas.width !== w || canvas.height !== h) {
       canvas.width = w;
       canvas.height = h;

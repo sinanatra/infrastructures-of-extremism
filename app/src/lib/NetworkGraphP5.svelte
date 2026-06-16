@@ -14,11 +14,10 @@
 
   let {
     data,
-    backgroundColor = "#000000",
-    pieFill = "#ffffff",
-    hexaFill = "#ffffff",
-    circleColor = "#ffffff",
-    textColor = "#ffffff",
+    backgroundColor = "#eeeeee",
+    fill = "#ffffff",
+    circleColor = "#222222",
+    textColor = "#111111",
     highlightColor: highlightColorProp = "yellow",
     extrudeOffsetX = 0,
     extrudeOffsetY = 950,
@@ -188,8 +187,8 @@
     highlightColor;
     textColor;
     backgroundColor;
+    fill;
     circleColor;
-    hexaFill;
     hoveredNode;
     hoveredGroupId;
     requestRedraw();
@@ -214,8 +213,9 @@
     highlightColor,
     textColor,
     backgroundColor,
+    pieBackground: fill,
     circleColor,
-    hexaFill,
+    hexaFill: fill,
   });
 
   const sketch = createNetworkGraphSketch({

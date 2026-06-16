@@ -20,29 +20,17 @@
 
   let {
     data,
-    backgroundColor = "gainsboro",
-    circleColor = "#ffffff",
-    textColor = "#ffffff",
-    pieTextColor = null,
+    backgroundColor = "#eeeeee",
+    fill = "#ffffff",
+    circleColor = "#222222",
+    textColor = "#111111",
     labelFont = "Courier, monospace",
     highlightColor = "yellow",
-    pieHighlightColor = "yellow",
     dotSize = 15,
     extrudeOffsetX = 0,
     extrudeOffsetY = 250,
-    pieFill = "#ffffff",
-    pieBackground = "gainsboro",
     viewFill = 1.95,
   } = $props();
-
-  // Auto-detect readable text color for the controls overlay based on pieBackground
-  const controlsTextColor = $derived.by(() => {
-    if (pieTextColor) return pieTextColor;
-    // Simple luminance check for common colors
-    const dark = ["#111", "#111111", "#000", "#000000", "#1a1a1a", "#222", "#222222", "#333", "#333333", "#0d0d0d"];
-    if (dark.some(c => pieBackground?.toLowerCase() === c)) return textColor;
-    return "#111111";
-  });
 
   const increase = 2;
 
@@ -165,7 +153,7 @@
     showLinks;
     selectedEmoji;
     selectedGroupId;
-    pieFill;
+    fill;
     labelFont;
     extrudeOffsetX;
     extrudeOffsetY;
@@ -181,10 +169,10 @@
     dotSize,
     labelFont,
     highlightColor,
-    pieHighlightColor,
+    pieHighlightColor: highlightColor,
     circleColor,
-    pieFill,
-    pieBackground,
+    pieFill: fill,
+    pieBackground: fill,
     extrudeOffsetX,
     extrudeOffsetY,
     viewFill,
@@ -224,7 +212,7 @@
 
 <section
   class="relative h-screen overflow-hidden"
-  style={`background:${pieBackground}; color:${textColor}; --graph-bg:${pieBackground}; --graph-text:${textColor}`}
+  style={`background:${fill}; color:${textColor}; --graph-bg:${fill}; --graph-text:${textColor}`}
 >
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
@@ -253,9 +241,9 @@
         {topEmojis}
         {selectedEmoji}
         {subscriberText}
-        textColor={controlsTextColor}
-        backgroundColor={pieBackground}
-        highlightColor={pieHighlightColor}
+        {textColor}
+        backgroundColor={fill}
+        {highlightColor}
         on:sizeMode={(e) => { sizeMode = e.detail; }}
         on:showLinks={(e) => { showLinks = e.detail; }}
         on:selectEmoji={(e) => { selectedEmoji = e.detail; }}
@@ -306,7 +294,7 @@
     <Trailer
       groups={trailerGroups}
       {highlightColor}
-      backgroundColor={pieBackground}
+      backgroundColor={fill}
       {textColor}
       introMode={true}
       introHeading=""

@@ -1,14 +1,12 @@
 <script>
-  // import NetworkGraph from "$lib/NetworkGraphSvg.svelte";
   import NetworkGraph from "$lib/NetworkGraphP5.svelte";
 
   let {
     data,
-    backgroundColor = "#000000",
-    circleColor = "#ffffff",
-    pieFill = "#ffffff",
-    hexaFill = "gainsboro",
-    textColor = "#ffffff",
+    backgroundColor = "#eeeeee",
+    fill = "#ffffff",
+    circleColor = "#222222",
+    textColor = "#111111",
     highlightColor = "yellow",
     extrudeOffsetX = 0,
     extrudeOffsetY = 950,
@@ -19,8 +17,7 @@
 <NetworkGraph
   {data}
   {backgroundColor}
-  {pieFill}
-  {hexaFill}
+  {fill}
   {circleColor}
   {textColor}
   {highlightColor}
