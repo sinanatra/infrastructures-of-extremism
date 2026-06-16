@@ -2,6 +2,7 @@
   import P5 from "p5-svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import ExportControl from "$lib/ExportControl.svelte";
+  import Trailer from "$lib/Trailer.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
   import { captureCanvasAsPng } from "$lib/captureCanvas.js";
   import Tooltip from "$lib/Tooltip.svelte";
@@ -77,7 +78,7 @@
     return (match ?? slicePaths[0])?.group?.label ?? (match ?? slicePaths[0])?.id ?? null;
   })();
 
-  let entered = $state(false);
+  let trailerBlocking = $state(true);
 
   let sizeMode = $state("links");
   let showLinks = $state(false);
@@ -216,6 +217,7 @@
     pieBackground: fill,
     circleColor,
     hexaFill: fill,
+    trailerBlocking,
   });
 
   const sketch = createNetworkGraphSketch({
@@ -253,39 +255,18 @@
     <ExportControl label="Export PNG" on:export={exportPng} />
   </div>
 
-  {#if !entered}
-    <div
-      class="absolute inset-0 z-30 flex items-center justify-center"
-      style="backdrop-filter:blur(2px);"
-      on:click|stopPropagation
-      on:pointerdown|stopPropagation
-    >
-      <div
-        class="pointer-events-auto px-5 py-4 rounded shadow-lg flex flex-col gap-3 items-center max-w-2xl w-[90vw] text-center"
-        style={`background:${backgroundColor}; border:1px solid ${highlightColor}; color:${textColor};`}
-      >
-        <div class="text-2xl">
-          Starting from the right-wing extremist Telegram group
-          <span class="italic" style={`color:${highlightColor};`}>
-            {seedLabel ?? "the seed"}
-          </span>,
-          this visualization shows the network of related channels: the ones they
-          talk about and the ones resharing their posts.
-        </div>
-        <button
-          class="px-4 py-2 rounded border text-sm hover:bg-[rgba(255,255,255,0.08)] active:scale-[0.98] transition-transform"
-          style={`border-color:${highlightColor}; color:${textColor}; background:${backgroundColor};`}
-          on:click={() => (entered = true)}
-        >
-          Enter
-        </button>
-      </div>
-    </div>
-  {/if}
+  <Trailer
+    {seedLabel}
+    {highlightColor}
+    {backgroundColor}
+    {textColor}
+    introSummary="this visualization shows the network of related channels: the ones they talk about and the ones resharing their posts."
+    on:block={(e) => { trailerBlocking = e.detail?.blocking ?? false; requestRedraw(); }}
+  />
 
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
-    hidden={!entered}
+    hidden={trailerBlocking}
   >
     <div
       class="pointer-events-auto max-w-5xl mx-auto"

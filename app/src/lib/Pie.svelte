@@ -10,7 +10,6 @@
   import {
     buildGraphNodes,
     buildLinkCountByPost,
-    buildTrailerGroups,
     computeTopEmojis,
     createCanonicalTopic,
     createTooltipForPost,
@@ -65,10 +64,8 @@
   const { posts, links } = data;
   const prepared = prepareNetwork(data, { circleColor });
   const preparedNodes = prepared.nodes;
-  const trailerGroups = buildTrailerGroups(prepared);
-  const trailerAvailable = trailerGroups.length > 0;
-  let trailerState = $state(trailerAvailable ? "idle" : "done");
-  let trailerBlocking = $state(trailerAvailable);
+  const trailerAvailable = true;
+  let trailerBlocking = $state(true);
 
   const graphNodes = $derived.by(() => {
     if (!canonicalTopic) return [];
@@ -96,7 +93,7 @@
   let selectedGroupId = $state(null);
   let listHoveredGroupId = $state(null);
 
-  const groups = $derived(trailerGroups);
+  const groups = prepared.slicePaths ?? [];
 
   const sliceForGroup = $derived(
     new Map((prepared?.slicePaths ?? []).map((s) => [s.id ?? s.group?.id, s]))
@@ -216,7 +213,7 @@
 >
   <div
     class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
-    hidden={trailerState !== "done"}
+    hidden={trailerBlocking}
   >
     <div
       class="pointer-events-auto max-w-5xl mx-auto flex flex-col gap-2"
@@ -258,7 +255,7 @@
   
   <div
     class="absolute top-4 right-4 z-20 pointer-events-auto"
-    hidden={trailerState !== "done"}
+    hidden={trailerBlocking}
   >
     <ExportControl label="Export PNG" on:export={exportPng} />
   </div>
@@ -292,23 +289,14 @@
 
   {#if trailerAvailable}
     <Trailer
-      groups={trailerGroups}
       {highlightColor}
       backgroundColor={fill}
       {textColor}
-      introMode={true}
-      introHeading=""
       introSummary="this visualization shows the dominant topics discussed across the channels."
-      introBody=""
-      enterLabel="Enter"
       seedLabel={data?.dataset?.label ?? data?.dataset?.slug}
-      on:update={(event) => {
-        trailerState = event.detail?.state ?? trailerState;
-        trailerBlocking = event.detail?.state === "idle";
-        requestRedraw();
-      }}
       on:block={(event) => {
         trailerBlocking = event.detail?.blocking ?? false;
+        requestRedraw();
       }}
     />
   {/if}

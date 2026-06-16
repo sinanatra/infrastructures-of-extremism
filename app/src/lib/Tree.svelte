@@ -443,21 +443,11 @@
 
   {#if trailerAvailable}
     <Trailer
-      groups={trailerGroups}
       seedLabel={trailerSeedLabel}
       highlightColor={theme.highlightColor}
       backgroundColor={theme.backgroundColor}
       textColor={theme.textColor}
-      introMode={true}
-      introHeading=""
       introSummary="the network shows links, mentions, forwards, and broken targets."
-      introBody=""
-      enterLabel="Enter"
-      on:update={(event) => {
-        trailerState = event.detail?.state ?? trailerState;
-        trailerBlocking = event.detail?.state === "idle";
-        requestRedraw();
-      }}
       on:block={(event) => {
         trailerBlocking = event.detail?.blocking ?? false;
       }}
@@ -468,5 +458,6 @@
 <style>
   :global(canvas) {
     display: block;
+    background: white
   }
 </style>
