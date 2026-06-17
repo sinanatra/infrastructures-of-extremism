@@ -100,7 +100,7 @@
         <img
           src="/intro/berlin-demo.png"
           alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
-          class=" border-gray-300 border w-[350px] block grayscale hover:grayscale-0"
+          class=" border-gray-300 border w-[150px] block grayscale hover:grayscale-0"
         />
         <figcaption class="text-sm max-w-60 text-gray-600">
           A banner that promotes a link to a Telegram far-right youth group.
