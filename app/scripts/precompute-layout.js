@@ -2,6 +2,8 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import { csvParse, csvFormat } from "d3-dsv";
+import { chromium } from "playwright";
+import { spawn } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -1291,42 +1293,233 @@ const computeLayout = ({ posts, links, groups }) => {
   };
 };
 
-const main = async () => {
-  const preferredSlugs = await readEnvSeeds();
-  const datasets = await findDatasets(preferredSlugs);
-  const summaries = [];
-
-  for (const dataset of datasets) {
-    const { posts, links, groups, meta } = await loadData(dataset);
-    const layout = computeLayout({ posts, links, groups });
-    const targetDir = path.join(dataRoot, dataset.slug);
-    await fs.mkdir(targetDir, { recursive: true });
-    const outputPath = path.join(targetDir, "layout.json");
-    await fs.writeFile(outputPath, JSON.stringify(layout, null, 2), "utf8");
-    console.log(
-      `Wrote ${layout.nodes.length} nodes for ${
-        dataset.slug
-      } -> ${path.relative(projectRoot, outputPath)}`
-    );
-    summaries.push({
-      slug: dataset.slug,
-      label: meta.label,
-      postCount: meta.postCount,
-      groupCount: meta.groupCount,
-      startDate: meta.startDate,
-      endDate: meta.endDate,
-      brokenTargetCount: meta.brokenTargetCount ?? 0,
-      brokenMentionCount: meta.brokenMentionCount ?? 0,
-      brokenStatusCounts: meta.brokenStatusCounts ?? {},
+const startDevServer = () =>
+  new Promise((resolve, reject) => {
+    const proc = spawn("npm", ["run", "dev", "--", "--port", "5173"], {
+      cwd: projectRoot,
+      stdio: ["ignore", "pipe", "pipe"],
     });
+    const onData = (data) => {
+      if (data.toString().includes("5173")) resolve(proc);
+    };
+    proc.stdout.on("data", onData);
+    proc.stderr.on("data", onData);
+    proc.on("error", reject);
+    setTimeout(() => reject(new Error("Dev server timed out")), 30000);
+  });
+
+// Samples a thin band along each edge of the canvas and reports whether any
+// pixel there differs from the (background-colored) corner — i.e. whether
+// the drawing currently bleeds past the visible frame.
+const canvasContentTouchesEdge = (canvasEl) => {
+  const ctx = canvasEl.getContext("2d");
+  const w = canvasEl.width;
+  const h = canvasEl.height;
+  if (!ctx || !w || !h) return false;
+
+  const bg = ctx.getImageData(0, 0, 1, 1).data;
+  const differs = (d, i) =>
+    Math.abs(d[i] - bg[0]) > 12 ||
+    Math.abs(d[i + 1] - bg[1]) > 12 ||
+    Math.abs(d[i + 2] - bg[2]) > 12;
+
+  const band = 1;
+  const stride = 8; // sample every 8th pixel for speed
+
+  const scanRow = (y) => {
+    const row = ctx.getImageData(0, y, w, 1).data;
+    for (let x = 0; x < w; x += stride) {
+      if (differs(row, x * 4)) return true;
+    }
+    return false;
+  };
+  const scanCol = (x) => {
+    const col = ctx.getImageData(x, 0, 1, h).data;
+    for (let y = 0; y < h; y += stride) {
+      if (differs(col, y * 4)) return true;
+    }
+    return false;
+  };
+
+  for (let i = 0; i < band; i++) {
+    if (scanRow(i) || scanRow(h - 1 - i)) return true;
+    if (scanCol(i) || scanCol(w - 1 - i)) return true;
+  }
+  return false;
+};
+
+// Zooms out (wheel events centered on the canvas) until the drawing no
+// longer touches the frame edges. This adapts to each dataset's actual
+// content size instead of relying on a fixed, hand-tuned step count.
+const zoomOutToFit = async (page, canvas, { maxSteps = 80, wheelDelta = 200, marginSteps = 3 } = {}) => {
+  const box = await canvas.boundingBox();
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  await page.mouse.move(cx, cy);
+
+  const canvasHandle = await canvas.elementHandle();
+  for (let i = 0; i < maxSteps; i++) {
+    const touches = await canvasHandle.evaluate(canvasContentTouchesEdge);
+    if (!touches) break;
+    await page.mouse.wheel(0, wheelDelta);
+    await page.waitForTimeout(120);
   }
 
-  const indexPath = path.join(dataRoot, "datasets.json");
-  await fs.mkdir(dataRoot, { recursive: true });
-  await fs.writeFile(indexPath, JSON.stringify(summaries, null, 2), "utf8");
-  console.log(
-    `Updated dataset index at ${path.relative(projectRoot, indexPath)}`
-  );
+  // A little extra margin so the drawing isn't flush against the frame.
+  for (let i = 0; i < marginSteps; i++) {
+    await page.mouse.wheel(0, wheelDelta);
+    await page.waitForTimeout(80);
+  }
+};
+
+const screenshotPage = async (page, url, outputPath) => {
+  await page.goto(url, { waitUntil: "networkidle" });
+
+  // Dismiss trailer — find Enter button by text, not class (tbtn is shared)
+  const enterBtn = page.getByRole("button", { name: "Enter", exact: true });
+  await enterBtn.waitFor({ state: "visible", timeout: 15000 });
+  await enterBtn.click();
+
+  // Hide any UI chrome (controls bar, tooltips, hover cards) so only the
+  // visualization itself ends up in the screenshot.
+  await page.addStyleTag({
+    content: ".controls, .tooltip, aside { display: none !important; }",
+  });
+
+  // Wait for canvas to appear and do an initial render
+  const canvas = page.locator("canvas").first();
+  await canvas.waitFor({ state: "visible", timeout: 10000 });
+  await page.waitForTimeout(2000);
+
+  await zoomOutToFit(page, canvas);
+
+  // Wait for the final render after zoom
+  await page.waitForTimeout(1500);
+  await canvas.screenshot({ path: outputPath });
+};
+
+// The tree view is a DOM-based, vertically-scrolling column layout (not a
+// p5 canvas) that can run to tens of thousands of pixels tall, so there's
+// no zoom to fit it into a square frame. Instead we just capture the
+// top-of-page preview (root + first columns) at the viewport size.
+const screenshotTreePage = async (page, url, outputPath) => {
+  await page.goto(url, { waitUntil: "networkidle" });
+
+  const enterBtn = page.getByRole("button", { name: "Enter", exact: true });
+  await enterBtn.waitFor({ state: "visible", timeout: 15000 });
+  await enterBtn.click();
+
+  await page.addStyleTag({
+    content: ".controls, .tooltip, aside { display: none !important; }",
+  });
+
+  // Node buttons carry a `title` attribute (for the hover tooltip) that the
+  // Enter button doesn't, so this reliably targets "the tree actually
+  // rendered" without depending on its current class names/markup, which
+  // change as the component evolves.
+  const treeNode = page.locator("button[title]").first();
+  try {
+    await treeNode.waitFor({ state: "visible", timeout: 20000 });
+  } catch (err) {
+    // First visit to this route can be slow while Vite compiles it lazily —
+    // reload once and give it a longer runway before giving up.
+    await page.reload({ waitUntil: "networkidle" });
+    const enterBtnAgain = page.getByRole("button", { name: "Enter", exact: true });
+    if (await enterBtnAgain.isVisible().catch(() => false)) {
+      await enterBtnAgain.click();
+      await page.addStyleTag({
+        content: ".controls, .tooltip, aside { display: none !important; }",
+      });
+    }
+    await treeNode.waitFor({ state: "visible", timeout: 20000 });
+  }
+  await page.waitForTimeout(1500);
+
+  const { width, height } = page.viewportSize();
+  await page.screenshot({ path: outputPath, clip: { x: 0, y: 0, width, height } });
+};
+
+const generateCovers = async (slugs) => {
+  const coverDir = path.join(projectRoot, "static", "cover");
+  await fs.mkdir(coverDir, { recursive: true });
+
+  console.log("\nStarting dev server for cover screenshots...");
+  const server = await startDevServer();
+  await new Promise((r) => setTimeout(r, 1500));
+
+  const browser = await chromium.launch();
+  try {
+    for (const slug of slugs) {
+      const page = await browser.newPage({
+        viewport: { width: 1400, height: 1400 },
+        deviceScaleFactor: 3,
+      });
+      const base = `http://localhost:5173/${slug}`;
+
+      process.stdout.write(`  ${slug} network ... `);
+      await screenshotPage(page, base, path.join(coverDir, `${slug}.png`));
+      console.log("done");
+
+      process.stdout.write(`  ${slug} pie     ... `);
+      await screenshotPage(page, `${base}/pie`, path.join(coverDir, `${slug}_pie.png`));
+      console.log("done");
+
+      process.stdout.write(`  ${slug} tree    ... `);
+      await screenshotTreePage(page, `${base}/tree`, path.join(coverDir, `${slug}_tree.png`));
+      console.log("done");
+
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+    server.kill();
+    console.log("Dev server stopped.");
+  }
+};
+
+const main = async () => {
+  const coversOnly = process.argv.includes("--covers-only");
+  const preferredSlugs = await readEnvSeeds();
+  const datasets = await findDatasets(preferredSlugs);
+
+  if (!coversOnly) {
+    const summaries = [];
+    for (const dataset of datasets) {
+      const { posts, links, groups, meta } = await loadData(dataset);
+      const layout = computeLayout({ posts, links, groups });
+      const targetDir = path.join(dataRoot, dataset.slug);
+      await fs.mkdir(targetDir, { recursive: true });
+      const outputPath = path.join(targetDir, "layout.json");
+      await fs.writeFile(outputPath, JSON.stringify(layout, null, 2), "utf8");
+      console.log(
+        `Wrote ${layout.nodes.length} nodes for ${
+          dataset.slug
+        } -> ${path.relative(projectRoot, outputPath)}`
+      );
+      summaries.push({
+        slug: dataset.slug,
+        label: meta.label,
+        postCount: meta.postCount,
+        groupCount: meta.groupCount,
+        startDate: meta.startDate,
+        endDate: meta.endDate,
+        brokenTargetCount: meta.brokenTargetCount ?? 0,
+        brokenMentionCount: meta.brokenMentionCount ?? 0,
+        brokenStatusCounts: meta.brokenStatusCounts ?? {},
+      });
+    }
+
+    const indexPath = path.join(dataRoot, "datasets.json");
+    await fs.mkdir(dataRoot, { recursive: true });
+    await fs.writeFile(indexPath, JSON.stringify(summaries, null, 2), "utf8");
+    console.log(
+      `Updated dataset index at ${path.relative(projectRoot, indexPath)}`
+    );
+  } else {
+    console.log("Skipping layout computation (--covers-only).");
+  }
+
+  await generateCovers(datasets.map((d) => d.slug));
 };
 
 main().catch((err) => {

@@ -28,20 +28,24 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
   };
 
   // ── Broken group lookup ────────────────────────────────────────────────
+  // flood_wait_exceeded means the scraper got rate-limited while resolving a
+  // group, not that the group/link is actually dead — don't treat it as broken.
   const brokenGroupInfo = new Map(
-    (data?.brokenGroups ?? []).map((row) => {
-      const id = stripHandle(row.id ?? '');
-      return [
-        id,
-        {
+    (data?.brokenGroups ?? [])
+      .filter((row) => (row.status ?? '').toString().trim().toLowerCase() !== 'flood_wait_exceeded')
+      .map((row) => {
+        const id = stripHandle(row.id ?? '');
+        return [
           id,
-          status: (row.status ?? 'resolve_failed').toString(),
-          reason: (row.reason ?? '').toString(),
-          totalMentions: Number(row.totalMentions ?? 0) || 0,
-          sourceGroupCount: Number(row.sourceGroupCount ?? 0) || 0,
-        },
-      ];
-    })
+          {
+            id,
+            status: (row.status ?? 'resolve_failed').toString(),
+            reason: (row.reason ?? '').toString(),
+            totalMentions: Number(row.totalMentions ?? 0) || 0,
+            sourceGroupCount: Number(row.sourceGroupCount ?? 0) || 0,
+          },
+        ];
+      })
   );
 
   // ── Group metadata ─────────────────────────────────────────────────────
@@ -117,7 +121,9 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
 
   const brokenNodeIds = new Set([...brokenGroupInfo.keys()]);
   for (const edge of edges) {
-    if (edge.kind === 'broken') brokenNodeIds.add(edge.target);
+    if (edge.kind === 'broken' && edge.status.toLowerCase() !== 'flood_wait_exceeded') {
+      brokenNodeIds.add(edge.target);
+    }
   }
 
   // ── Seed node selection ────────────────────────────────────────────────

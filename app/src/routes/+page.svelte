@@ -18,40 +18,11 @@
     ]),
   );
 
-  let downloadingSlug = $state(null);
-
   const formatDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
-
-  const downloadDataset = async (slug) => {
-    if (!slug || downloadingSlug === slug) return;
-    downloadingSlug = slug;
-    try {
-      const response = await fetch(`/data/${slug}/graph.json`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch dataset: ${response.statusText}`);
-      }
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${slug}-data.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed:", error);
-      alert("Failed to download dataset");
-    } finally {
-      if (downloadingSlug === slug) {
-        downloadingSlug = null;
-      }
-    }
-  };
 
   const formatRange = (start, end) => {
     if (!start || !end) return null;
@@ -231,7 +202,7 @@
                 <img
                   src={`/cover/${dataset.slug}.png`}
                   alt={dataset.label || dataset.slug}
-                  class="w-full h-full object-cover scale-[1.35]"
+                  class="w-full h-full object-fit scale-[1.35]"
                   loading="lazy"
                 />
               </div>
@@ -278,7 +249,7 @@
                 <img
                   src={`/cover/${dataset.slug}_pie.png`}
                   alt={dataset.label || dataset.slug}
-                  class="w-full h-full object-cover scale-[1.35]"
+                  class="w-full h-full object-fit scale-[1.1]"
                   loading="lazy"
                 />
               </div>
@@ -325,7 +296,7 @@
                 <img
                   src={`/cover/${dataset.slug}_tree.png`}
                   alt={dataset.label || dataset.slug}
-                  class="w-full h-full object-cover scale-[1.35]"
+                  class="w-full h-full object-fit"
                   loading="lazy"
                 />
               </div>
@@ -346,47 +317,41 @@
     </section>
   </div>
 
-  <div
+  <!-- <div
     class="custom-shadow pt-20 sticky min-h-[60vh] top-0 justify-center flex relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
   >
     <section id="data" class="max-w-[1640px] w-full pb-10 space-y-4">
       <h2 class="text-2xl p-0 m-0 text-black">Datasets</h2>
 
       <p class="text-sm max-w-80 text-gray-600 pb-8">
-        All the scraped material is publicly available.<br />
-        Click to download the datasets.
+        All the scraped material is publicly available.
       </p>
       {#if datasets.length}
         <div class="grid gap-2 max-h-[320px] overflow-auto pr-1">
           {#each datasets as dataset (dataset.slug)}
-            <button
-              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-black/20 bg-[#dedede] text-black/60 text-left hover:bg-gray-300 hover:text-black transition text-sm disabled:cursor-wait disabled:opacity-80 disabled:hover:bg-[#dedede] text-black/60 disabled:hover:text-current"
-              onclick={() => downloadDataset(dataset.slug)}
-              disabled={downloadingSlug === dataset.slug}
-              aria-busy={downloadingSlug === dataset.slug}
+            <div
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded border border-black/20 bg-[#dedede] text-black/60 text-sm"
             >
               <span class="truncate">
                 {dataset.label || dataset.slug}
               </span>
               <span class="text-xs whitespace-nowrap text-gray-700">
-                {#if downloadingSlug === dataset.slug}
-                  Downloading...
-                {:else}
-                  {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
-                    "—"} groups
-                  {#if formatRange(dataset.startDate, dataset.endDate)}
-                    · {formatRange(dataset.startDate, dataset.endDate)}
-                  {/if}
+                {dataset.postCount?.toLocaleString() ?? "—"} messages · {dataset.groupCount ??
+                  "—"} groups
+                {#if formatRange(dataset.startDate, dataset.endDate)}
+                  · {formatRange(dataset.startDate, dataset.endDate)}
                 {/if}
               </span>
-            </button>
+            </div>
           {/each}
         </div>
       {/if}
     </section>
-  </div>
-
-  <div class="relative z-10 w-full px-5 pb-10 pt-20 bg-[#dedede] text-black">
+  </div> -->
+  <div
+    class="custom-shadow pt-5 sticky min-h-[20vh] top-0 relative z-10 w-full h-full px-5 pt-4 bg-[#dedede] text-black"
+  >
+    <div class="relative z-10 w-full px-5 pb-10 bg-[#dedede] text-black"></div>
     <section class="max-w-5xl text-xs text-gray-600 space-y-2 text-left">
       <p>
         Infrastructures of Extremism is a project by

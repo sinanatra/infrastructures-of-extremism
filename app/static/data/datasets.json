@@ -39,6 +39,19 @@
     }
   },
   {
+    "slug": "nsc131official",
+    "label": "Nationalist Social Club",
+    "postCount": 3610,
+    "groupCount": 23,
+    "startDate": "2022-08-22T01:00:16.000Z",
+    "endDate": "2026-06-17T14:25:30.000Z",
+    "brokenTargetCount": 2,
+    "brokenMentionCount": 8,
+    "brokenStatusCounts": {
+      "not_found": 2
+    }
+  },
+  {
     "slug": "tricoloredelsangueitalico",
     "label": "Tricolore del Sangue Italico(canale)",
     "postCount": 43825,

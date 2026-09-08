@@ -1,12 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import P5 from "p5-svelte";
-  import NetworkControls from "$lib/NetworkControls.svelte";
   import Tooltip from "$lib/Tooltip.svelte";
   import Trailer from "$lib/Trailer.svelte";
-  import ExportControl from "$lib/ExportControl.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
-  import { captureCanvasAsPng } from "$lib/captureCanvas.js";
   import {
     buildGraphNodes,
     buildLinkCountByPost,
@@ -80,13 +77,6 @@
     return graphNodes.length ? computeTopEmojis(graphNodes, 30) : [];
   });
 
-  const subscriberText = (value) => {
-    if (!value) return null;
-    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}m subs`;
-    if (value >= 1000) return `${(value / 1000).toFixed(1)}k subs`;
-    return `${value} subs`;
-  };
-
   let sizeMode = $state("links");
   let showLinks = $state(false);
   let selectedEmoji = $state(null);
@@ -129,20 +119,6 @@
       redrawPending = false;
       if (p5Instance) p5Instance.redraw();
     });
-  };
-
-  const exportPng = async () => {
-    if (!p5Instance?.canvas) return;
-    try {
-      p5Instance.redraw();
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-      const downloadName = data?.dataset?.slug ?? "pie";
-      await captureCanvasAsPng(p5Instance.canvas, downloadName);
-    } catch (err) {
-      console.error("Export failed", err);
-    } finally {
-      requestRedraw();
-    }
   };
 
   $effect(() => {
@@ -211,55 +187,6 @@
   class="relative h-screen overflow-hidden"
   style={`background:${fill}; color:${textColor}; --graph-bg:${fill}; --graph-text:${textColor}`}
 >
-  <div
-    class="absolute inset-x-0 top-0 z-10 p-4 pointer-events-none"
-    hidden={trailerBlocking}
-  >
-    <div
-      class="pointer-events-auto max-w-5xl mx-auto flex flex-col gap-2"
-      on:pointerdown|stopPropagation
-      on:pointermove|stopPropagation
-      on:pointerup|stopPropagation
-      on:wheel|stopPropagation
-      on:click|stopPropagation
-    >
-      <NetworkControls
-        counts={{
-          posts: posts.length,
-          groups: groups.length,
-          links: links.length,
-        }}
-        {groups}
-        {selectedGroupId}
-        hoveredGroupId={listHoveredGroupId}
-        {selectedGroup}
-        {sizeMode}
-        {showLinks}
-        {topEmojis}
-        {selectedEmoji}
-        {subscriberText}
-        {textColor}
-        backgroundColor={fill}
-        {highlightColor}
-        on:sizeMode={(e) => { sizeMode = e.detail; }}
-        on:showLinks={(e) => { showLinks = e.detail; }}
-        on:selectEmoji={(e) => { selectedEmoji = e.detail; }}
-        on:clearSelection={() => { selectedGroupId = null; }}
-        on:selectGroup={(e) => { selectedGroupId = selectedGroupId === e.detail ? null : e.detail; }}
-        on:hoverGroup={(e) => { listHoveredGroupId = e.detail; }}
-        on:clearHoverGroup={() => { listHoveredGroupId = null; }}
-      />
-    </div>
-  </div>
-
-  
-  <div
-    class="absolute top-4 right-4 z-20 pointer-events-auto"
-    hidden={trailerBlocking}
-  >
-    <ExportControl label="Export PNG" on:export={exportPng} />
-  </div>
-
   {#if loadingError}
     <div class="flex items-center justify-center h-full">
       <div class="text-red-500 text-center">

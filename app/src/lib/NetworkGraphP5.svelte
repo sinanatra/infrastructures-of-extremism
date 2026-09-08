@@ -1,10 +1,8 @@
 <script>
   import P5 from "p5-svelte";
   import NetworkControls from "$lib/NetworkControls.svelte";
-  import ExportControl from "$lib/ExportControl.svelte";
   import Trailer from "$lib/Trailer.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
-  import { captureCanvasAsPng } from "$lib/captureCanvas.js";
   import Tooltip from "$lib/Tooltip.svelte";
   import {
     buildLinkSegments,
@@ -153,30 +151,6 @@
     });
   };
 
-  const exportPng = async () => {
-    if (!pInstance?.canvas) return;
-    let exportSnapshot = null;
-    try {
-      if (typeof pInstance.prepareFullExport === "function") {
-        exportSnapshot = pInstance.prepareFullExport();
-      }
-      pInstance.redraw();
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-      const downloadName = datasetSlug ?? data?.dataset?.slug ?? "network";
-      await captureCanvasAsPng(pInstance.canvas, downloadName);
-    } catch (err) {
-      console.error("Export failed", err);
-    } finally {
-      if (
-        exportSnapshot &&
-        typeof pInstance.restoreAfterExport === "function"
-      ) {
-        pInstance.restoreAfterExport(exportSnapshot);
-      }
-      requestRedraw();
-    }
-  };
-
   $effect(() => {
     if (!pInstance) return;
     visibleNodes;
@@ -251,10 +225,6 @@
   class="relative h-screen overflow-hidden"
   style={`--highlite-color:${highlightColor}; --graph-bg:${backgroundColor}; --graph-circle:${circleColor}; --graph-text:${textColor}; background:${backgroundColor}; color:${textColor};`}
 >
-  <div class="absolute top-4 right-4 z-30 pointer-events-auto">
-    <ExportControl label="Export PNG" on:export={exportPng} />
-  </div>
-
   <Trailer
     {seedLabel}
     {highlightColor}

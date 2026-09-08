@@ -457,7 +457,7 @@ export const createPieSketch = ({
       if (trailerBlocking) return false;
       camera.zoomAt(event.deltaY, p.mouseX, p.mouseY, {
         step: 0.0004,
-        minZoom: 0.001,
+        minZoom: 0.5,
         maxZoom: 5,
       });
       scheduleRedraw();
@@ -583,7 +583,7 @@ export const createPieSketch = ({
           const centerY = (t0.clientY + t1.clientY) / 2;
           camera.zoomAt(deltaDistance * 0.5, centerX, centerY, {
             step: 0.001,
-            minZoom: 0.001,
+            minZoom: 0.5,
             maxZoom: 5,
           });
           scheduleRedraw();

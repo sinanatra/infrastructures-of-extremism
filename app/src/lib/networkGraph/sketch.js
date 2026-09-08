@@ -42,8 +42,6 @@ export const createNetworkGraphSketch = ({
 
   const minScale = 0.1;
   const maxScale = 0.9;
-  const exportLongSidePx = 2400;
-  const exportPadding = 100;
   const view = {
     scale: 0.35,
     panX: 0,
@@ -224,100 +222,6 @@ export const createNetworkGraphSketch = ({
     const h = parent?.clientHeight || window.innerHeight || height;
     canvasSize = { w, h };
     return canvasSize;
-  };
-
-  const computeExportBounds = () => {
-    const { visibleNodes, trailerVisibleGroups } = getState();
-    let minX = cx - outerRingRadius;
-    let maxX = cx + outerRingRadius;
-    let minY = cy - outerRingRadius;
-    let maxY = cy + outerRingRadius;
-
-    for (const node of visibleNodes ?? []) {
-      const nodeRadius = Math.max(node.radiusLinks ?? 0, node.radiusReactions ?? 0, 8);
-      minX = Math.min(minX, node.x - nodeRadius);
-      maxX = Math.max(maxX, node.x + nodeRadius);
-      minY = Math.min(minY, node.y - nodeRadius);
-      maxY = Math.max(maxY, node.y + nodeRadius);
-    }
-
-    for (const slice of slicePaths ?? []) {
-      if (trailerVisibleGroups && !trailerVisibleGroups.has(slice.id)) continue;
-      const metrics = sliceLabelMetrics(slice);
-      const pos = slice.labelPos;
-      const labelW = metrics?.width ?? Math.max(40, (slice.label?.length ?? 6) * 12);
-      const labelH = metrics?.height ?? 24;
-      minX = Math.min(minX, pos.x - labelW);
-      maxX = Math.max(maxX, pos.x + labelW);
-      minY = Math.min(minY, pos.y - labelH);
-      maxY = Math.max(maxY, pos.y + labelH);
-    }
-
-    return { minX, minY, maxX, maxY };
-  };
-
-  const computeExportSize = (bounds) => {
-    const contentWidth = Math.max(1, bounds.maxX - bounds.minX);
-    const contentHeight = Math.max(1, bounds.maxY - bounds.minY);
-
-    if (contentWidth >= contentHeight) {
-      return {
-        w: exportLongSidePx,
-        h: Math.max(1, Math.round((exportLongSidePx * contentHeight) / contentWidth)),
-      };
-    }
-    return {
-      w: Math.max(1, Math.round((exportLongSidePx * contentWidth) / contentHeight)),
-      h: exportLongSidePx,
-    };
-  };
-
-  const fitViewToBounds = (bounds, size) => {
-    const contentWidth = Math.max(1, bounds.maxX - bounds.minX);
-    const contentHeight = Math.max(1, bounds.maxY - bounds.minY);
-    const centerX = (bounds.minX + bounds.maxX) / 2;
-    const centerY = (bounds.minY + bounds.maxY) / 2;
-    const safeWidth = Math.max(1, size.w - exportPadding * 2);
-    const safeHeight = Math.max(1, size.h - exportPadding * 2);
-    const targetScale = clamp(
-      Math.min(safeWidth / contentWidth, safeHeight / contentHeight),
-      minScale,
-      maxScale
-    );
-
-    view.scale = targetScale;
-    view.panX = (cx - centerX) * view.scale;
-    view.panY = (cy - centerY) * view.scale;
-    labelMetricsCache.clear();
-    lastLabelScale = view.scale;
-  };
-
-  const prepareFullExport = () => {
-    if (!pRef) return null;
-    const snapshot = {
-      canvasSize: { ...canvasSize },
-      view: { ...view },
-      labelScale: lastLabelScale,
-    };
-
-    const bounds = computeExportBounds();
-    const exportSize = computeExportSize(bounds);
-    pRef.resizeCanvas(exportSize.w, exportSize.h, true);
-    canvasSize = { ...exportSize };
-    fitViewToBounds(bounds, exportSize);
-
-    return snapshot;
-  };
-
-  const restoreAfterExport = (snapshot) => {
-    if (!pRef || !snapshot?.canvasSize) return;
-    pRef.resizeCanvas(snapshot.canvasSize.w, snapshot.canvasSize.h, true);
-    canvasSize = { ...snapshot.canvasSize };
-    view.scale = snapshot.view?.scale ?? view.scale;
-    view.panX = snapshot.view?.panX ?? view.panX;
-    view.panY = snapshot.view?.panY ?? view.panY;
-    lastLabelScale = snapshot.labelScale ?? view.scale;
-    labelMetricsCache.clear();
   };
 
   const zoomAt = (deltaY, sx, sy) => {
@@ -755,8 +659,6 @@ export const createNetworkGraphSketch = ({
       pRef = p;
       const size = computeCanvasSize();
       p.createCanvas(size.w, size.h, p.P2D);
-      p.prepareFullExport = prepareFullExport;
-      p.restoreAfterExport = restoreAfterExport;
       p.noLoop();
       p.angleMode(p.RADIANS);
       p.textFont("sans-serif");
