@@ -12,7 +12,12 @@
   } = $props();
 
   const { theme, nodes, linkSegments, trailerGroups, trailerSeedLabel, seed } =
-    prepareTreeData(data, { backgroundColor, circleColor, textColor, highlightColor });
+    prepareTreeData(data, {
+      backgroundColor,
+      circleColor,
+      textColor,
+      highlightColor,
+    });
 
   const trailerAvailable = trailerGroups.length > 0;
   let trailerBlocking = $state(trailerAvailable);
@@ -30,7 +35,9 @@
   // hoveredId gives a quick preview; pinnedId (set by click) survives scrolling
   // so the connections stay visible while tracing a line across the diagram.
   let hoveredId = $state(null);
-  let pinnedId = $state(seed && nodes.some((n) => n.id === seed) ? seed : (nodes[0]?.id ?? null));
+  let pinnedId = $state(
+    seed && nodes.some((n) => n.id === seed) ? seed : (nodes[0]?.id ?? null),
+  );
   const activeId = $derived(pinnedId ?? hoveredId);
   const activeNode = $derived(nodes.find((n) => n.id === activeId) ?? null);
 
@@ -70,7 +77,9 @@
       isRoot
         ? "bg-[color-mix(in_srgb,var(--node-color)_25%,var(--node-bg))]"
         : "bg-[color-mix(in_srgb,var(--node-color)_16%,var(--node-bg))]",
-      isActive ? "border-[var(--node-color)] translate-x-0.5" : "border-[color-mix(in_srgb,var(--node-color)_55%,transparent)]",
+      isActive
+        ? "border-[var(--node-color)] translate-x-0.5"
+        : "border-[color-mix(in_srgb,var(--node-color)_55%,transparent)]",
       node.isBroken ? "border-dashed" : "",
       isDim ? "opacity-30" : "",
     ]
@@ -174,9 +183,19 @@
       role="presentation"
       onclick={clearPin}
     >
-      <svg class="absolute inset-0 z-0 w-full h-full pointer-events-none overflow-visible">
+      <svg
+        class="absolute inset-0 z-0 w-full h-full pointer-events-none overflow-visible"
+      >
         <defs>
-          <marker id="tree-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <marker
+            id="tree-arrow"
+            viewBox="0 0 8 8"
+            refX="7"
+            refY="4"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
             <path d="M0,0 L8,4 L0,8 Z" fill={theme.highlightColor} />
           </marker>
         </defs>
@@ -236,9 +255,6 @@
         {#if activeNode.brokenMentions}
           <div>Mentions: {activeNode.brokenMentions}</div>
         {/if}
-      {/if}
-      {#if pinnedId === activeNode.id}
-        <div class="opacity-60 text-[10px] mt-1">click again to open · esc / click background to unpin</div>
       {/if}
     </aside>
   {/if}
