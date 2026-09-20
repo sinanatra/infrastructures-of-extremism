@@ -1,0 +1,49 @@
+{
+  "topics": [
+    {
+      "label": "Symbols",
+      "description": "Visual and cultural representations: flags, heraldry, national emblems, monuments, statues, heraldic symbols, aesthetic representations of heritage, historical monuments, cultural artifacts, patriotic imagery, symbolic markers, visual identity",
+      "keywords": []
+    },
+    {
+      "label": "Demographics",
+      "description": "Population statistics and composition: birth rates, population numbers, demographic trends, age structure, gender ratios, ethnic composition percentages, statistical data, census information, demographic indicators, population figures",
+      "keywords": []
+    },
+    {
+      "label": "Migration",
+      "description": "Immigration and population movement: migration flows, immigration policy, asylum seekers, refugees, border control, population displacement, migration patterns, foreign populations, immigration law, population movement",
+      "keywords": []
+    },
+    {
+      "label": "Institutions",
+      "description": "Government and authority structures: state institutions, legislative bodies, executive branches, courts, bureaucracy, official agencies, institutional power, administrative systems, constitutional bodies, governmental organizations",
+      "keywords": []
+    },
+    {
+      "label": "Street Mobilization",
+      "description": "Grassroots organizing and action: street protests, demonstrations, marches, rallies, activism, community organizing, public gatherings, protest movements, direct action, grassroots campaigns, popular mobilization",
+      "keywords": []
+    },
+    {
+      "label": "Ideology",
+      "description": "Political theory and doctrine: manifestos, political philosophy, ideological frameworks, worldview exposition, theoretical principles, belief systems, ideological positioning, political doctrines, philosophical foundations",
+      "keywords": []
+    },
+    {
+      "label": "Media Criticism",
+      "description": "Critique of mainstream media: media bias allegations, journalistic integrity criticism, mainstream press criticism, media manipulation claims, press freedom debate, specific media outlet criticism, media accountability",
+      "keywords": []
+    },
+    {
+      "label": "Censorship Claims",
+      "description": "Claims about suppression and restrictions: deplatforming, content removal, censorship accusations, restricted speech, account suspension, platform moderation criticism, suppression of information, information control, free speech violation claims",
+      "keywords": []
+    },
+    {
+      "label": "Conflict",
+      "description": "Armed conflict and violence: military action, warfare, armed clashes, combat operations, violent events, military intervention, armed struggle, geopolitical conflict, military aggression, violent confrontation",
+      "keywords": []
+    }
+  ]
+}

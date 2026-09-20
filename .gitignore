@@ -1,0 +1,6 @@
+notebooks/data/*
+.DS_Store
+*.session
+notebooks/__pycache__/
+.claude/
+.env

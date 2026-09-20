@@ -1,0 +1,73 @@
+[
+  {
+    "slug": "jungenationalisten",
+    "theme": {
+      "backgroundColor": "#eee",
+      "fill": "white",
+      "circleColor": "#222",
+      "highlightColor": "#7B68EE",
+      "textColor": "#111111",
+
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
+    }
+  },
+  {
+    "slug": "tricoloredelsangueitalico",
+    "theme": {
+      "backgroundColor": "#eee",
+      "fill": "white",
+      "circleColor": "#222",
+      "textColor": "#111111",
+      "highlightColor": "#FF4701",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
+    }
+  },
+  {
+    "slug": "generationidentitaire",
+    "theme": {
+      "backgroundColor": "#eee",
+      "fill": "white",
+      "circleColor": "#222",
+      "textColor": "#111111",
+      "highlightColor": "#76b68d",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
+    }
+  },
+  {
+    "slug": "afdjugendbw",
+    "theme": {
+      "backgroundColor": "#eee",
+      "fill": "white",
+      "circleColor": "#222",
+      "textColor": "#111111",
+      "highlightColor": "#896F61",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
+    }
+  },
+  {
+    "slug": "whitelivesmatterofficial",
+    "theme": {
+      "backgroundColor": "#eee",
+      "fill": "white",
+      "circleColor": "#222",
+      "textColor": "#111111",
+      "highlightColor": "#a8723c",
+      "pieExtrudeOffsetX": 0,
+      "pieExtrudeOffsetY": 180,
+      "graphExtrudeOffsetX": 0,
+      "graphExtrudeOffsetY": 1250
+    }
+  }
+]
