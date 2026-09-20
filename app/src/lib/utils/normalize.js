@@ -1,6 +1,6 @@
 export const normalizeGroupId = (value) => (value ?? '').trim().toLowerCase();
 
-export const normalizeHandle = (v) =>
+const normalizeHandle = (v) =>
   (v ?? '')
     .toString()
     .trim()

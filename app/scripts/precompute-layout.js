@@ -4,6 +4,8 @@ import { fileURLToPath } from "url";
 import { csvParse, csvFormat } from "d3-dsv";
 import { chromium } from "playwright";
 import { spawn } from "child_process";
+import { normalizeGroupId } from "../src/lib/utils/normalize.js";
+import { parseNumber, parseDateMs } from "../src/lib/utils/parse.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -14,8 +16,6 @@ const requiredSourceFiles = [
   "message_edges.csv",
   "nodes.csv",
 ];
-
-const normalizeGroupId = (value) => (value ?? "").trim().toLowerCase();
 
 const parseEnvSeeds = (envText) => {
   const match = envText.match(/^TG_START_SEEDS\s*=\s*(.+)$/m);
@@ -131,11 +131,6 @@ const readOptionalCsv = async (baseDir, filename) => {
   }
 };
 
-const parseNumber = (value) => {
-  const num = Number(value ?? "");
-  return Number.isFinite(num) ? num : undefined;
-};
-
 const parseSubscribers = (value) => {
   if (value == null) return undefined;
   let s = String(value).trim();
@@ -147,11 +142,6 @@ const parseSubscribers = (value) => {
   s = s.replace(/[\s,]/g, "");
   const num = Number(s);
   return Number.isFinite(num) ? num * factor : undefined;
-};
-
-const parseDateMs = (value) => {
-  const ms = Date.parse(value ?? "");
-  return Number.isFinite(ms) ? ms : undefined;
 };
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));

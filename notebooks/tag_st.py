@@ -15,14 +15,15 @@ from sentence_transformers import SentenceTransformer, util
 
 from utils import (
     DEFAULT_PRIMARY_TOPIC,
-    atomic_write_text,
     dedupe_keep_order,
+    ensure_tag_columns,
     normalize_id,
     normalize_text,
     parse_listish,
-    parse_locations,
     read_csv_rows,
+    should_tag_row,
     sync_to_app_static,
+    update_graph_json,
     write_csv_rows,
 )
 
@@ -36,7 +37,7 @@ TOPIC_DEDUP_SIM = 0.75
 
 URL_PATTERN = re.compile(r"https?://\S+")
 RT_PATTERN = re.compile(r"^rt\s+@\w+:\s*", re.IGNORECASE)
-CONTROL_PATTERN = re.compile(r"[--]")
+CONTROL_PATTERN = re.compile(r"[\u0000-\u001f\u007f-\u009f]")
 MULTISPACE_PATTERN = re.compile(r"\s+")
 
 
@@ -122,67 +123,6 @@ def predict_topics_batch(
                 break
         results.append(selected)
     return results
-
-
-def should_tag_row(row: dict[str, str], mode: str, min_text_length: int) -> bool:
-    text = normalize_text(row.get("text"))
-    if not text or len(text) < min_text_length:
-        return False
-    current_topics = parse_listish(row.get("topics"))
-    has_topics = bool(current_topics)
-    has_error = bool(normalize_text(row.get("tagging_error")))
-    has_attempt = bool(
-        normalize_text(row.get("tagged_at")) or normalize_text(row.get("tagging_model"))
-    )
-    if mode == "all":
-        return True
-    if mode == "errors":
-        return has_error or (not has_topics and not has_attempt)
-    return not has_topics and not has_attempt
-
-
-def ensure_tag_columns(fieldnames: list[str]) -> list[str]:
-    out = list(fieldnames)
-    for col in ("topics", "primaryTopic", "topics_ollama_raw", "locations_ranked",
-                "tagging_error", "tagged_at", "tagging_model"):
-        if col not in out:
-            out.append(col)
-    return out
-
-
-def update_graph_json(
-    graph_path: Path,
-    by_id: dict[str, dict[str, Any]],
-    changed_ids: set[str],
-) -> tuple[int, int]:
-    if not graph_path.exists():
-        return 0, 0
-    payload = json.loads(graph_path.read_text(encoding="utf-8"))
-    messages = payload.get("messages")
-    if not isinstance(messages, list):
-        return 0, 0
-    matched = updated = 0
-    for msg in messages:
-        if not isinstance(msg, dict):
-            continue
-        msg_id = normalize_id(msg.get("id"))
-        if not msg_id or msg_id not in changed_ids:
-            continue
-        row = by_id.get(msg_id)
-        if row is None:
-            continue
-        matched += 1
-        before = (msg.get("topics"), msg.get("primaryTopic"))
-        msg["topics"] = parse_listish(row.get("topics"))
-        msg["primaryTopic"] = normalize_text(row.get("primaryTopic")) or DEFAULT_PRIMARY_TOPIC
-        msg["topics_ollama_raw"] = parse_listish(row.get("topics_ollama_raw"))
-        msg["locations_ranked"] = parse_locations(row.get("locations_ranked"))
-        msg["tagging_error"] = normalize_text(row.get("tagging_error"))
-        if (msg.get("topics"), msg.get("primaryTopic")) != before:
-            updated += 1
-    if updated:
-        atomic_write_text(graph_path, json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
-    return matched, updated
 
 
 def parse_args() -> argparse.Namespace:

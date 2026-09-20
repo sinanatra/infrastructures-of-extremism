@@ -1,5 +1,5 @@
 <script>
-  import NetworkGraph from "$lib/NetworkGraph.svelte";
+  import NetworkGraph from "$lib/NetworkGraphP5.svelte";
   let { data } = $props();
 
   const defaultTheme = {
