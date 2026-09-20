@@ -9,6 +9,7 @@ export const createNetworkGraphSketch = ({
   requestRedraw,
   getState,
   setHoverState,
+  toggleGroup,
   tooltipForPost,
   formatTick,
   getCanvasParent,

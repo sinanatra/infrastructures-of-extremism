@@ -271,8 +271,6 @@ export const prepareNetwork = (
       label: slice.group.label ?? slice.group.id,
       color: slice.color,
       path: arcPath(innerRadius - 28, outerRadius + 12, slice.start, slice.end),
-      start: slice.start,
-      end: slice.end,
       labelPos: toCartesian(labelRadius, slice.center),
       angleDeg,
       labelRotation: flipped ? angleDeg + 180 : angleDeg,

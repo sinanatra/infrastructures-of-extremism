@@ -190,6 +190,7 @@
     backgroundColor,
     pieBackground: fill,
     circleColor,
+    hexaFill: fill,
     trailerBlocking,
   });
 
@@ -212,6 +213,7 @@
     requestRedraw,
     getState,
     setHoverState,
+    toggleGroup,
     tooltipForPost,
     formatTick,
     getCanvasParent: () => canvasParent,
