@@ -3,3 +3,4 @@ notebooks/data/*
 *.session
 notebooks/__pycache__/
 .claude/
+.env
