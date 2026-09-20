@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-"""Tag dataset messages with sentence-transformers (incremental).
-
-Workflow:
-1) Read notebooks/data/<dataset>/message_nodes.csv
-2) Tag only rows that are not already tagged (default behavior)
-3) Update message_nodes.csv (topics/primaryTopic + metadata columns)
-4) Optionally sync files to app/static/data/<dataset>
-
-Usage:
-    python tag_st.py --dataset tricoloredelsangueitalico
-    python tag_st.py --dataset generationidentitaire --mode all --sync-app-static
-"""
 
 from __future__ import annotations
 

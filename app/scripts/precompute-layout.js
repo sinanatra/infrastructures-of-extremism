@@ -621,10 +621,6 @@ const GAP_RADIUS_PX = 50;
 const LABEL_CHAR_PX = 9;
 const LABEL_PAD_PX = 80;
 
-/**
- * Builds a spatial grid and resolves pairwise collision overlaps for all nodes.
- * Directly mutates node.x / node.y.
- */
 const applyCollisionPass = (nodes, cellSize, collisionPadding) => {
   const grid = new Map();
   for (const node of nodes) {
@@ -659,10 +655,7 @@ const applyCollisionPass = (nodes, cellSize, collisionPadding) => {
   }
 };
 
-// Separates overlapping nodes that share the same ring by pushing them apart
-// angularly within their slice. Works directly in polar space so the result
-// is exact — no 2D→snap round-trip loss.
-const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, polygonSides, polygonPointAtAngle, passes = 40) => {
+const applyAngularSeparation =(nodes, cx, cy, collisionPadding, sliceForGroup, polygonSides, polygonPointAtAngle, passes = 40) => {
   const byGroup = new Map();
   for (const node of nodes) {
     if (!byGroup.has(node.groupId)) byGroup.set(node.groupId, []);
@@ -680,7 +673,6 @@ const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, 
     for (let pass = 0; pass < passes; pass++) {
       let moved = false;
 
-      // Forward sweep: push later node forward if too close
       for (let i = 0; i < gNodes.length - 1; i++) {
         const a = gNodes[i];
         const b = gNodes[i + 1];
@@ -698,7 +690,6 @@ const applyAngularSeparation = (nodes, cx, cy, collisionPadding, sliceForGroup, 
         }
       }
 
-      // Backward sweep: push earlier node back if too close
       for (let i = gNodes.length - 1; i > 0; i--) {
         const a = gNodes[i - 1];
         const b = gNodes[i];
@@ -1170,12 +1161,8 @@ const computeLayout = ({ posts, links, groups }) => {
 
   simulate(300);
 
-  // Angular separation pass: works directly on the ring so nothing gets undone.
-  // Resolves remaining overlaps that the 2D simulation can't fix after ring snap.
   applyAngularSeparation(nodes, cx, cy, 12, sliceForGroup, polygonSides, polygonPointAtAngle, 120);
 
-  // Final 2D collision pass without ring snap — resolves remaining overlaps at
-  // slice boundaries where angular separation hits its limit.
   const finalCellSize = Math.max(32, maxNodeRadius * 4);
   for (let i = 0; i < 40; i++) {
     applyCollisionPass(nodes, finalCellSize, 4);
@@ -1308,9 +1295,6 @@ const startDevServer = () =>
     setTimeout(() => reject(new Error("Dev server timed out")), 30000);
   });
 
-// Samples a thin band along each edge of the canvas and reports whether any
-// pixel there differs from the (background-colored) corner — i.e. whether
-// the drawing currently bleeds past the visible frame.
 const canvasContentTouchesEdge = (canvasEl) => {
   const ctx = canvasEl.getContext("2d");
   const w = canvasEl.width;
@@ -1324,7 +1308,7 @@ const canvasContentTouchesEdge = (canvasEl) => {
     Math.abs(d[i + 2] - bg[2]) > 12;
 
   const band = 1;
-  const stride = 8; // sample every 8th pixel for speed
+  const stride = 8;
 
   const scanRow = (y) => {
     const row = ctx.getImageData(0, y, w, 1).data;
@@ -1348,9 +1332,6 @@ const canvasContentTouchesEdge = (canvasEl) => {
   return false;
 };
 
-// Zooms out (wheel events centered on the canvas) until the drawing no
-// longer touches the frame edges. This adapts to each dataset's actual
-// content size instead of relying on a fixed, hand-tuned step count.
 const zoomOutToFit = async (page, canvas, { maxSteps = 80, wheelDelta = 200, marginSteps = 3 } = {}) => {
   const box = await canvas.boundingBox();
   const cx = box.x + box.width / 2;
@@ -1365,7 +1346,6 @@ const zoomOutToFit = async (page, canvas, { maxSteps = 80, wheelDelta = 200, mar
     await page.waitForTimeout(120);
   }
 
-  // A little extra margin so the drawing isn't flush against the frame.
   for (let i = 0; i < marginSteps; i++) {
     await page.mouse.wheel(0, wheelDelta);
     await page.waitForTimeout(80);
@@ -1375,33 +1355,24 @@ const zoomOutToFit = async (page, canvas, { maxSteps = 80, wheelDelta = 200, mar
 const screenshotPage = async (page, url, outputPath) => {
   await page.goto(url, { waitUntil: "networkidle" });
 
-  // Dismiss trailer — find Enter button by text, not class (tbtn is shared)
   const enterBtn = page.getByRole("button", { name: "Enter", exact: true });
   await enterBtn.waitFor({ state: "visible", timeout: 15000 });
   await enterBtn.click();
 
-  // Hide any UI chrome (controls bar, tooltips, hover cards) so only the
-  // visualization itself ends up in the screenshot.
   await page.addStyleTag({
     content: ".controls, .tooltip, aside { display: none !important; }",
   });
 
-  // Wait for canvas to appear and do an initial render
   const canvas = page.locator("canvas").first();
   await canvas.waitFor({ state: "visible", timeout: 10000 });
   await page.waitForTimeout(2000);
 
   await zoomOutToFit(page, canvas);
 
-  // Wait for the final render after zoom
   await page.waitForTimeout(1500);
   await canvas.screenshot({ path: outputPath });
 };
 
-// The tree view is a DOM-based, vertically-scrolling column layout (not a
-// p5 canvas) that can run to tens of thousands of pixels tall, so there's
-// no zoom to fit it into a square frame. Instead we just capture the
-// top-of-page preview (root + first columns) at the viewport size.
 const screenshotTreePage = async (page, url, outputPath) => {
   await page.goto(url, { waitUntil: "networkidle" });
 
@@ -1413,16 +1384,10 @@ const screenshotTreePage = async (page, url, outputPath) => {
     content: ".controls, .tooltip, aside { display: none !important; }",
   });
 
-  // Node buttons carry a `title` attribute (for the hover tooltip) that the
-  // Enter button doesn't, so this reliably targets "the tree actually
-  // rendered" without depending on its current class names/markup, which
-  // change as the component evolves.
   const treeNode = page.locator("button[title]").first();
   try {
     await treeNode.waitFor({ state: "visible", timeout: 20000 });
   } catch (err) {
-    // First visit to this route can be slow while Vite compiles it lazily —
-    // reload once and give it a longer runway before giving up.
     await page.reload({ waitUntil: "networkidle" });
     const enterBtnAgain = page.getByRole("button", { name: "Enter", exact: true });
     if (await enterBtnAgain.isVisible().catch(() => false)) {

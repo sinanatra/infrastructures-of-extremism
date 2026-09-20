@@ -44,12 +44,9 @@
         return;
       }
       const data = await response.json();
-      // console.log('Topics loaded successfully:', data);
       topicsData = data;
       TOPIC_LABELS = topicsData.topics.map(t => t.label);
-      // console.log('TOPIC_LABELS:', TOPIC_LABELS);
       canonicalTopic = createCanonicalTopic(TOPIC_LABELS, "other topics");
-      // console.log('canonicalTopic created:', canonicalTopic);
     } catch (err) {
       loadingError = err.message;
       console.error('Error loading topics:', err);
@@ -67,7 +64,6 @@
   const graphNodes = $derived.by(() => {
     if (!canonicalTopic) return [];
     const nodes = buildGraphNodes(preparedNodes, { circleColor, canonicalTopic });
-    // console.log('graphNodes updated:', nodes.length, 'nodes');
     return nodes;
   });
   const graphLinks = normalizeGraphLinks(links);
@@ -159,10 +155,8 @@
 
   const sketch = $derived.by(() => {
     if (!canonicalTopic || TOPIC_LABELS.length === 0) {
-      // console.log('Sketch not ready:', { canonicalTopic: !!canonicalTopic, labels: TOPIC_LABELS.length });
       return null;
     }
-    // console.log('Creating sketch with graphNodes:', graphNodes.length, 'graphLinks:', graphLinks.length);
     const s = createPieSketch({
       graphNodes,
       graphLinks,
@@ -173,7 +167,6 @@
       tooltipForPost,
       setHoverState,
     });
-    // console.log('Sketch created:', s);
     return s;
   });
 

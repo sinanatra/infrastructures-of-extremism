@@ -1,17 +1,4 @@
 #!/usr/bin/env python3
-"""Tag dataset messages with Ollama and resume incrementally.
-
-Workflow:
-1) Read notebooks/data/<dataset>/message_nodes.csv
-2) Tag only rows that are not already tagged (default behavior)
-3) Update message_nodes.csv (topics/primaryTopic + metadata columns)
-4) Optionally update graph.json and sync files to app/static/data/<dataset>
-
-Usage:
-    python tag.py --dataset tricoloredelsangueitalico
-    python tag.py --dataset jungenationalisten --mode errors --workers 5
-    python tag.py --dataset afdjugendbw --mode all --sync-app-static
-"""
 
 from __future__ import annotations
 
@@ -38,22 +25,12 @@ from utils import (
 )
 
 
-# ---------------------------------------------------------------------------
-# Data types
-# ---------------------------------------------------------------------------
-
-
 @dataclass
 class TagResult:
     topics: list[str]
     raw_topics: list[str]
     locations_ranked: list[dict[str, Any]]
     tagging_error: str
-
-
-# ---------------------------------------------------------------------------
-# Topic loading
-# ---------------------------------------------------------------------------
 
 
 def load_topic_labels(topics_json_path: Path) -> list[str]:
@@ -66,11 +43,6 @@ def load_topic_labels(topics_json_path: Path) -> list[str]:
         if label:
             out.append(label)
     return dedupe_keep_order(out)
-
-
-# ---------------------------------------------------------------------------
-# Row filtering
-# ---------------------------------------------------------------------------
 
 
 def should_tag_row(row: dict[str, str], mode: str, min_text_length: int) -> bool:
@@ -89,13 +61,7 @@ def should_tag_row(row: dict[str, str], mode: str, min_text_length: int) -> bool
         return True
     if mode == "errors":
         return has_error or (not has_topics and not has_attempt)
-    # "missing" (default)
     return not has_topics and not has_attempt
-
-
-# ---------------------------------------------------------------------------
-# Ollama calling
-# ---------------------------------------------------------------------------
 
 
 def build_system_prompt(topic_labels: list[str]) -> str:
@@ -218,11 +184,6 @@ def call_ollama(
     )
 
 
-# ---------------------------------------------------------------------------
-# Applying results
-# ---------------------------------------------------------------------------
-
-
 def apply_tag_result(
     row: dict[str, str],
     *,
@@ -230,7 +191,6 @@ def apply_tag_result(
     model: str,
     tagged_at_iso: str,
 ) -> bool:
-    """Update row in-place. Returns True if any field changed."""
     changed = False
 
     def _set(key: str, val: str) -> None:
@@ -254,7 +214,6 @@ def update_graph_json(
     by_id: dict[str, dict[str, Any]],
     changed_ids: set[str],
 ) -> tuple[int, int]:
-    """Sync tagging fields from CSV rows back into graph.json for changed IDs."""
     if not graph_path.exists():
         return 0, 0
 
@@ -301,11 +260,6 @@ def ensure_tag_columns(fieldnames: list[str]) -> list[str]:
     return out
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Tag dataset messages with Ollama (incremental)."
@@ -343,11 +297,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
-
 def main() -> int:
     args = parse_args()
     dataset_slug = normalize_text(args.dataset).lower()
@@ -373,7 +322,6 @@ def main() -> int:
     fieldnames, rows = read_csv_rows(message_nodes_path)
     fieldnames = ensure_tag_columns(fieldnames)
 
-    # Build ID index and pre-normalise existing topics
     by_id: dict[str, dict[str, Any]] = {}
     changed_ids: set[str] = set()
     candidates: list[int] = []

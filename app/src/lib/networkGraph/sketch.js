@@ -368,7 +368,6 @@ export const createNetworkGraphSketch = ({
     return segments;
   };
 
-  // Precompute static geometry — none of these inputs change at runtime
   const preTopPoly = drawPolygonVertices(outerRingRadius);
   const preBottomPoly = preTopPoly.map((pt) => ({
     x: pt.x + extrudeOffsetX,
@@ -386,7 +385,6 @@ export const createNetworkGraphSketch = ({
     return { topArc, bottomArc, segments: bottomSegments(topArc, bottomArc) };
   });
 
-  // Color cache — p.color() is expensive; cache by string value
   const colorCache = new Map();
   const cachedColor = (str) => {
     if (!colorCache.has(str)) colorCache.set(str, pRef.color(str));

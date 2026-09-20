@@ -1,14 +1,4 @@
 #!/usr/bin/env python3
-"""Merge a pre-tagged CSV into a dataset's message_nodes.csv and graph.json.
-
-Use this when you have an externally computed tagged CSV (e.g. from a one-off
-benchmarking run) and want to apply those tags back to the dataset files used
-by the visualization.
-
-Usage:
-    python merge_tags.py --dataset tricoloredelsangueitalico --tagged-csv path/to/tagged.csv
-    python merge_tags.py --dataset jungenationalisten --sync-app-static --dry-run
-"""
 
 from __future__ import annotations
 
@@ -30,7 +20,6 @@ from utils import (
     write_csv_rows,
 )
 
-# Maps legacy benchmark topic labels → current canonical app labels
 LEGACY_TOPIC_MAP: dict[str, str] = {
     "national identity": "Ideology",
     "migration & xenophobia": "Migration",
@@ -46,13 +35,7 @@ LEGACY_TOPIC_MAP: dict[str, str] = {
 EXTRA_COLUMNS = ["topics_ollama_raw", "locations_ranked", "tagging_error"]
 
 
-# ---------------------------------------------------------------------------
-# Topic canonicalization
-# ---------------------------------------------------------------------------
-
-
 def load_topic_lookup(topics_json_path: Path) -> dict[str, str]:
-    """Return {label.lower(): label} from the canonical topics JSON."""
     if not topics_json_path.exists():
         return {}
     payload = json.loads(topics_json_path.read_text(encoding="utf-8"))
@@ -90,11 +73,6 @@ def canonicalize_topics(
     return dedupe_keep_order(out)
 
 
-# ---------------------------------------------------------------------------
-# Building the tag map from the input CSV
-# ---------------------------------------------------------------------------
-
-
 def build_tag_map(
     tagged_rows: list[dict[str, str]],
     dataset_slug: str,
@@ -103,7 +81,6 @@ def build_tag_map(
     keep_unknown: bool,
     allow_empty_topics: bool,
 ) -> dict[str, dict[str, Any]]:
-    """Return {row_id: tag_dict} keeping the best tag when duplicates exist."""
     tag_map: dict[str, dict[str, Any]] = {}
 
     for row in tagged_rows:
@@ -111,7 +88,6 @@ def build_tag_map(
         if not row_id:
             continue
 
-        # Filter to rows belonging to this dataset
         row_chat = normalize_slug(row.get("chat", ""))
         if row_chat != dataset_slug and not row_id.startswith(f"{dataset_slug}:"):
             continue
@@ -139,7 +115,6 @@ def build_tag_map(
             tag_map[row_id] = candidate
             continue
 
-        # Keep whichever has more topics, then more locations, then no error
         def _score(t: dict[str, Any]) -> tuple[int, int, int]:
             return (len(t["topics"]), len(t["locations_ranked"]), 0 if t["tagging_error"] else 1)
 
@@ -147,11 +122,6 @@ def build_tag_map(
             tag_map[row_id] = candidate
 
     return tag_map
-
-
-# ---------------------------------------------------------------------------
-# Merging into files
-# ---------------------------------------------------------------------------
 
 
 def merge_message_nodes(
@@ -249,11 +219,6 @@ def merge_graph_json(
         )
 
     return matched, updated
-
-
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
 
 
 def _find_default_tagged_csv(repo_root: Path, requested: Path) -> Path:

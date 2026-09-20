@@ -11,11 +11,7 @@
   );
 
   const coverImages = $derived(
-    datasets.flatMap((d) => [
-      `/cover/${d.slug}.png`,
-      // `/cover/${d.slug}_pie.png`,
-      // `/cover/${d.slug}_tree.png`,
-    ]),
+    datasets.flatMap((d) => [`/cover/${d.slug}.png`]),
   );
 
   const formatDate = new Intl.DateTimeFormat("en-US", {

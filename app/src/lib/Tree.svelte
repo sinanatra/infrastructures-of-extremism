@@ -22,7 +22,6 @@
   const trailerAvailable = trailerGroups.length > 0;
   let trailerBlocking = $state(trailerAvailable);
 
-  // ── Layout: group nodes into one column per BFS depth ──────────────────
   const columns = $derived.by(() => {
     const cols = [];
     for (const node of nodes) {
@@ -31,9 +30,6 @@
     return cols.map((c) => c ?? []);
   });
 
-  // ── Interaction state ───────────────────────────────────────────────────
-  // hoveredId gives a quick preview; pinnedId (set by click) survives scrolling
-  // so the connections stay visible while tracing a line across the diagram.
   let hoveredId = $state(null);
   let pinnedId = $state(
     seed && nodes.some((n) => n.id === seed) ? seed : (nodes[0]?.id ?? null),
@@ -115,7 +111,6 @@
         const dx = Math.max(40, (x2 - x1) * 0.5);
         d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
       } else {
-        // Back-reference: loop underneath both nodes instead of crossing through the tree.
         const loopY = Math.max(y1, y2) + 46;
         d = `M ${x1} ${y1} C ${x1} ${loopY}, ${x2} ${loopY}, ${x2} ${y2}`;
       }

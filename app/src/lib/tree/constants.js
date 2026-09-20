@@ -10,7 +10,6 @@ export const ANIMATION_FRAMES_PER_GROUP = 10;
 export const BROKEN_NODE_COLOR = '#ff9a72';
 export const BROKEN_EDGE_COLOR = '#ff7a3d';
 
-/** Density-based scale factors: applied when a ring has more than `minCount` nodes. */
 export const DENSITY_SCALE_THRESHOLDS = [
   { minCount: 240, scale: 0.55 },
   { minCount: 140, scale: 0.65 },
@@ -18,7 +17,6 @@ export const DENSITY_SCALE_THRESHOLDS = [
   { minCount: 40, scale: 0.85 },
 ];
 
-/** Font-size breakpoints by node count in the ring. */
 export const FONT_SIZE_THRESHOLDS = [
   { minCount: 220, size: 9 },
   { minCount: 120, size: 10 },

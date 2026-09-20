@@ -41,7 +41,6 @@
 
 <style>
   div {
-    /* border-top: 0.5px solid color-mix(in srgb, var(--hi) 30%, transparent); */
     color: var(--text);
   }
 

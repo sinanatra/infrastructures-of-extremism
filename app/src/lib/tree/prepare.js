@@ -9,16 +9,7 @@ import {
   DENSITY_SCALE_THRESHOLDS,
 } from './constants.js';
 
-/**
- * Derives everything the Tree sketch needs from the raw page data.
- * Pure computation — no Svelte reactivity or p5 dependencies.
- *
- * @param {object} data - the data object from +page.js
- * @param {object} defaultTheme - fallback colours from component props
- * @returns All derived nodes, edges, layout geometry, and helpers.
- */
 export const prepareTreeData = (data, defaultTheme = {}) => {
-  // ── Theme ──────────────────────────────────────────────────────────────
   const base = data?.dataset?.theme ?? {};
   const theme = {
     backgroundColor: base.backgroundColor ?? defaultTheme.backgroundColor ?? '#000000',
@@ -27,9 +18,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     highlightColor: base.highlightColor ?? defaultTheme.highlightColor ?? 'yellow',
   };
 
-  // ── Broken group lookup ────────────────────────────────────────────────
-  // flood_wait_exceeded means the scraper got rate-limited while resolving a
-  // group, not that the group/link is actually dead — don't treat it as broken.
   const brokenGroupInfo = new Map(
     (data?.brokenGroups ?? [])
       .filter((row) => (row.status ?? '').toString().trim().toLowerCase() !== 'flood_wait_exceeded')
@@ -48,7 +36,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
       })
   );
 
-  // ── Group metadata ─────────────────────────────────────────────────────
   const groupInfo = new Map(
     (data.groups ?? []).map((g) => {
       const id = stripHandle(g.id);
@@ -66,7 +53,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     })
   );
 
-  // ── Seed / trailer groups ──────────────────────────────────────────────
   const datasetRoot = stripHandle(data?.dataset?.slug ?? '');
   const trailerSeedLabel =
     groupInfo.get(datasetRoot)?.label ??
@@ -104,7 +90,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     return result;
   })();
 
-  // ── Edges ──────────────────────────────────────────────────────────────
   const rawLinks =
     (data.groupLinks?.length ? data.groupLinks : data.links) ?? [];
 
@@ -126,7 +111,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     }
   }
 
-  // ── Seed node selection ────────────────────────────────────────────────
   const allNodes = new Set();
   for (const e of edges) { allNodes.add(e.source); allNodes.add(e.target); }
 
@@ -142,7 +126,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
   else if (hasNode(firstEdgeTarget)) seed = firstEdgeTarget;
   else seed = datasetRoot || groupRoot || firstEdgeSource || firstEdgeTarget;
 
-  // ── BFS layer assignment ───────────────────────────────────────────────
   const children = new Map();
   for (const { source, target } of edges) {
     if (!children.has(source)) children.set(source, []);
@@ -181,7 +164,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     discovered.add(seed);
   }
 
-  // ── Node array ─────────────────────────────────────────────────────────
   const nodes = [];
   const nodeIndex = new Map();
   layers.forEach((layer, layerIndex) => {
@@ -216,7 +198,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     });
   });
 
-  // ── Ring layout ────────────────────────────────────────────────────────
   const balancedVisualRings = layers
     .slice(1)
     .filter((layer) => Array.isArray(layer) && layer.length)
@@ -251,7 +232,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     return 1;
   };
 
-  // Assign x/y coordinates to each node
   for (const node of nodes) {
     if (node.layerIndex === 0) {
       node.radius = 0; node.angle = 0; node.x = 0; node.y = 0;
@@ -267,7 +247,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     node.y = Math.sin(node.angle) * node.radius;
   }
 
-  // ── Link segments (resolved to node references) ────────────────────────
   const linkSegments = edges
     .map((e) => {
       const si = nodeIndex.get(e.source);
@@ -284,7 +263,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     })
     .filter(Boolean);
 
-  // ── Neighbour map (for reveal animation) ──────────────────────────────
   const neighbors = new Map();
   for (const l of linkSegments) {
     if (!neighbors.has(l.source.id)) neighbors.set(l.source.id, new Set());
@@ -293,7 +271,6 @@ export const prepareTreeData = (data, defaultTheme = {}) => {
     neighbors.get(l.target.id).add(l.source.id);
   }
 
-  // ── Reveal groups (BFS-ordered animation groups) ──────────────────────
   const revealGroups = (() => {
     const groups = [];
     const revealed = new Set();

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Shared utilities for the data pipeline (tagging and merging)."""
 
 from __future__ import annotations
 
@@ -12,11 +11,6 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_PRIMARY_TOPIC = "Unlabeled"
-
-
-# ---------------------------------------------------------------------------
-# Text helpers
-# ---------------------------------------------------------------------------
 
 
 def normalize_text(value: Any) -> str:
@@ -46,13 +40,7 @@ def dedupe_keep_order(items: list[str]) -> list[str]:
     return out
 
 
-# ---------------------------------------------------------------------------
-# Parsing
-# ---------------------------------------------------------------------------
-
-
 def parse_listish(value: Any) -> list[str]:
-    """Parse a value that might be a list, JSON string, or literal string."""
     if value is None:
         return []
     if isinstance(value, list):
@@ -82,7 +70,6 @@ def parse_listish(value: Any) -> list[str]:
 
 
 def parse_locations(value: Any) -> list[dict[str, Any]]:
-    """Parse a value that might be a list of location dicts or a JSON string."""
     if value is None:
         return []
     if isinstance(value, float) and math.isnan(value):
@@ -105,13 +92,7 @@ def parse_locations(value: Any) -> list[dict[str, Any]]:
     return []
 
 
-# ---------------------------------------------------------------------------
-# File I/O
-# ---------------------------------------------------------------------------
-
-
 def atomic_write_text(path: Path, text: str) -> None:
-    """Write text to a file atomically via a .tmp swap."""
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(text, encoding="utf-8")
     tmp.replace(path)
@@ -126,7 +107,6 @@ def read_csv_rows(path: Path) -> tuple[list[str], list[dict[str, str]]]:
 
 
 def write_csv_rows(path: Path, fieldnames: list[str], rows: list[dict[str, str]]) -> None:
-    """Write rows to CSV atomically."""
     tmp = path.with_suffix(path.suffix + ".tmp")
     with tmp.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
@@ -136,7 +116,6 @@ def write_csv_rows(path: Path, fieldnames: list[str], rows: list[dict[str, str]]
 
 
 def sync_to_app_static(repo_root: Path, dataset_slug: str) -> None:
-    """Copy message_nodes.csv and graph.json to app/static/data/<dataset>."""
     source_dir = repo_root / "notebooks" / "data" / dataset_slug
     target_dir = repo_root / "app" / "static" / "data" / dataset_slug
     target_dir.mkdir(parents=True, exist_ok=True)

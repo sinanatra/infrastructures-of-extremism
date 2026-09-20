@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""Telegram crawler.
-
-Outputs per dataset under <output_path>/<seed>/:
-- graph.json
-- nodes.csv
-- edges.csv
-- message_nodes.csv
-- message_edges.csv
-- broken_groups.csv
-- broken_group_links.csv
-"""
 
 from __future__ import annotations
 
@@ -205,7 +194,7 @@ async def get_subscriber_count(client: TelegramClient, entity: Any) -> int:
         if isinstance(entity, Chat):
             full = await client(GetFullChatRequest(entity.id))
             return int(getattr(full.full_chat, "participants_count", 0) or 0)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"[warn] subscribers for {getattr(entity, 'username', entity)} failed: {exc}")
     return 0
 
@@ -253,7 +242,7 @@ async def fetch_entity_with_backoff(
                 )
             print(f"[wait] {handle}: flood wait {wait}s on get_entity; sleeping...")
             await asyncio.sleep(wait + 1)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             status, reason = classify_entity_error(exc)
             return None, status, reason
 
@@ -264,7 +253,7 @@ def load_existing_graph(output_dir: pathlib.Path) -> Dict[str, Any]:
         return {}
     try:
         return json.loads(graph_path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"[warn] failed to read existing graph from {graph_path}: {exc}")
         return {}
 
@@ -669,7 +658,7 @@ async def crawl_graph(
                 )
                 await asyncio.sleep(wait + 1)
                 continue
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 print(f"[warn] iter_messages for {handle} failed: {exc}")
                 break
 
