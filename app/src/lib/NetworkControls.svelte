@@ -42,11 +42,11 @@
     <div class="toggle-group flex text-[11px] rounded overflow-hidden">
       <button
         class={`tbtn px-2 py-1 ${sizeMode === "reactions" ? "active" : ""}`}
-        on:click={() => setSizeMode("reactions")}
+        onclick={() => setSizeMode("reactions")}
       >reactions</button>
       <button
         class={`tbtn px-2 py-1 ${sizeMode === "links" ? "active" : ""}`}
-        on:click={() => setSizeMode("links")}
+        onclick={() => setSizeMode("links")}
       >forwards</button>
     </div>
 
@@ -54,7 +54,7 @@
       <input
         type="checkbox"
         checked={showLinks}
-        on:change={(e) => toggleLinks(e.currentTarget.checked)}
+        onchange={(e) => toggleLinks(e.currentTarget.checked)}
         style={`accent-color:${highlightColor}; width:10px; height:10px;`}
       />
       links
@@ -63,12 +63,12 @@
     {#if groups.length}
       <button
         class={`tbtn-groups text-[11px] px-2 py-1 rounded ${showGroups ? "active" : ""}`}
-        on:click={() => (showGroups = !showGroups)}
+        onclick={() => (showGroups = !showGroups)}
       >groups{#if selectedGroupId}<span class="dot"> ·</span>{/if}</button>
     {/if}
 
     {#if selectedGroupId}
-      <button class="clear-all text-[10px] px-1.5 py-0.5 rounded" on:click={clearSelection}>clear ×</button>
+      <button class="clear-all text-[10px] px-1.5 py-0.5 rounded" onclick={clearSelection}>clear ×</button>
     {/if}
   </div>
 
@@ -89,9 +89,9 @@
           <li>
             <button
               class={`group-item text-[11px] w-full text-left px-1.5 py-0.5 rounded ${isSelected ? "selected" : ""} ${isHovered && !isSelected ? "hovered" : ""}`}
-              on:click={() => dispatch("selectGroup", g.id)}
-              on:mouseenter={() => dispatch("hoverGroup", g.id)}
-              on:mouseleave={() => dispatch("clearHoverGroup")}
+              onclick={() => dispatch("selectGroup", g.id)}
+              onmouseenter={() => dispatch("hoverGroup", g.id)}
+              onmouseleave={() => dispatch("clearHoverGroup")}
             >{g.label}</button>
           </li>
         {/each}

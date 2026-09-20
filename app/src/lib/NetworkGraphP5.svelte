@@ -241,11 +241,11 @@
     <div
       class="pointer-events-auto max-w-5xl mx-auto"
       bind:this={controlsEl}
-      on:pointerdown|stopPropagation
-      on:pointermove|stopPropagation
-      on:pointerup|stopPropagation
-      on:wheel|stopPropagation
-      on:click|stopPropagation
+      onpointerdown={(e) => e.stopPropagation()}
+      onpointermove={(e) => e.stopPropagation()}
+      onpointerup={(e) => e.stopPropagation()}
+      onwheel={(e) => e.stopPropagation()}
+      onclick={(e) => e.stopPropagation()}
     >
       <NetworkControls
         counts={{

@@ -25,7 +25,7 @@
         {#each topEmojis as option}
           <button
             class={`pill ${selectedEmoji === option.emoji ? "active" : ""}`}
-            on:click={() => selectEmoji(option.emoji)}
+            onclick={() => selectEmoji(option.emoji)}
             title={`${option.emoji} · ${option.count}`}
           >
             {option.emoji.length > 5 ? "?" : option.emoji}
@@ -34,7 +34,7 @@
       </div>
     </div>
     {#if selectedEmoji}
-      <button class="clear" on:click={() => selectEmoji(null)}>×</button>
+      <button class="clear" onclick={() => selectEmoji(null)}>×</button>
     {/if}
   </div>
 {/if}
