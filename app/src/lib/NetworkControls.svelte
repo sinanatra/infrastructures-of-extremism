@@ -16,6 +16,10 @@
     textColor = "#ffffff",
     backgroundColor = "#000000",
     highlightColor = "yellow",
+    recording = false,
+    recordProgress = 0,
+    recordingEmoji = false,
+    recordEmojiProgress = 0,
   } = $props();
 
   const dispatch = createEventDispatcher();
@@ -24,6 +28,8 @@
   const toggleLinks = (checked) => dispatch("showLinks", checked);
   const clearSelection = () => dispatch("clearSelection");
   const setEmoji = (emoji) => dispatch("selectEmoji", selectedEmoji === emoji ? null : emoji);
+  const startRecord = () => dispatch("record");
+  const startRecordEmoji = () => dispatch("recordEmoji");
 
   let showGroups = $state(false);
   let groupSearch = $state("");
@@ -70,6 +76,18 @@
     {#if selectedGroupId}
       <button class="clear-all text-[10px] px-1.5 py-0.5 rounded" onclick={clearSelection}>clear ×</button>
     {/if}
+
+    <button
+      class="tbtn-record text-[11px] px-2 py-1 rounded"
+      disabled={recording || recordingEmoji}
+      on:click={startRecord}
+    >{recording ? `recording ${Math.round(recordProgress * 100)}%` : "record 4K"}</button>
+
+    <button
+      class="tbtn-record text-[11px] px-2 py-1 rounded"
+      disabled={recording || recordingEmoji}
+      on:click={startRecordEmoji}
+    >{recordingEmoji ? `emojis ${Math.round(recordEmojiProgress * 100)}%` : "record emojis"}</button>
   </div>
 
   {#if showGroups && groups.length}
@@ -213,5 +231,18 @@
 
   .clear-all:hover {
     opacity: 1;
+  }
+
+  .tbtn-record {
+    background: transparent;
+    color: var(--text);
+    line-height: 1;
+    border: 0.5px solid color-mix(in srgb, var(--hi) 40%, transparent);
+    white-space: nowrap;
+  }
+
+  .tbtn-record:disabled {
+    opacity: 0.6;
+    cursor: default;
   }
 </style>

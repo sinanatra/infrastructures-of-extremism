@@ -1,5 +1,6 @@
 <script>
   import P5 from "p5-svelte";
+  import CCapture from "ccapture.js";
   import NetworkControls from "$lib/NetworkControls.svelte";
   import Trailer from "$lib/Trailer.svelte";
   import { prepareNetwork } from "$lib/networkPrep.js";
@@ -44,6 +45,16 @@
 
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const linkSegments = buildLinkSegments(links, nodeById);
+
+  // Timestamp of each group's most recent post — used during recording to
+  // reveal a group's label only once its last post has played.
+  const groupLastPostMs = new Map();
+  for (const node of nodes) {
+    const t = node.post?.dateMs;
+    if (!Number.isFinite(t)) continue;
+    const current = groupLastPostMs.get(node.groupId);
+    if (current === undefined || t > current) groupLastPostMs.set(node.groupId, t);
+  }
 
   const formatDate = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
   const formatTick = new Intl.DateTimeFormat("en", {
@@ -175,24 +186,64 @@
     requestRedraw();
   };
 
-  const getState = () => ({
-    sizeMode,
-    showLinks,
-    selectedGroupId,
-    hoveredGroupId,
-    hoveredNode,
-    hoveredText,
-    visibleNodes,
-    visibleLinks,
-    visibleNodeIds,
-    highlightColor,
-    textColor,
-    backgroundColor,
-    pieBackground: fill,
-    circleColor,
-    hexaFill: fill,
-    trailerBlocking,
-  });
+  // During recording this is set to the timestamp of the post currently
+  // playing; only posts at or before it are drawn, so the graph fills in
+  // node-by-node along the timeline instead of showing everything at once.
+  // Plain (non-reactive) var: it's mutated from the imperative capture loop
+  // and read synchronously by getState() on each manual redraw.
+  let recordRevealMs = null;
+
+  // During the emoji-tour recording this is set to the emoji currently being
+  // featured, drawn large over the center of the canvas. Same plain-var
+  // pattern as recordRevealMs.
+  let centerEmoji = null;
+
+  const getState = () => {
+    let nodesForDraw = visibleNodes;
+    let linksForDraw = visibleLinks;
+    let nodeIdsForDraw = visibleNodeIds;
+    let revealedGroupIds = null;
+    if (recordRevealMs !== null) {
+      nodesForDraw = visibleNodes.filter(
+        (n) => (n.post?.dateMs ?? Infinity) <= recordRevealMs
+      );
+      const revealedIds = new Set(nodesForDraw.map((n) => n.id));
+      nodeIdsForDraw = revealedIds;
+      linksForDraw = showLinks
+        ? visibleLinks.filter(
+            (link) => revealedIds.has(link.source.id) && revealedIds.has(link.target.id)
+          )
+        : [];
+      revealedGroupIds = new Set();
+      for (const [groupId, lastMs] of groupLastPostMs) {
+        if (lastMs <= recordRevealMs) revealedGroupIds.add(groupId);
+      }
+    }
+    return {
+      sizeMode,
+      showLinks,
+      selectedGroupId,
+      hoveredGroupId,
+      hoveredNode,
+      hoveredText,
+      visibleNodes: nodesForDraw,
+      visibleLinks: linksForDraw,
+      visibleNodeIds: nodeIdsForDraw,
+      revealedGroupIds,
+      centerEmoji,
+      highlightColor,
+      textColor,
+      backgroundColor,
+      pieBackground: fill,
+      circleColor,
+      hexaFill: fill,
+      trailerBlocking,
+      // Mouse interaction (hover/pan/click) must stay frozen during either
+      // recording mode — real mouse movement would fight the programmatic
+      // hover/reveal/emoji state the capture loop is driving.
+      interactionBlocked: trailerBlocking || recording || recordingEmoji,
+    };
+  };
 
   const sketch = createNetworkGraphSketch({
     prepared: {
@@ -219,6 +270,204 @@
     getCanvasParent: () => canvasParent,
     getControlsEl: () => controlsEl,
   });
+
+  // --- 4K video recording -------------------------------------------------
+  // One single timeline: posts reveal on-canvas one at a time, in order.
+  // Whenever the post currently being revealed is one of the most-forwarded
+  // ones (reusing the same link-count calculation that already sizes the
+  // nodes), its tooltip is shown — and stays showing, unchanged, through
+  // every subsequent non-featured post, until the next most-forwarded post
+  // is revealed.
+  const RECORD_WIDTH = 3840;
+  const RECORD_HEIGHT = 2160;
+  const RECORD_FRAMERATE = 60;
+  const RECORD_SECONDS_PER_POST = 0.3;
+  const RECORD_TOP_FORWARDS_COUNT = 150;
+  const RECORD_MIN_SECONDS = 8;
+  const RECORD_MAX_SECONDS = 90;
+
+  let recording = $state(false);
+  let recordProgress = $state(0);
+
+  const stopRecording = () => {
+    recording = false;
+    recordProgress = 0;
+    recordRevealMs = null;
+    clearHover();
+    sketch.restoreDisplaySize?.();
+    sketch.restoreView?.();
+    requestRedraw();
+  };
+
+  const startRecording = async () => {
+    if (recording || recordingEmoji || !pInstance) return;
+    const byTime = [...nodes]
+      .filter((n) => Number.isFinite(n.post?.dateMs))
+      .sort((a, b) => a.post.dateMs - b.post.dateMs);
+    if (!byTime.length) return;
+
+    const topForwardIds = new Set(
+      [...byTime]
+        .sort(
+          (a, b) =>
+            (linkCountByPost.get(b.post.id) ?? 0) - (linkCountByPost.get(a.post.id) ?? 0)
+        )
+        .slice(0, Math.min(RECORD_TOP_FORWARDS_COUNT, byTime.length))
+        .map((n) => n.id)
+    );
+
+    recording = true;
+    recordProgress = 0;
+
+    sketch.setCaptureSize?.(RECORD_WIDTH, RECORD_HEIGHT);
+    sketch.fitToCanvas?.();
+    const canvasEl = sketch.getCanvas?.();
+
+    const totalSeconds = Math.min(
+      RECORD_MAX_SECONDS,
+      Math.max(RECORD_MIN_SECONDS, byTime.length * RECORD_SECONDS_PER_POST)
+    );
+    const totalFrames = Math.ceil(totalSeconds * RECORD_FRAMERATE);
+
+    const capturer = new CCapture({
+      format: "mp4",
+      framerate: RECORD_FRAMERATE,
+      name: `network-graph-${datasetSlug ?? "export"}`,
+      frameLimit: totalFrames,
+    });
+
+    capturer.on("frame", (frameCount) => {
+      recordProgress = Math.min(1, frameCount / totalFrames);
+    });
+    capturer.on("save", () => {
+      stopRecording();
+    });
+    capturer.on("error", (err) => {
+      console.error("Recording failed:", err);
+      stopRecording();
+    });
+
+    await capturer.start();
+
+    let frameIndex = 0;
+    let lastRevealIndex = -1;
+
+    const tick = () => {
+      if (!capturer.capturing) return;
+      requestAnimationFrame(tick);
+
+      const progress = Math.min(1, frameIndex / totalFrames);
+      const revealIndex = Math.min(
+        byTime.length - 1,
+        Math.floor(progress * byTime.length)
+      );
+
+      if (revealIndex !== lastRevealIndex) {
+        // Walk every post newly revealed since the last frame (there can be
+        // more than one when a dataset is too large to give each post its
+        // own frame) so none of them are skipped when checking whether it's
+        // one of the top-forwarded posts.
+        for (let i = lastRevealIndex + 1; i <= revealIndex; i += 1) {
+          const node = byTime[i];
+          if (topForwardIds.has(node.id)) {
+            setHoverState(node, tooltipForPost(node.post));
+          }
+        }
+        lastRevealIndex = revealIndex;
+        recordRevealMs = byTime[revealIndex].post.dateMs;
+      }
+      frameIndex += 1;
+
+      sketch.redrawNow?.();
+      capturer.capture(canvasEl);
+    };
+    tick();
+  };
+
+  // --- Emoji-tour recording ------------------------------------------------
+  // A second, simpler record mode: show the whole graph (no timeline reveal,
+  // no group filter), and step through the top emojis one at a time, filtering
+  // the graph down to posts whose top reaction is that emoji while showing it
+  // large over the center of the canvas.
+  const RECORD_SECONDS_PER_EMOJI = 0.6;
+
+  let recordingEmoji = $state(false);
+  let recordEmojiProgress = $state(0);
+
+  const stopEmojiRecording = (previousGroupId) => {
+    recordingEmoji = false;
+    recordEmojiProgress = 0;
+    centerEmoji = null;
+    selectedEmoji = null;
+    selectedGroupId = previousGroupId;
+    sketch.restoreDisplaySize?.();
+    sketch.restoreView?.();
+    requestRedraw();
+  };
+
+  const startEmojiRecording = async () => {
+    if (recordingEmoji || recording || !pInstance) return;
+    const emojis = topEmojis.map((e) => e.emoji);
+    if (!emojis.length) return;
+
+    const previousGroupId = selectedGroupId;
+    selectedGroupId = null;
+
+    recordingEmoji = true;
+    recordEmojiProgress = 0;
+
+    sketch.setCaptureSize?.(RECORD_WIDTH, RECORD_HEIGHT);
+    sketch.fitToCanvas?.();
+    const canvasEl = sketch.getCanvas?.();
+
+    const totalFrames = Math.ceil(
+      emojis.length * RECORD_SECONDS_PER_EMOJI * RECORD_FRAMERATE
+    );
+
+    const capturer = new CCapture({
+      format: "mp4",
+      framerate: RECORD_FRAMERATE,
+      name: `network-graph-emojis-${datasetSlug ?? "export"}`,
+      frameLimit: totalFrames,
+    });
+
+    capturer.on("frame", (frameCount) => {
+      recordEmojiProgress = Math.min(1, frameCount / totalFrames);
+    });
+    capturer.on("save", () => {
+      stopEmojiRecording(previousGroupId);
+    });
+    capturer.on("error", (err) => {
+      console.error("Emoji recording failed:", err);
+      stopEmojiRecording(previousGroupId);
+    });
+
+    await capturer.start();
+
+    let frameIndex = 0;
+    let lastEmojiIndex = -1;
+
+    const tick = () => {
+      if (!capturer.capturing) return;
+      requestAnimationFrame(tick);
+
+      const progress = Math.min(1, frameIndex / totalFrames);
+      const emojiIndex = Math.min(
+        emojis.length - 1,
+        Math.floor(progress * emojis.length)
+      );
+      if (emojiIndex !== lastEmojiIndex) {
+        lastEmojiIndex = emojiIndex;
+        selectedEmoji = emojis[emojiIndex];
+        centerEmoji = emojis[emojiIndex];
+      }
+      frameIndex += 1;
+
+      sketch.redrawNow?.();
+      capturer.capture(canvasEl);
+    };
+    tick();
+  };
 </script>
 
 <section
@@ -265,6 +514,12 @@
         {textColor}
         {backgroundColor}
         {highlightColor}
+        {recording}
+        {recordProgress}
+        {recordingEmoji}
+        {recordEmojiProgress}
+        on:record={startRecording}
+        on:recordEmoji={startEmojiRecording}
         on:sizeMode={(event) => { sizeMode = event.detail; }}
         on:showLinks={(event) => { showLinks = event.detail; }}
         on:selectEmoji={(event) => {

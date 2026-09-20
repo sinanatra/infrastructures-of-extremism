@@ -496,12 +496,13 @@ export const createNetworkGraphSketch = ({
   };
 
   const drawLabels = (p, state) => {
-    const { highlightColor, selectedGroupId, hoveredGroupId } = state;
+    const { highlightColor, selectedGroupId, hoveredGroupId, revealedGroupIds } = state;
 
     p.push();
     p.textFont("sans-serif");
     p.textSize(textSizeFor(36));
     for (const slice of slicePaths ?? []) {
+      if (revealedGroupIds && !revealedGroupIds.has(slice.id)) continue;
       p.push();
       p.translate(slice.labelPos.x, slice.labelPos.y);
       p.rotate((slice.labelRotation * Math.PI) / 180);
@@ -652,7 +653,24 @@ export const createNetworkGraphSketch = ({
     if (ctx?.setLineDash) ctx.setLineDash([]);
   };
 
-  return (p) => {
+  // Drawn in world space (inside the same pan/zoom transform as the rest of
+  // the scene) at the graph's center, so it scales up/down with the view
+  // zoom instead of staying a fixed screen-space size.
+  const drawCenterEmoji = (p, state) => {
+    const { centerEmoji, backgroundColor } = state;
+    if (!centerEmoji) return;
+    p.push();
+    p.textAlign(p.CENTER, p.CENTER);
+    const size = outerRingRadius * 0.14;
+    p.textSize(size);
+    p.noStroke();
+    p.fill(cachedColor(backgroundColor));
+    p.circle(cx, cy, size * 1.5);
+    p.text(centerEmoji, cx, cy);
+    p.pop();
+  };
+
+  const sketchFn = (p) => {
     p.setup = () => {
       pRef = p;
       const size = computeCanvasSize();
@@ -673,21 +691,21 @@ export const createNetworkGraphSketch = ({
     };
 
     p.mousePressed = (evt) => {
-      if (getState().trailerBlocking) return;
+      if (getState().interactionBlocked) return;
       if (evt.button !== 0 || overControls(evt)) return;
       pressStarted = true;
       startPan(p.mouseX, p.mouseY);
     };
 
     p.mouseDragged = (evt) => {
-      if (getState().trailerBlocking) return;
+      if (getState().interactionBlocked) return;
       if (!isPanning || overControls(evt)) return;
       movePan(p.mouseX, p.mouseY);
       return false;
     };
 
     p.mouseReleased = () => {
-      if (getState().trailerBlocking) return;
+      if (getState().interactionBlocked) return;
       if (!pressStarted) return;
       pressStarted = false;
       if (!isPanning) return;
@@ -695,7 +713,7 @@ export const createNetworkGraphSketch = ({
     };
 
     p.mouseMoved = (evt) => {
-      if (getState().trailerBlocking) return;
+      if (getState().interactionBlocked) return;
       if (isPanning || overControls(evt)) return;
       const hoverChanged = updateHover(p.mouseX, p.mouseY);
       const clickable = Boolean(getState().hoveredNode);
@@ -704,14 +722,14 @@ export const createNetworkGraphSketch = ({
     };
 
     p.mouseWheel = (event) => {
-      if (getState().trailerBlocking) return false;
+      if (getState().interactionBlocked) return false;
       if (overControls(event)) return false;
       zoomAt(event.deltaY, event.offsetX, event.offsetY);
       return false;
     };
 
     p.touchStarted = (evt) => {
-      if (getState().trailerBlocking) return;
+      if (getState().interactionBlocked) return;
       if (overControls(evt)) return false;
       const touches = evt.touches ?? [];
       if (touches.length >= 2) {
@@ -733,7 +751,7 @@ export const createNetworkGraphSketch = ({
     };
 
     p.touchMoved = (evt) => {
-      if (getState().trailerBlocking) return false;
+      if (getState().interactionBlocked) return false;
       if (overControls(evt)) return false;
       const touches = evt.touches ?? [];
       if (pinchActive && touches.length >= 2) {
@@ -766,7 +784,7 @@ export const createNetworkGraphSketch = ({
     };
 
     p.touchEnded = (evt) => {
-      if (getState().trailerBlocking) return false;
+      if (getState().interactionBlocked) return false;
       const touches = evt.touches ?? [];
       if (pinchActive && touches.length < 2) {
         pinchActive = false;
@@ -806,7 +824,63 @@ export const createNetworkGraphSketch = ({
         drawExtrudedPolygonOutline(p, highlightColor);
       }
 
+      drawCenterEmoji(p, state);
+
       p.pop();
     };
   };
+
+  // Recording support: force an exact pixel-resolution canvas (bypassing the
+  // container-driven auto-sizing) and drive a synchronous redraw per captured
+  // frame. Attached to the sketch function itself since createNetworkGraphSketch
+  // must keep returning a plain p5 sketch fn for the P5 wrapper component.
+  sketchFn.setCaptureSize = (w, h) => {
+    if (!pRef) return;
+    pRef.pixelDensity(1);
+    canvasSize = { w, h };
+    pRef.resizeCanvas(w, h, true);
+  };
+
+  sketchFn.restoreDisplaySize = () => {
+    if (!pRef) return;
+    pRef.pixelDensity(window.devicePixelRatio || 1);
+    const size = computeCanvasSize();
+    pRef.resizeCanvas(size.w, size.h, true);
+  };
+
+  // Recording must show the whole graph, not whatever crop the user happened
+  // to have panned/zoomed to interactively — fit the full content (the outer
+  // ring plus the extruded base below it) inside the current canvas size,
+  // saving the prior view so it can be restored once recording stops.
+  let savedView = null;
+
+  sketchFn.fitToCanvas = (padding = 0.92) => {
+    if (!pRef) return;
+    savedView = { ...view };
+    const contentWidth = 2 * outerRingRadius;
+    const contentHeight = 2 * outerRingRadius + Math.max(0, extrudeOffsetY);
+    const contentCenterY = cy + Math.max(0, extrudeOffsetY) / 2;
+    const scaleX = (canvasSize.w * padding) / contentWidth;
+    const scaleY = (canvasSize.h * padding) / contentHeight;
+    view.scale = clamp(Math.min(scaleX, scaleY), minScale, maxScale);
+    view.panX = 0;
+    view.panY = -(contentCenterY - cy) * view.scale;
+    labelMetricsCache.clear();
+    lastLabelScale = view.scale;
+  };
+
+  sketchFn.restoreView = () => {
+    if (!savedView) return;
+    view.scale = savedView.scale;
+    view.panX = savedView.panX;
+    view.panY = savedView.panY;
+    labelMetricsCache.clear();
+    lastLabelScale = view.scale;
+    savedView = null;
+  };
+
+  sketchFn.getCanvas = () => pRef?.canvas ?? null;
+  sketchFn.redrawNow = () => pRef?.redraw();
+
+  return sketchFn;
 };
