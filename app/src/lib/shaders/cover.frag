@@ -59,7 +59,7 @@ vec2 coverUV(vec2 uv, vec2 imgSize) {
   float ca = u_res.x / u_res.y;
   float ia = imgSize.x / imgSize.y;
   vec2 scale = ca > ia ? vec2(1.0, ia / ca) : vec2(ca / ia, 1.0);
-  scale *= 0.95;
+  scale *= 0.7;
   return (uv - 0.5) * scale + 0.5;
 }
 
