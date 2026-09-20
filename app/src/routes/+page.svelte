@@ -14,23 +14,6 @@
     datasets.flatMap((d) => [`/cover/${d.slug}.png`]),
   );
 
-  const formatDate = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
-  const formatYearRange = (start, end) => {
-    if (!start || !end) return null;
-    try {
-      const startYear = new Date(start).getFullYear();
-      const endYear = new Date(end).getFullYear();
-      return startYear === endYear ? `${startYear}` : `${startYear}–${endYear}`;
-    } catch (err) {
-      return null;
-    }
-  };
-
   const MODES = [
     {
       key: "graph",
@@ -61,7 +44,7 @@
   <article
     class="w-full md:h-full md:w-[360px] md:flex-shrink-0 md:overflow-y-auto bg-[#fefefe] text-black px-4 pt-4 pb-20 text-base leading-relaxed"
   >
-    <h1 class="text-3[xl mb-4 max-w-[300px] text-black">
+    <h1 class="text-2xl mb-4 max-w-[300px] text-black">
       Infrastructures of Extremism
     </h1>
     <p class="mb-3">
@@ -186,44 +169,33 @@
       borders.
     </p>
 
-    <h2 class="text-2xl mt-14 mb-6 text-black border-t border-black pt-6">
+    <h2 class="text-xl mt-14 mb-6 text-black border-t border-black pt-6">
       Several Telegram groups have been examined
     </h2>
 
     {#if datasets.length}
-      <table class="w-full text-sm border-collapse mb-12 tabular-nums">
-     
-        <tbody>
-          {#each datasets as dataset, i (dataset.slug)}
-            <tr class="border-b border-black align-top text-black">
-              <td class="py-4 pr-2">
-                {dataset.label || dataset.slug}
-                <div class="text-xs mt-1">
-                  {dataset.postCount?.toLocaleString() ?? "—"} msgs, {dataset.groupCount ??
-                    "—"} groups
-                </div>
-              </td>
-              <td
-                class="py-4 whitespace-nowrap text-xs uppercase tracking-wide"
-              >
-                {#each MODES as m, i2 (m.key)}
-                  {#if i2 > 0}<br />{/if}
-                  <a
-                    class="hover:underline"
-                    data-sveltekit-reload
-                    href={m.href(dataset.slug)}
-                  >
-                    {m.label}
-                  </a>
-                {/each}
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+      <div class="mb-12 text-base tabular-nums">
+        {#each datasets as dataset (dataset.slug)}
+          <div class="border-b border-black py-4 text-black">
+            <div>{dataset.label || dataset.slug}</div>
+            <div class="flex gap-2 mt-1.5 text-xs tracking-wide">
+              {#each MODES as m, i (m.key)}
+                {#if i > 0}<span>/</span>{/if}
+                <a
+                  class="hover:underline"
+                  data-sveltekit-reload
+                  href={m.href(dataset.slug)}
+                >
+                  {m.label}
+                </a>
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
     {/if}
 
-    <p class="text-xs border-t border-black pt-6">
+    <p class="text-xs border-t border-black mt-20 pt-2">
       Infrastructures of Extremism is a project by
       <a
         class="underline"
