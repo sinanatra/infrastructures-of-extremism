@@ -11,10 +11,9 @@
   );
 
   const coverImages = $derived(
-    datasets.flatMap((d) => [
-      `/cover/${d.slug}.png`,
-      `/cover/${d.slug}_pie.png`,
-    ]),
+    datasets.map((d) => `/cover/${d.slug}.png`).concat(
+      datasets.map((d) => `/cover/${d.slug}_pie.png`),
+    ),
   );
 
   const MODES = [
