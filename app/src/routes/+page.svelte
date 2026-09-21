@@ -11,7 +11,10 @@
   );
 
   const coverImages = $derived(
-    datasets.flatMap((d) => [`/cover/${d.slug}.png`]),
+    datasets.flatMap((d) => [
+      `/cover/${d.slug}.png`,
+      `/cover/${d.slug}_pie.png`,
+    ]),
   );
 
   const MODES = [
@@ -44,7 +47,7 @@
   <article
     class="w-full md:h-full md:w-[360px] md:flex-shrink-0 md:overflow-y-auto bg-[#fefefe] text-black px-4 pt-4 pb-20 text-base leading-relaxed"
   >
-    <h1 class="text-2xl mb-4 max-w-[300px] text-black">
+    <h1 class="text-xl mb-4 max-w-[300px] text-black">
       Infrastructures of Extremism
     </h1>
     <p class="mb-3">
@@ -70,7 +73,7 @@
         alt="Banner promoting a right-wing Telegram channel at a Berlin rally"
         class=" border-gray-300 border w-[150px] block grayscale hover:grayscale-0"
       />
-      <figcaption class="text-sm max-w-60 text-gray-600">
+      <figcaption class="text-xs max-w-60 text-gray-600">
         A banner that promotes a link to a Telegram far-right youth group.
       </figcaption>
     </figure>
@@ -106,7 +109,7 @@
         alt="Telegram profile of Generation Deutschland"
         class="w-[220px] block grayscale hover:grayscale-0"
       />
-      <figcaption class="text-sm max-w-80 text-gray-600 text-right">
+      <figcaption class="text-xs max-w-80 text-gray-600 text-right">
         The Telegram profile <em>@JungeAlternativeLSA</em> has been renamed
         <em>Generation Deutschland LSA</em>, although the handle remains the
         former.
@@ -137,7 +140,7 @@
         alt="Rome, Italy, 7 January 2025"
         class="w-full block grayscale hover:grayscale-0"
       />
-      <figcaption class="text-sm max-w-80 text-gray-600">
+      <figcaption class="text-xs max-w-80 text-gray-600">
         Rome, Italy, 7 January 2025. Hundreds of <em>CasaPound</em> supporters and
         other far-right militants performed the fascist salute during a commemoration.
       </figcaption>
@@ -169,14 +172,14 @@
       borders.
     </p>
 
-    <h2 class="text-xl mt-14 mb-6 text-black border-t border-black pt-6">
+    <h2 class="text-base border-t border-gray-300 mt-20 mb-10 pt-2">
       Several Telegram groups have been examined
     </h2>
 
     {#if datasets.length}
       <div class="mb-12 text-base tabular-nums">
         {#each datasets as dataset (dataset.slug)}
-          <div class="border-b border-black py-4 text-black">
+          <div class="border-b border-gray-300 py-4 text-black">
             <div>{dataset.label || dataset.slug}</div>
             <div class="flex gap-2 mt-1.5 text-xs tracking-wide">
               {#each MODES as m, i (m.key)}
@@ -195,7 +198,7 @@
       </div>
     {/if}
 
-    <p class="text-xs border-t border-black mt-20 pt-2">
+    <p class="text-xs border-t border-gray-300 mt-20 pt-2">
       Infrastructures of Extremism is a project by
       <a
         class="underline"

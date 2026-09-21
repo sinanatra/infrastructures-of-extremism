@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 14px;
+}
+
 body {
   @apply bg-gray-300 text-black antialiased font-sans;
-  font-family: "Geist", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Aereal", sans-serif;
   --highlite-color: orangered;
 
   text-rendering: geometricPrecision;
@@ -37,34 +41,18 @@ body {
   color: var(--highlite-color);
 }
 
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Thin.ttf") format("truetype");
-  font-weight: 100;
+/* @font-face {
+  font-family: "Aereal";
+  src: url("/fonts/ABCArealSemiMonoVariable.ttf") format("truetype");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Bold.ttf") format("truetype");
-  font-weight: 700;
+  font-family: "Aereal";
+  src: url("/fonts/ABCArealSemiMonoVariable.ttf") format("truetype");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
