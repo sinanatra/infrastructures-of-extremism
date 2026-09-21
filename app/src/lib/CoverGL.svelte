@@ -23,8 +23,8 @@
   let pendingNextIndex = -1;
   let rafId;
 
-  const TRANSITION_MS = 5000;
-  const WAIT_MS = 1000;
+  const TRANSITION_MS = 4000;
+  const WAIT_MS = 100;
 
   function initGL() {
     gl = canvas.getContext("webgl");

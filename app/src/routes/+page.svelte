@@ -11,9 +11,10 @@
   );
 
   const coverImages = $derived(
-    datasets.map((d) => `/cover/${d.slug}.png`).concat(
-      datasets.map((d) => `/cover/${d.slug}_pie.png`),
-    ),
+    datasets.map((d) => `/cover/${d.slug}.png`),
+    // .concat
+    // datasets.map((d) => `/cover/${d.slug}_pie.png`),
+    // (),
   );
 
   const MODES = [
